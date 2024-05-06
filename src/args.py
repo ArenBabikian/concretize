@@ -17,6 +17,13 @@ def parse_args():
     data_opt.add_argument('-all', '--store-all-outcomes', action='store_true', help='Store only the best solution')
     data_opt.add_argument('-s-stat', '--save-path-statistics', default=None, help='Path to save the statistics')
 
+    # Visualisation Options
+    vis_opt = parser.add_argument_group('visualisation options')
+    vis_opt.add_argument('-v-diag', '--view-diagram', action='store_true', help='Pop up diagram')
+    vis_opt.add_argument('-s-diag', '--save-path-diagram', default=None, help='Path to save the diagram')
+    vis_opt.add_argument('-z', '--zoom_diagram', action='store_true', help='Zoom to junction, or to the actors')
+
+
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')
     mhs_cmd.add_argument('-aggr', '--aggregation-strategy', choices=['one', 'categories', 'actors', 'importance', 'categImpo', 'none'], default='actors', help='Objective aggregation strategy')

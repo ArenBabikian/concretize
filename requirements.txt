@@ -1,1 +1,2 @@
-# TODO
+scenic==2.1.0
+pymoo==0.6.1.1

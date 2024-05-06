@@ -41,6 +41,8 @@ class MHS_Approach:
             # Notes: x = [x_a0, y_a0, x_a1, y_a1, ...]
             def _evaluate(self, x, out, *args, **kwargs):
                 heuristics = getHeuristic(specification, x, con2id, exp)
+                logging.debug((f'x = {x}'))
+                logging.debug((f'h = {heuristics}'))
                 out["F"] = heuristics
         return MyProblem(), len(exp)
 
@@ -51,7 +53,7 @@ class MHS_Approach:
         if algo_name == 'nsga2':
             algorithm = NSGA2MOD(pop_size=5, n_offsprings=None, restart_time=self.restart_time,
                             eliminate_duplicates=True)
-            algorithm = NSGA2(pop_size=5, n_offsprings=20)
+            # algorithm = NSGA2(pop_size=2, n_offsprings=5, seed=1)
             # algorithm = NSGA2MOD(pop_size=5, n_offsprings=None, restart_time=self.restart_time, eliminate_duplicates=True)
         elif algo_name == 'ga':
             from pymoo.algorithms.soo.nonconvex.ga import GA
@@ -77,6 +79,8 @@ class MHS_Approach:
         # t1 = ConstraintViolationToleranceTermination(n_last=20, tol=1e-6,)	
         # t1 = IGDTermination	
         t2 = TimeBasedTermination(max_time=self.timeout)
+        # from pymoo.termination.max_gen import MaximumGenerationTermination
+        # return MaximumGenerationTermination(50)
 
         return TerminationCollection(t1, t2)
 

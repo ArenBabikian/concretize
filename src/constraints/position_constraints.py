@@ -5,10 +5,9 @@ import math
 class Has_To_Left_Con(Constraint):
 
     def __init__(self, actors):
-        self.predicate_name = "Has_To_Left"
         self.arity = 2
         self.type_id = 30
-        super().__init__(self, actors)
+        super().__init__("Has_To_Left", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
@@ -21,10 +20,9 @@ class Has_To_Left_Con(Constraint):
 class Has_To_Right_Con(Constraint):
 
     def __init__(self, actors):
-        self.predicate_name = "Has_To_Right"
         self.arity = 2
         self.type_id = 31
-        super().__init__(self, actors)
+        super().__init__("Has_To_Right", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
@@ -37,10 +35,9 @@ class Has_To_Right_Con(Constraint):
 class Has_In_Front_Con(Constraint):
 
     def __init__(self, actors):
-        self.predicate_name = "Has_In_Front"
         self.arity = 2
         self.type_id = 33
-        super().__init__(self, actors)
+        super().__init__("Has_In_Front", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
@@ -53,10 +50,9 @@ class Has_In_Front_Con(Constraint):
 class Has_Behind_Con(Constraint):
 
     def __init__(self, actors):
-        self.predicate_name = "Has_Behind"
         self.arity = 2
         self.type_id = 32
-        super().__init__(self, actors)
+        super().__init__("Has_Behind", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position

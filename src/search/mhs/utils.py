@@ -142,7 +142,7 @@ def fillInstance(specification, coords):
         # NOT WAYPOINT, NOT MANEUVER 
         # (keep point as is, assigns default heading at point)
         # currentLane = lane_ifAssignedManeuverIsNotPossible # MAY SAVE SOME TIME
-        current_lane = specification.map.roadAt(pos_actor)
+        current_lane = specification.roadmap.roadAt(pos_actor)
         heading = 0 if current_lane is None else current_lane.orientation[pos_actor]
 
         # Initialize Actor

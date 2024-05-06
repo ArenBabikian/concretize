@@ -12,7 +12,6 @@ class OneSolutionHeuristicTermination(Termination, SingleElementTermination):
         i = 0
         for sol in algorithm.opt.get("F"):
             # for each fitness result collection
-            # print(f'{i} = {tuple(sol)}')
             i+=1
             sol_is_valid = True
             sol_is_valid = self.single_element_validity(sol)

@@ -1,13 +1,15 @@
-import json
-from pprint import pprint
-from src.constraints.constraint import Actor
+from src.constraints.distance_constraints import Is_Close_To_Con
+from src.constraints.placement_constraints import On_Region_Con
 from src.constraints.position_constraints import Has_Behind_Con, Has_To_Left_Con, Has_In_Front_Con
 import src.args as get_args
+from src.model.actor import Car, Pedestrian
+from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
+from src.results.statistics import Statistics_Manager
 from src.search.mhs.mhs import MHS_Approach
 import logging
 
-from src.results.results2json import generate_json
-from src.specification import Specification
+from src.model.specification import Specification
+from src.visualization.diagram import Scenario_Diagram
 
 def concretize():
     
@@ -23,31 +25,43 @@ def concretize():
     map_file = args.map
 
     # 2 read scenario specification (constraints)
+
+    # INPUT: specification file path, or other
     specification_file = args.specification
 
     # TODO  1 parse the specification file
     #       return a list of constraints over objects
     #       Validation would also be integrated here
 
-    # TODO MAP INTEGRATION
+    #       A related conceptual challenge:
+    #       what if we want to specify that actor A1 has any actor in front of it?
+    #       we woiuld need to model somehow the instance and type abstraction levels in specification langueage
+
+    #       Further interesting thing:
+    #       - For actors, we work at the instance level
+    #       - but for roads, we work at the type level
 
     # INFO as a sample, there would be an output like this as a result of the file parsing
-    a0 = Actor(0, True)
-    a1 = Actor(1)
-    a2 = Actor(2)
 
-    c1 = Has_In_Front_Con([a0, a1])
-    c2 = Has_Behind_Con([a0, a2])
+    # OUTPUT: a Specification object, with relevant actors and constraints, as below
+    spec = Specification(map_file)
+
+    acs = []
+    acs.append(Car(0, True))
+    acs.append(Pedestrian(1, True))
+
+    cons = []
+    cons.append(Has_In_Front_Con([acs[0], acs[1]]))
+    cons.append(Is_Close_To_Con([acs[0], acs[1]]))
+    cons.append(On_Region_Con([acs[1], Junction_Type()], spec.roadmap))
+    cons.append(On_Region_Con([acs[0], Road_Type()], spec.roadmap))
 
     #potentialy
     # c3 = TurnsLeft([a0]) # which would setthe a0.assigned_maneuver to TurnsLeft
+    spec.actors = acs
+    spec.constraints = cons
 
-    # out: a Specification object
-    spec = Specification(map_file)
-    spec.actors = [a0, a1, a2]
-    spec.constraints = [c1, c2]
-
-    # get the approach
+    # 3.0 get the approach
     if args.approach == 'mhs':
         # TODO generalise this
         approach = MHS_Approach(args)
@@ -55,6 +69,8 @@ def concretize():
         exit(1)
 
     # Prepare the statistics container
+    stat_man = Statistics_Manager(args, spec)
+    stat_man.save()
 
     for run_id in range(args.num_of_runs):
         #   3 call the search approach
@@ -62,14 +78,13 @@ def concretize():
         logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
 
         #   4 save the result
-        json_data = generate_json(res,
-                                  args.store_all_outcomes,
-                                  args.save_path_statistics)
+        stat_man.generate_update_save(run_id, res)
 
-        logging.debug(json.dumps(json_data, indent=2))
+        #   5 visualize 
+        sd = Scenario_Diagram(res.ordered_outcomes[0], args)
+        sd.generate_diagram()
+        sd.save_and_show()
 
-    #     save the result
-    #   4 visualize result
     #   5 simulate
     #   6 evaluate simulation run
     #   7 visualize the evaluation result

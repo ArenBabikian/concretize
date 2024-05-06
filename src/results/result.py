@@ -1,9 +1,8 @@
 import logging
 from src.search.mhs.termination.single_element_termination import SingleElementTermination
 from pymoo.termination.collection import TerminationCollection
-from src.specification import Specification_Instance
+from src.model.specification import Specification_Instance
 from src.search.mhs import utils
-import pymoo.core.result
 
 class Result:
 
@@ -73,11 +72,14 @@ class Result:
             for term in termination.terminations:
                 if isinstance(term, SingleElementTermination):
                     return term.single_element_validity(fitness)
+        else:
+            logging.warning(f'No SingleElementTermination instance found')
+            return None
 
     def analyse_data_and_fill_element(self, element):
         num_violations = 0
         constraint2heuristic = {}
-        for constraint in self.specification.constraints:
+        for constraint in element.constraints:
             heuristic_value = constraint.get_heuristic_value()
             if heuristic_value != 0:
                 # constraint is violated
