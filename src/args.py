@@ -10,13 +10,12 @@ def parse_args():
     main_opt.add_argument('-v', '--verbosity', type=int, choices=(0, 1, 2, 3), default=1,  help='verbosity level',)
     main_opt.add_argument('-n', '--num-of-runs', type=int, default=1, help='Number of runs')
     main_opt.add_argument('-t', '--timeout', type=int, default=60, help='Time limit in seconds')
-    logging.warning("Fix the map integration")
     main_opt.add_argument('-m', '--map', default="maps/town02.xodr", help='path to map file')
 
     # Data Options
     data_opt = parser.add_argument_group('data options')
     data_opt.add_argument('-all', '--store-all-outcomes', action='store_true', help='Store only the best solution')
-    # TODO add save path stuff
+    data_opt.add_argument('-s-stat', '--save-path-statistics', default=None, help='Path to save the statistics')
 
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')

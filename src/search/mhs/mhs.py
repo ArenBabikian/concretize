@@ -10,7 +10,7 @@ from pymoo.termination.collection import TerminationCollection
 from pymoo.termination.max_time import TimeBasedTermination
 from pymoo.algorithms.moo.nsga2 import NSGA2
 
-from src.search.result import Result
+from src.results.result import Result
 
 class MHS_Approach:
 
@@ -95,7 +95,7 @@ class MHS_Approach:
 
         # RUN PROBLEM
         # (For Repeatability) use seed=1 option
-        verbose_pymoo = logging.getLogger().getEffectiveLevel() <= logging.WARNING
+        verbose_pymoo = logging.getLogger().getEffectiveLevel() < logging.WARNING
         mhs_res = minimize(problem, algorithm, termination, save_history=self.history, verbose=verbose_pymoo)
 
         # CREATE RESULT OBJECT

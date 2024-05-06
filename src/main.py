@@ -1,3 +1,4 @@
+import json
 from pprint import pprint
 from src.constraints.constraint import Actor
 from src.constraints.position_constraints import Has_Behind_Con, Has_To_Left_Con, Has_In_Front_Con
@@ -5,7 +6,7 @@ import src.args as get_args
 from src.search.mhs.mhs import MHS_Approach
 import logging
 
-from src.search.results2json import generate_json
+from src.results.results2json import generate_json
 from src.specification import Specification
 
 def concretize():
@@ -15,7 +16,8 @@ def concretize():
     
     # 1 setup
     logging_map = {0: logging.CRITICAL, 1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
-    logging.basicConfig(level=logging_map[args.verbosity])
+    logging.root.setLevel(logging_map[args.verbosity])
+    logging.warning("Fix the map integration in command-line options") # TEMP 
 
     # 1.1 parse the map file
     map_file = args.map
@@ -52,14 +54,19 @@ def concretize():
     elif args.approach == 'brute':
         exit(1)
 
+    # Prepare the statistics container
+
     for run_id in range(args.num_of_runs):
         #   3 call the search approach
         res = approach.concretize(spec)
+        logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
 
         #   4 save the result
-        json_data = generate_json(res, args.store_all_outcomes)
+        json_data = generate_json(res,
+                                  args.store_all_outcomes,
+                                  args.save_path_statistics)
 
-        pprint(json_data)
+        logging.debug(json.dumps(json_data, indent=2))
 
     #     save the result
     #   4 visualize result
@@ -67,3 +74,5 @@ def concretize():
     #   6 evaluate simulation run
     #   7 visualize the evaluation result
         pass
+
+    # save json for all

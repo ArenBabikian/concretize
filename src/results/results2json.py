@@ -1,4 +1,5 @@
 import json
+import logging
 
 def generate_json(res, store_all_solutions, file_path=None):
 
@@ -21,7 +22,7 @@ def generate_json(res, store_all_solutions, file_path=None):
         n_satisfactions = n_constraints - outcome.n_violations
         outcome_data['n_satisfactions'] = n_satisfactions
         outcome_data['p_satisfactions'] = -1 if n_constraints == 0 else n_satisfactions/n_constraints
-        outcome_data['heuristics'] = outcome.constraint2heuristic
+        outcome_data['heuristics'] = {str(k):v for k, v in outcome.constraint2heuristic.items()}
         outcome_data['raw_positions'] = outcome.raw_res
         # TODO missing some hard/soft constraint analysis here. Probably unnecessary
         all_outcome_data[outcome_id] = outcome_data
@@ -31,6 +32,7 @@ def generate_json(res, store_all_solutions, file_path=None):
 
     if file_path:
         with open(file_path, 'w') as f:
-            json.dump(data, f)
+            json.dump(data, f, indent=2)
+        logging.info(f"Saved outcome statistics to {file_path}")   
 
     return data

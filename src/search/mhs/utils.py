@@ -160,7 +160,7 @@ def getHeuristic(specification, x, con2id, exp):
     fillInstance(specification, x)
 
     ## GET HEURISTIC VALUES
-    logging.info(f'Confirm the getHeuristic function in mhs/utils.py from Scenic.')
+    logging.debug(f'Confirm the getHeuristic function in mhs/utils.py from Scenic.')
     for c_id, c in enumerate(specification.constraints):
         heu_val = c.get_heuristic_value()
         obj_funcs[con2id[c_id]] += heu_val
