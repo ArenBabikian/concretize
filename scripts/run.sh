@@ -1,3 +1,6 @@
+if [ ! -d output ]; then
+    mkdir output
+fi
 python concretize.py\
     -v 2\
     -n 2\
