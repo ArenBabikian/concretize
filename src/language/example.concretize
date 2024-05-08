@@ -1,0 +1,6 @@
+Car c1
+Pedestrian p1
+	position: '1,1'
+	heading: 'front'
+	dimensions: '1,1,1'
+hasInFront(c1, p1)

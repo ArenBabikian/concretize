@@ -1,0 +1,21 @@
+Specification:
+	objects += Object*
+	constraints += Constraint*
+;
+
+Object: CarInstance | PedestrianInstance;
+CarInstance:
+	'Car' name = ID
+;
+PedestrianInstance:
+	'Pedestrian' name = ID
+	// Maybe we need to do something better with these attributes
+	'position' ':' position = STRING
+	'heading' ':' heading = STRING
+	'dimensions' ':' dimensions = STRING
+;
+
+// Not well implemented yet
+Constraint:
+    type = ID '(' objects += [Object] ( ',' objects += [Object] )* ')'
+;
