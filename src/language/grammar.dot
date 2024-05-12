@@ -11,22 +11,22 @@
     edge[dir=black,arrowtail=empty]
 
 
-140550161503824[ label="{Specification|}"]
+94683190292656[ label="{Specification|}"]
 
-140550161500400[ label="{*Object|}"]
+94683190296240[ label="{*Object|}"]
 
-140550161490784[ label="{CarInstance|name: ID\l}"]
+94683190299808[ label="{CarInstance|name: ID\lx: FLOAT\ly: FLOAT\lheading: STRING\lw: FLOAT\ll: FLOAT\lh: FLOAT\l}"]
 
-140550161600480[ label="{PedestrianInstance|name: ID\lposition: STRING\lheading: STRING\ldimensions: STRING\l}"]
+94683190303968[ label="{PedestrianInstance|name: ID\lx: FLOAT\ly: FLOAT\lheading: STRING\lw: FLOAT\ll: FLOAT\lh: FLOAT\l}"]
 
-140550161602368[ label="{Constraint|type: ID\l}"]
+94683190307536[ label="{Constraint|type: ID\l}"]
 
 
 
-140550161503824 -> 140550161500400[arrowtail=diamond, dir=both, headlabel="objects 1..*"]
-140550161503824 -> 140550161602368[arrowtail=diamond, dir=both, headlabel="constraints 1..*"]
-140550161500400 -> 140550161490784 [dir=back]
-140550161500400 -> 140550161600480 [dir=back]
-140550161602368 -> 140550161500400[headlabel="objects 1..*"]
+94683190292656 -> 94683190296240[arrowtail=diamond, dir=both, headlabel="objects 1..*"]
+94683190292656 -> 94683190307536[arrowtail=diamond, dir=both, headlabel="constraints 1..*"]
+94683190296240 -> 94683190299808 [dir=back]
+94683190296240 -> 94683190303968 [dir=back]
+94683190307536 -> 94683190296240[headlabel="objects 1..*"]
 
 }

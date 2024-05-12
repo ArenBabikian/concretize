@@ -1,4 +1,7 @@
 Car c1
+	position: 1,1
+	heading: 'front'
+	dimensions: 1,1,1
 Pedestrian p1
 	position: 1,1
 	heading: 'front'

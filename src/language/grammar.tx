@@ -3,9 +3,14 @@ Specification:
 	constraints += Constraint*
 ;
 
-Object: CarInstance | PedestrianInstance;
+Object: CarInstance | PedestrianInstance
+;
+
 CarInstance:
 	'Car' name = ID
+	'position' ':' x = FLOAT',' y = FLOAT
+	'heading' ':' heading = STRING
+	'dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT
 ;
 PedestrianInstance:
 	'Pedestrian' name = ID
