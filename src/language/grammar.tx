@@ -10,9 +10,9 @@ CarInstance:
 PedestrianInstance:
 	'Pedestrian' name = ID
 	// Maybe we need to do something better with these attributes
-	'position' ':' position = STRING
+	'position' ':' x = FLOAT',' y = FLOAT
 	'heading' ':' heading = STRING
-	'dimensions' ':' dimensions = STRING
+	'dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT
 ;
 
 // Not well implemented yet
