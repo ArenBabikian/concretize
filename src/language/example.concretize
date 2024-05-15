@@ -6,4 +6,8 @@ Pedestrian p1
 	position: 1,1
 	heading: 'front'
 	dimensions: 1,1,1
+hasToLeft(c1, p1)
+hasToRight(c1, p1)
 hasInFront(c1, p1)
+hasBehind(c1, p1)
+onRegion(c1, Drivable)

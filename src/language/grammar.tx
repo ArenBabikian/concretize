@@ -1,10 +1,9 @@
 Specification:
-	objects += Object*
+	actors += ActorInstance*
 	constraints += Constraint*
 ;
 
-Object: CarInstance | PedestrianInstance
-;
+ActorInstance: CarInstance | PedestrianInstance ;
 
 CarInstance:
 	'Car' name = ID
@@ -20,7 +19,14 @@ PedestrianInstance:
 	'dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT
 ;
 
-// Not well implemented yet
 Constraint:
-    type = ID '(' objects += [Object] ( ',' objects += [Object] )* ')'
+	HasToLeftConstraint | HasToRightConstraint | HasInFrontConstraint | HasBehindConstraint
+	| OnRegionConstraint
 ;
+
+HasToLeftConstraint: 'hasToLeft' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
+HasToRightConstraint: 'hasToRight' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
+HasInFrontConstraint: 'hasInFront' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
+HasBehindConstraint: 'hasBehind' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
+
+OnRegionConstraint: 'onRegion' '(' object = [ActorInstance] ',' region = ID ')' ;
