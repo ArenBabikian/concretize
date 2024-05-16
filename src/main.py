@@ -48,10 +48,7 @@ def concretize():
 
     # OUTPUT: a Specification object, with relevant actors and constraints, as below
 
-    # TODO: Delete and use the filename in args
-    baseFile = pathlib.Path(__file__).parent.resolve()
-    specification_file = f'{baseFile}/language/example.concretize'
-
+    specification_file = args.specification
     spec = parser.parse(specification_file,
                         [Specification, Actor, Constraint,
                          Car,
