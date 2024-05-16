@@ -51,7 +51,7 @@ def concretize():
     specification_file = args.specification
     spec = parser.parse(specification_file,
                         [Specification, Actor, Constraint,
-                         Car,
+                         Car, Pedestrian,
                          Has_To_Left_Con,
                          On_Region_Con])
     spec.map_file = map_file

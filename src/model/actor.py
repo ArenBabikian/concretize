@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
 class Actor(ABC):
-    def __init__(self, actor_id, snap=False):
+    def __init__(self, parent, actor_id, snap=False):
         self.id = actor_id
         self.snap_to_waypoint = snap
         self.assigned_maneuver = None # Constraint object
-
+        self.parent = parent
         self.position = [None, None, None]
         self.heading = None
         self.current_lane = None
@@ -24,8 +24,7 @@ class Actor(ABC):
 
 class Car(Actor):
     def __init__(self, parent, name, snap=False): # TODO: No snap would be given in textX-generated model
-        super().__init__(name, snap)
-        self.parent = parent
+        super().__init__(parent, name, snap)
         self.width = 2
         self.length = 5
 
@@ -34,8 +33,8 @@ class Car(Actor):
 
 
 class Pedestrian(Actor):
-    def __init__(self, name, snap=False):
-        super().__init__(name, snap)
+    def __init__(self, parent, name, snap=False):
+        super().__init__(parent, name, snap)
         self.width = 1
         self.length = 1
 

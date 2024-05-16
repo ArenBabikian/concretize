@@ -1,4 +1,6 @@
 Car c1
 Car c2
+Pedestrian p1
+onRegion(p1, Junction)
 hasToLeft(c1, c2)
 onRegion(c1, Junction)
