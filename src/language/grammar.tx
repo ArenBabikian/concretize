@@ -1,32 +1,33 @@
 Specification:
-	actors += ActorInstance*
+	actors += Actor*
 	constraints += Constraint*
 ;
 
-ActorInstance: CarInstance | PedestrianInstance ;
+Actor: Car
+	// | Pedestrian
+;
 
-CarInstance:
+Car:
 	'Car' name = ID
-	'position' ':' x = FLOAT',' y = FLOAT
-	'heading' ':' heading = STRING
-	'dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT
+	// ('position' ':' x = FLOAT',' y = FLOAT)?
+	// ('heading' ':' heading = STRING)?
+	// ('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?
 ;
-PedestrianInstance:
-	'Pedestrian' name = ID
-	// Maybe we need to do something better with these attributes
-	'position' ':' x = FLOAT',' y = FLOAT
-	'heading' ':' heading = STRING
-	'dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT
-;
+// Pedestrian:
+//	'Pedestrian' name = ID
+//	('position' ':' x = FLOAT',' y = FLOAT)?
+//	('heading' ':' heading = STRING)?
+//	('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?
+// ;
 
 Constraint:
-	HasToLeftConstraint | HasToRightConstraint | HasInFrontConstraint | HasBehindConstraint
-	| OnRegionConstraint
+	Has_To_Left_Con // | Has_To_Right_Con | Has_In_Front_Con | Has_Behind_Con
+	| On_Region_Con
 ;
 
-HasToLeftConstraint: 'hasToLeft' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
-HasToRightConstraint: 'hasToRight' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
-HasInFrontConstraint: 'hasInFront' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
-HasBehindConstraint: 'hasBehind' '(' source = [ActorInstance] ',' target = [ActorInstance] ')' ;
+Has_To_Left_Con: 'hasToLeft' '(' actors += [Actor] ',' actors += [Actor] ')' ;
+// Has_To_Right_Con: 'hasToRight' '(' actors += [Actor] ',' actors += [Actor] ')' ;
+// Has_In_Front_Con: 'hasInFront' '(' actors += [Actor] ',' actors += [Actor] ')' ;
+// Has_Behind_Con: 'hasBehind' '(' actors += [Actor] ',' actors += [Actor] ')' ;
 
-OnRegionConstraint: 'onRegion' '(' object = [ActorInstance] ',' region = ID ')' ;
+On_Region_Con: 'onRegion' '(' actors += [Actor] ',' region = ID ')' ;

@@ -67,7 +67,7 @@ def handleConstraints(approach, specification):
         con2id = [int(c.type_id/10) for c in constraints]
         exp = [1, 1, 1, 1, 1, 1]
     elif agg_strat == 'actors':
-        con2id = [c.actors[0].id for c in constraints]
+        con2id = [actors.index(c.actors[0]) for c in constraints]
         exp = [1 for _ in range(len(actors))]
     elif agg_strat == 'importance':
         con2id = [int(c.type_id >= 20) for c in constraints]

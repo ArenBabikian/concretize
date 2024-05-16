@@ -1,12 +1,17 @@
+from src.model.road_components import Junction_Type
 from src.constraints.constraint import Constraint
 import src.constraints.utils as utils
 
 class On_Region_Con(Constraint):
 
-    def __init__(self, actors, roadmap):
+    def __init__(self, parent, actors, region):
+        self.parent = parent
         self.arity = 2
         self.type_id = 0
-        super().__init__("On_Region", actors, roadmap)
+        if region == 'Junction':
+            self.actors.append(Junction_Type())
+        # TODO: Map other region(type)s
+        super().__init__("On_Region", actors, None)
 
     def get_heuristic_value(self):
         src_ac = self.actors[0]

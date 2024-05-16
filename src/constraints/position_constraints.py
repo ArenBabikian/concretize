@@ -4,7 +4,8 @@ import math
 
 class Has_To_Left_Con(Constraint):
 
-    def __init__(self, actors):
+    def __init__(self, parent, actors):
+        self.parent = parent
         self.arity = 2
         self.type_id = 30
         super().__init__("Has_To_Left", actors, None)

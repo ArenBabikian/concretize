@@ -23,8 +23,9 @@ class Actor(ABC):
         return str(self)
 
 class Car(Actor):
-    def __init__(self, actor_id, snap=False):
-        super().__init__(actor_id, snap)
+    def __init__(self, parent, name, snap=False): # TODO: No snap would be given in textX-generated model
+        super().__init__(name, snap)
+        self.parent = parent
         self.width = 2
         self.length = 5
 
@@ -33,8 +34,8 @@ class Car(Actor):
 
 
 class Pedestrian(Actor):
-    def __init__(self, actor_id, snap=False):
-        super().__init__(actor_id, snap)
+    def __init__(self, name, snap=False):
+        super().__init__(name, snap)
         self.width = 1
         self.length = 1
 

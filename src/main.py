@@ -1,12 +1,15 @@
+from src.constraints.constraint import Constraint
 from src.constraints.distance_constraints import Is_Close_To_Con
 from src.constraints.placement_constraints import On_Region_Con
 from src.constraints.position_constraints import Has_Behind_Con, Has_To_Left_Con, Has_In_Front_Con
 import src.args as get_args
-from src.model.actor import Car, Pedestrian
+from src.model.actor import Actor, Car, Pedestrian
 from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 from src.results.statistics import Statistics_Manager
 from src.search.mhs.mhs import MHS_Approach
+from src.language import parser
 import logging
+import pathlib
 
 from src.model.specification import Specification
 from src.visualization.diagram import Scenario_Diagram
@@ -44,22 +47,41 @@ def concretize():
     # INFO as a sample, there would be an output like this as a result of the file parsing
 
     # OUTPUT: a Specification object, with relevant actors and constraints, as below
-    spec = Specification(map_file)
 
-    acs = []
-    acs.append(Car(0, True))
-    acs.append(Pedestrian(1, True))
+    # TODO: Delete and use the filename in args
+    baseFile = pathlib.Path(__file__).parent.resolve()
+    specification_file = f'{baseFile}/language/example.concretize'
 
-    cons = []
-    cons.append(Has_In_Front_Con([acs[0], acs[1]]))
-    cons.append(Is_Close_To_Con([acs[0], acs[1]]))
-    cons.append(On_Region_Con([acs[1], Junction_Type()], spec.roadmap))
-    cons.append(On_Region_Con([acs[0], Road_Type()], spec.roadmap))
+    spec = parser.parse(specification_file,
+                        [Specification, Actor, Constraint,
+                         Car,
+                         Has_To_Left_Con,
+                         On_Region_Con])
+    spec.map_file = map_file
+    spec.roadmap = spec.parsemap(map_file)
+
+    # TODO: Confirm about snap and roadmap below
+    for actor in spec.actors:
+        actor.snap = True
+    for constraint in spec.constraints:
+        constraint.roadmap = spec.roadmap
+
+    # spec = Specification(map_file)
+
+    # acs = []
+    # acs.append(Car(0, True))
+    # acs.append(Pedestrian(1, True))
+
+    # cons = []
+    # cons.append(Has_In_Front_Con([acs[0], acs[1]]))
+    # cons.append(Is_Close_To_Con([acs[0], acs[1]]))
+    # cons.append(On_Region_Con([acs[1], Junction_Type()], spec.roadmap))
+    # cons.append(On_Region_Con([acs[0], Road_Type()], spec.roadmap))
 
     #potentialy
     # c3 = TurnsLeft([a0]) # which would setthe a0.assigned_maneuver to TurnsLeft
-    spec.actors = acs
-    spec.constraints = cons
+    # spec.actors = acs
+    # spec.constraints = cons
 
     # 3.0 get the approach
     if args.approach == 'mhs':
