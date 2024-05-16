@@ -8,6 +8,7 @@ class On_Region_Con(Constraint):
         self.parent = parent
         self.arity = 2
         self.type_id = 0
+        # TODO: Do we want to separate regions from actors?
         self.actors.append(get_region_from_str(region))
         super().__init__("On_Region", actors, None)
 

@@ -68,6 +68,10 @@ def handleConstraints(approach, specification):
         exp = [1, 1, 1, 1, 1, 1]
     elif agg_strat == 'actors':
         con2id = [actors.index(c.actors[0]) for c in constraints]
+        # TODO: Improve this.
+        # c.actors[0].name is now a string.
+        # With the previous implementation, con2id = [c.actors[0].id for c in constraints],
+        # in search/mhs/utils.py line 166, obj_funcs[con2id[c_id]] will fail
         exp = [1 for _ in range(len(actors))]
     elif agg_strat == 'importance':
         con2id = [int(c.type_id >= 20) for c in constraints]

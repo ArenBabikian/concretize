@@ -60,7 +60,7 @@ def concretize():
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 
-    # TODO: Confirm about snap and roadmap below
+    # TODO: Make them optional attributes in the grammar
     for actor in spec.actors:
         actor.snap = True
     for constraint in spec.constraints:
