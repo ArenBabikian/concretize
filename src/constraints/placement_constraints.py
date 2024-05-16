@@ -5,13 +5,12 @@ import src.constraints.utils as utils
 class On_Region_Con(Constraint):
 
     def __init__(self, parent, actors, region):
-        self.parent = parent
-        self.arity = 2
-        self.type_id = 0
         if region == 'Junction':
             self.actors.append(Junction_Type())
         # TODO: Map other region(type)s
-        super().__init__("On_Region", actors, None)
+        super().__init__(parent, "On_Region", actors, None)
+        self.arity = 2
+        self.type_id = 0
 
     def get_heuristic_value(self):
         src_ac = self.actors[0]
