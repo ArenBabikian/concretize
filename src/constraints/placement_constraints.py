@@ -8,9 +8,7 @@ class On_Region_Con(Constraint):
         self.parent = parent
         self.arity = 2
         self.type_id = 0
-        if region == 'Junction':
-            self.actors.append(Junction_Type())
-        # TODO: Map other region(type)s
+        self.actors.append(get_region_from_str(region))
         super().__init__("On_Region", actors, None)
 
     def get_heuristic_value(self):
@@ -25,3 +23,7 @@ class On_Region_Con(Constraint):
                 maxDist = dist
         return maxDist
 
+def get_region_from_str(region_str):
+    if region_str == 'Junction':
+        return Junction_Type()
+    # TODO: Map other region(type)s
