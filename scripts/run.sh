@@ -12,4 +12,4 @@ python concretize.py\
     -s-diag output/diagram.png\
     -z\
     mhs\
-    yassou.txt
+    scripts/specifications/example.concretize

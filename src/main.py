@@ -27,31 +27,10 @@ def concretize():
     # 1.1 parse the map file
     map_file = args.map
 
-    # 2 read scenario specification (constraints)
-
-    # INPUT: specification file path, or other
+    # 2.0 read the scenario specification (constraints)
+    # TODO address the case of a file being editted on a web-based editor
+    
     specification_file = args.specification
-
-    # TODO  1 parse the specification file
-    #       return a list of constraints over objects
-    #       Validation would also be integrated here
-
-    #       A related conceptual challenge:
-    #       what if we want to specify that actor A1 has any actor in front of it?
-    #       we woiuld need to model somehow the instance and type abstraction levels in specification langueage
-
-    #       Further interesting thing:
-    #       - For actors, we work at the instance level
-    #       - but for roads, we work at the type level
-
-    # INFO as a sample, there would be an output like this as a result of the file parsing
-
-    # OUTPUT: a Specification object, with relevant actors and constraints, as below
-
-    # TODO: Delete and use the filename in args
-    baseFile = pathlib.Path(__file__).parent.resolve()
-    specification_file = f'{baseFile}/language/example.concretize'
-
     spec = parser.parse(specification_file,
                         [Specification, Actor, Constraint,
                          Car,
@@ -82,6 +61,9 @@ def concretize():
     # c3 = TurnsLeft([a0]) # which would setthe a0.assigned_maneuver to TurnsLeft
     # spec.actors = acs
     # spec.constraints = cons
+    
+    # 2.1 validate the scenario specification
+    # TODO
 
     # 3.0 get the approach
     if args.approach == 'mhs':
