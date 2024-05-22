@@ -1,6 +1,6 @@
 
-from src.constraints import utils
-from src.constraints.constraint import Constraint
+from src.model.constraints import utils
+from src.model.constraints.constraint import Constraint
 
 class Is_Close_To_Con(Constraint):
 

@@ -1,5 +1,5 @@
-from src.constraints.constraint import Constraint
-import src.constraints.utils as utils
+from src.model.constraints.constraint import Constraint
+import src.model.constraints.utils as utils
 import math
 
 class Has_To_Left_Con(Constraint):

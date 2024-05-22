@@ -1,10 +1,10 @@
-from src.constraints.constraint import Constraint
-from src.constraints.distance_constraints import Is_Close_To_Con
-from src.constraints.placement_constraints import On_Region_Con
-from src.constraints.position_constraints import Has_Behind_Con, Has_To_Left_Con, Has_In_Front_Con
-import src.args as get_args
+from src.model.constraints.constraint import Constraint
+from src.model.constraints.distance_constraints import Is_Close_To_Con
+from src.model.constraints.placement_constraints import On_Region_Con
+from src.model.constraints.position_constraints import Has_Behind_Con, Has_To_Left_Con, Has_In_Front_Con
 from src.model.actor import Actor, Car, Pedestrian
 from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
+import src.args as get_args
 from src.results.statistics import Statistics_Manager
 from src.search.mhs.mhs import MHS_Approach
 from src.language import parser
@@ -29,7 +29,7 @@ def concretize():
 
     # 2.0 read the scenario specification (constraints)
     # TODO address the case of a file being editted on a web-based editor
-    
+
     specification_file = args.specification
     spec = parser.parse(specification_file,
                         [Specification, Actor, Constraint,

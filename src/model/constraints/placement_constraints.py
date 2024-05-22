@@ -1,6 +1,6 @@
 from src.model.road_components import Junction_Type
-from src.constraints.constraint import Constraint
-import src.constraints.utils as utils
+from src.model.constraints.constraint import Constraint
+import src.model.constraints.utils as utils
 
 class On_Region_Con(Constraint):
 
