@@ -1,7 +1,7 @@
-from src.model.constraints.constraint import Constraint
-from src.model.constraints.distance_constraints import Is_Close_To_Con
-from src.model.constraints.placement_constraints import On_Region_Con
-from src.model.constraints.position_constraints import Has_Behind_Con, Has_To_Left_Con, Has_In_Front_Con
+from src.constraints.constraint import Constraint
+from src.constraints.distance_constraints import Is_Close_To_Con
+from src.constraints.placement_constraints import On_Region_Con
+from src.constraints.position_constraints import *
 from src.model.actor import Actor, Car, Pedestrian
 from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 import src.args as get_args
@@ -33,8 +33,8 @@ def concretize():
     specification_file = args.specification
     spec = parser.parse(specification_file,
                         [Specification, Actor, Constraint,
-                         Car,
-                         Has_To_Left_Con,
+                         Car, Pedestrian,
+                         Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con,
                          On_Region_Con])
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)

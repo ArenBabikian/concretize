@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 # TODO some work here and in specification.py to clarify the conceptual abstrcation levels (what is meta, what is instance)
 
 class Constraint(ABC):
-    def __init__(self, name, actors, roadmap):
+    def __init__(self, parent, name, actors, roadmap):
         self.predicate_name = name
+        self.parent = parent
         self.actors = actors
         self.roadmap = roadmap
         self.arity = None # TODO Might be irrelevant
