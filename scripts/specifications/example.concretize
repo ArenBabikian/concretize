@@ -1,10 +1,5 @@
 Car c1
-Car c2
-Car c3
 Pedestrian p1
 onRegion(p1, Junction)
-hasToLeft(c1, c2)
-onRegion(c1, Junction)
-hasToRight(c2, c3)
-hasBehind(c1, p1)
-hasInFront(c2, p1)
+hasToLeft(c1, p1)
+distFar(c1, p1)

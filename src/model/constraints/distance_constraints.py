@@ -4,10 +4,10 @@ from src.model.constraints.constraint import Constraint
 
 class Is_Close_To_Con(Constraint):
 
-    def __init__(self, actors):
+    def __init__(self, parent, actors):
         self.arity = 2
         self.type_id = 40
-        super().__init__("Is_Close_To", actors, None)
+        super().__init__(parent, "Is_Close_To", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
@@ -17,10 +17,10 @@ class Is_Close_To_Con(Constraint):
 
 class Is_Medium_Distance_From_Con(Constraint):
 
-    def __init__(self, actors):
+    def __init__(self, parent, actors):
         self.arity = 2
         self.type_id = 41
-        super().__init__("Is_Med_Dist_From", actors, None)
+        super().__init__(parent, "Is_Med_Dist_From", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
@@ -30,10 +30,10 @@ class Is_Medium_Distance_From_Con(Constraint):
 
 class Is_Far_From_Con(Constraint):
 
-    def __init__(self, actors):
+    def __init__(self, parent, actors):
         self.arity = 2
         self.type_id = 42
-        super().__init__("Is_Far_From", actors, None)
+        super().__init__(parent, "Is_Far_From", actors, None)
 
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
