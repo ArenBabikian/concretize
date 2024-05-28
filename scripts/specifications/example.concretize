@@ -1,5 +1,9 @@
 Car c1
+Car c2
 Pedestrian p1
+maneuverJunction(j1234)
+doesManeuver(c1, X)
+collision(c1, c2)
 onRegion(p1, Junction)
 hasToLeft(c1, p1)
 distFar(c1, p1)

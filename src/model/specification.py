@@ -4,10 +4,11 @@ from scenic.domains.driving.roads import Network
 from src.model.actor import Actor
 
 class Specification:
-    def __init__(self, actors, constraints):
+    def __init__(self, actors, maneuverJunction, constraints):
         # self.map_file = None
         # self.roadmap = None
         self.actors = actors
+        self.maneuverJunction = maneuverJunction
         self.constraints = constraints
         # self.tested_junction = None
 

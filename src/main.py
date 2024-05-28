@@ -1,3 +1,4 @@
+from src.model.constraints.behavior_constraints import Behavior_Con, Collision_Con, Danger_Con, Does_Maneuver_Con
 from src.model.constraints.constraint import Constraint
 from src.model.constraints.distance_constraints import *
 from src.model.constraints.placement_constraints import On_Region_Con
@@ -35,7 +36,8 @@ def concretize():
                         [Specification, Actor, Constraint,
                          Car, Pedestrian,
                          Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con, Is_Close_To_Con, Is_Medium_Distance_From_Con, Is_Far_From_Con,
-                         On_Region_Con])
+                         On_Region_Con,
+                         Behavior_Con, Danger_Con, Does_Maneuver_Con, Collision_Con])
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 

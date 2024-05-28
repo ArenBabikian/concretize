@@ -1,5 +1,6 @@
 Specification:
 	actors += Actor*
+	( 'maneuverJunction' '(' maneuverJunction = ID ')' )?
 	constraints += Constraint*
 ;
 
@@ -20,7 +21,8 @@ Pedestrian:
 ;
 
 Constraint:
-	Has_To_Left_Con | Has_To_Right_Con | Has_In_Front_Con | Has_Behind_Con | Is_Close_To_Con | Is_Medium_Distance_From_Con | Is_Far_From_Con | On_Region_Con
+	Has_To_Left_Con | Has_To_Right_Con | Has_In_Front_Con | Has_Behind_Con | Is_Close_To_Con | Is_Medium_Distance_From_Con | Is_Far_From_Con | On_Region_Con |
+	Behavior_Con
 ;
 
 Has_To_Left_Con: 'hasToLeft' '(' actors += [Actor] ',' actors += [Actor] ')' ;
@@ -32,5 +34,10 @@ Is_Close_To_Con: 'distClose' '(' actors += [Actor] ',' actors += [Actor] ')' ;
 Is_Medium_Distance_From_Con: 'distMed' '(' actors += [Actor] ',' actors += [Actor] ')' ;
 Is_Far_From_Con: 'distFar' '(' actors += [Actor] ',' actors += [Actor] ')' ;
 
+Behavior_Con: Does_Maneuver_Con | Danger_Con ;
+Danger_Con: Collision_Con ;
+
+Does_Maneuver_Con: 'doesManeuver' '(' actors += [Actor] ',' maneuver = ID ')' ;
+Collision_Con: 'collision' '(' actors += [Actor] ',' actors += [Actor] ')' ;
 
 On_Region_Con: 'onRegion' '(' actors += [Actor] ',' region = ID ')' ;
