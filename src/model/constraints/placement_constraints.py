@@ -1,8 +1,8 @@
 from src.model.road_components import Junction_Type
-from src.model.constraints.constraint import Constraint
+from src.model.constraints.static_constraints import Static_Con
 import src.model.constraints.utils as utils
 
-class On_Region_Con(Constraint):
+class On_Region_Con(Static_Con):
 
     def __init__(self, parent, actors, region):
         self.actors.append(get_region_from_str(region))

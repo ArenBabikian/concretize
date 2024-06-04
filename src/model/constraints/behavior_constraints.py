@@ -1,8 +1,10 @@
-from src.model.constraints import utils
+from abc import abstractmethod
 from src.model.constraints.constraint import Constraint
 
 class Behavior_Con(Constraint):
-    pass
+    @abstractmethod
+    def get_possible_paths(self): # TODO: Confirm naming and implement
+        return []
     
 class Danger_Con(Behavior_Con):
     pass
@@ -16,7 +18,10 @@ class Does_Maneuver_Con(Behavior_Con):
         super().__init__(parent, "Does_Maneuver", actors, None) # TODO: Confirm
 
     def get_heuristic_value(self):
-        return 0 # TODO
+        return 0 # TODO: Delete this method after behavior constraints are supported
+    
+    def get_possible_paths(self): # TODO: Confirm naming and implement
+        return []
 
 class Collision_Con(Danger_Con):
 
@@ -26,4 +31,7 @@ class Collision_Con(Danger_Con):
         super().__init__(parent, "Collision", actors, None) # TODO: Confirm
 
     def get_heuristic_value(self):
-        return 0 # TODO
+        return 0 # TODO: Delete this method after behavior constraints are supported
+    
+    def get_possible_paths(self): # TODO: Confirm naming and implement
+        return []

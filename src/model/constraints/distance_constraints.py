@@ -1,8 +1,8 @@
 
 from src.model.constraints import utils
-from src.model.constraints.constraint import Constraint
+from src.model.constraints.static_constraints import Static_Con
 
-class Is_Close_To_Con(Constraint):
+class Is_Close_To_Con(Static_Con):
 
     def __init__(self, parent, actors):
         self.arity = 2
@@ -15,7 +15,7 @@ class Is_Close_To_Con(Constraint):
         return utils.distance_helper(src_pos, tgt_pos, 0, 10)
 
 
-class Is_Medium_Distance_From_Con(Constraint):
+class Is_Medium_Distance_From_Con(Static_Con):
 
     def __init__(self, parent, actors):
         self.arity = 2
@@ -28,7 +28,7 @@ class Is_Medium_Distance_From_Con(Constraint):
         return utils.distance_helper(src_pos, tgt_pos, 10, 20)
 
 
-class Is_Far_From_Con(Constraint):
+class Is_Far_From_Con(Static_Con):
 
     def __init__(self, parent, actors):
         self.arity = 2

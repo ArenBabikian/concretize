@@ -33,11 +33,14 @@ def concretize():
 
     specification_file = args.specification
     spec = parser.parse(specification_file,
-                        [Specification, Actor, Constraint,
+                        [Specification,
+                         Actor,
                          Car, Pedestrian,
+                         Constraint,
+                         Static_Con,
                          Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con, Is_Close_To_Con, Is_Medium_Distance_From_Con, Is_Far_From_Con,
                          On_Region_Con,
-                         Behavior_Con, Danger_Con, Does_Maneuver_Con, Collision_Con])
+                         Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con])
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 
