@@ -1,11 +1,17 @@
 Specification:
+	params = Params?
 	actors += Actor*
-	( 'maneuverJunction' '(' maneuverJunction = ID ')' )?
 	constraints += Constraint*
 ;
 
-Actor: Car | Pedestrian
+Params:
+	'Params' '{'
+		( 'map' ':' map = STRING )?
+		( 'maneuverJunction' ':' maneuverJunction = ID )?
+	'}'
 ;
+
+Actor: Car | Pedestrian ;
 
 Car:
 	'Car' name = ID
