@@ -3,21 +3,23 @@
   <main>
     <textarea v-model="specificationsText"></textarea>
     <button @click="onSubmit">Submit</button>
+    <img :src="imgSrc"/>
   </main>
 </template>
 
 <script>
-import { generate } from '@/scripts/api'
+import { BASE_URL, generate, download } from '@/scripts/api'
 export default {
   data() {
     return {
-      specificationsText: ""
+      specificationsText: "",
+      imgSrc: ""
     }
   },
   methods: {
     async onSubmit() {
       console.log(this.specificationsText)
-      res = await generate(this.specificationsText, {
+      let res = await generate(this.specificationsText, {
         approach: "mhs",
         aggregation_strategy: "actors",
         algorithm_name: "nsga2",
@@ -28,6 +30,10 @@ export default {
         zoom_diagram: true
       })
       console.log(res)
+      if (res?.data?.diagram_file_name) {
+        const filename = res?.data?.diagram_file_name;
+        this.imgSrc = `${BASE_URL}/downloads/${filename}`
+      }
     }
   }
 }

@@ -1,12 +1,14 @@
 import os
-from flask import Flask, current_app, request, send_from_directory
+from flask import Flask, current_app, request, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from src.controller import *
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = './uploads'
 CORS(app)
+
+UPLOAD_FOLDER_NAME = 'uploads'
+app.config['UPLOAD_FOLDER'] = f'./{UPLOAD_FOLDER_NAME}'
 
 @app.post("/generate")
 def generate():
@@ -22,8 +24,8 @@ def generate():
 
 @app.get("/downloads/<filename>")
 def download(filename):
-    uploadAbsPath = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
-    return send_from_directory(directory=uploadAbsPath, filename=filename)
+    abspath = os.path.join(current_app.root_path, f"/{UPLOAD_FOLDER_NAME}")
+    return send_file(f".{abspath}/{filename}")
 
 class AutoObject(object):   
     def __init__(self, d: dict):
