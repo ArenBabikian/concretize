@@ -4,7 +4,7 @@
     <div class="wrapper">
       <div class="input-area">
         <textarea v-model="specificationsText" class="input-text block"></textarea>
-        <button @click="onSubmit" class="submit-button block">Submit</button>
+        <button @click="onSubmit" class="submit-button block" :disabled="waiting">{{ buttonText }}</button>
       </div>
       <div class="img-display">
         <img :src="imgSrc" class="res-img"/>
@@ -23,17 +23,24 @@ export default {
   data() {
     return {
       specificationsText: "",
-      imgSrc: ""
+      imgSrc: "",
+      waiting: false
     }
   },
   computed: {
     showPlaceholder() {
       return this.imgSrc.length == 0;
+    },
+    buttonText() {
+      if (this.waiting) {
+        return "Loading...";
+      } 
+      return "Submit";
     }
   },
   methods: {
     async onSubmit() {
-      console.log(this.specificationsText)
+      this.waiting = true;
       let res = await generate(this.specificationsText, {
         approach: "mhs",
         aggregation_strategy: "actors",
@@ -49,6 +56,7 @@ export default {
         const filename = res?.data?.diagram_file_name;
         this.imgSrc = `${BASE_URL}/downloads/${filename}`
       }
+      this.waiting = false;
     }
   }
 }
