@@ -1,9 +1,19 @@
 
 <template>
   <main>
-    <textarea v-model="specificationsText"></textarea>
-    <button @click="onSubmit">Submit</button>
-    <img :src="imgSrc"/>
+    <div class="wrapper">
+      <div class="input-area">
+        <textarea v-model="specificationsText" class="input-text block"></textarea>
+        <button @click="onSubmit" class="submit-button block">Submit</button>
+      </div>
+      <div class="img-display">
+        <img :src="imgSrc" class="res-img"/>
+        <div class="placeholder-text center-text" v-if="showPlaceholder">
+          Your image will appear here
+        </div>
+      </div>
+
+    </div>
   </main>
 </template>
 
@@ -14,6 +24,11 @@ export default {
     return {
       specificationsText: "",
       imgSrc: ""
+    }
+  },
+  computed: {
+    showPlaceholder() {
+      return this.imgSrc.length == 0;
     }
   },
   methods: {
@@ -27,7 +42,7 @@ export default {
         history: "none",
         num_of_runs: 10,
         timeout: 60,
-        zoom_diagram: true
+       zoom_diagram: true
       })
       console.log(res)
       if (res?.data?.diagram_file_name) {
@@ -38,3 +53,33 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  margin-top: 10px;
+}
+.input-text {
+  height: 70vh;
+  width: 100%;
+  resize: none;
+}
+
+.center-text {
+  width: 100%;
+  text-align: center;
+  margin-top: 30vh;
+}
+.submit-button {
+  margin-top: 5px;
+  float: right;
+  position: relative;
+  left: 5px; 
+}
+.res-img {
+  width: min(48vw, 100%);
+  float:right;
+}
+</style>
