@@ -57,3 +57,4 @@ class Scenario_Diagram:
             logging.debug('Showing diagram of the initial scene')
             plt.show()
         plt.close()
+    
