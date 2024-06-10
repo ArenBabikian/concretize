@@ -5,6 +5,7 @@
       <div class="input-area">
         <textarea v-model="specificationsText" class="input-text block"></textarea>
         <button @click="onSubmit" class="submit-button block" :disabled="waiting">{{ buttonText }}</button>
+        <textarea class="console" ref="resultsConsole" disabled v-model="consoleText"></textarea>
       </div>
       <div class="img-display">
         <img :src="imgSrc" class="res-img"/>
@@ -24,7 +25,8 @@ export default {
     return {
       specificationsText: "",
       imgSrc: "",
-      waiting: false
+      waiting: false,
+      consoleText: ""
     }
   },
   computed: {
@@ -36,6 +38,14 @@ export default {
         return "Loading...";
       } 
       return "Submit";
+    }
+  },
+  watch: {
+    consoleText() {
+      // Automatically scrolls console to bottom on update
+      this.$nextTick(() => {
+        this.$refs.resultsConsole.scrollTop = this.$refs.resultsConsole.scrollHeight;
+      });
     }
   },
   methods: {
@@ -55,6 +65,8 @@ export default {
       if (res?.data?.diagram_file_name) {
         const filename = res?.data?.diagram_file_name;
         this.imgSrc = `${BASE_URL}/downloads/${filename}`
+      } else if (res?.data?.error) {
+        this.consoleText += `${res?.data?.error}\n`;
       }
       this.waiting = false;
     }
@@ -70,7 +82,7 @@ export default {
   margin-top: 10px;
 }
 .input-text {
-  height: 70vh;
+  height: 60vh;
   width: 100%;
   resize: none;
 }
@@ -86,6 +98,17 @@ export default {
   position: relative;
   left: 5px; 
 }
+
+.console {
+  height: 20vh;
+  width: 100%;
+  margin-top: calc(var(--text-size-big) + 25px);
+  background-color: var(--color-dark-text);
+  color: var(--color-light-text);
+  font-family: var(--font-mono);
+  overflow: auto;
+}
+
 .res-img {
   width: min(48vw, 100%);
   float:right;

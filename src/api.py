@@ -17,10 +17,16 @@ def generate():
     args = AutoObject(jsonData['args'])
     args.upload_folder = app.config['UPLOAD_FOLDER']
     # TODO: Support upload of map files
-    diagramFileName = generateFromSpecs(constraints, args)
-    return {
-        "diagram_file_name": diagramFileName
-    }
+    try:
+        diagramFileName = generateFromSpecs(constraints, args)
+        return {
+            "diagram_file_name": diagramFileName
+        }
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
+    
 
 @app.get("/downloads/<filename>")
 def download(filename):
