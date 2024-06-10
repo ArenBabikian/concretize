@@ -5,6 +5,7 @@
       <div class="input-area">
         <textarea v-model="specificationsText" class="input-text block"></textarea>
         <button @click="onSubmit" class="submit-button block" :disabled="waiting">{{ buttonText }}</button>
+        <div v-if="error" class="notification-text">Could not generate image</div>
         <textarea class="console" ref="resultsConsole" disabled v-model="consoleText"></textarea>
       </div>
       <div class="img-display">
@@ -26,7 +27,8 @@ export default {
       specificationsText: "",
       imgSrc: "",
       waiting: false,
-      consoleText: ""
+      consoleText: "",
+      error: false
     }
   },
   computed: {
@@ -41,6 +43,10 @@ export default {
     }
   },
   watch: {
+    specificationsText() {
+      // Exit error state if user has changed the text
+      this.error = false;
+    },
     consoleText() {
       // Automatically scrolls console to bottom on update
       this.$nextTick(() => {
@@ -67,6 +73,7 @@ export default {
         this.imgSrc = `${BASE_URL}/downloads/${filename}`
       } else if (res?.data?.error) {
         this.consoleText += `${res?.data?.error}\n`;
+        this.error = true;
       }
       this.waiting = false;
     }
@@ -102,7 +109,7 @@ export default {
 .console {
   height: 20vh;
   width: 100%;
-  margin-top: calc(var(--text-size-big) + 25px);
+  margin-top: 5px;
   background-color: var(--color-dark-text);
   color: var(--color-light-text);
   font-family: var(--font-mono);

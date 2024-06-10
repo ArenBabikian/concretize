@@ -3,7 +3,7 @@
 :root {
     --font-sans: "Overpass", sans-serif;
     --font-serif: "PT Serif", "Times New Roman", "Liberation Serif", serif;
-    --font-mono: "Latin Modern Mono", monospace;
+    --font-mono: "Latin Modern Mono", "Courier New", Courier, monospace;
     --text-size-big: 1.7em;
     --text-size-medium: 1.3em;
     --color-dark-text: hsl(0, 0%, 5%);
@@ -37,6 +37,12 @@ button:disabled {
 .placeholder-text {
     color: var(--color-gray-text);
     font-family: var(--font-sans);
+    font-size: var(--text-size-medium);
+}
+
+.notification-text {
+    color: var(--color-gray-text);
+    font-family: var(--font-serif);
     font-size: var(--text-size-medium);
 }
 
