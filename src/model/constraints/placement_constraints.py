@@ -23,6 +23,8 @@ class On_Region_Con(Static_Con):
         return maxDist
 
 def get_region_from_str(region_str):
-    if region_str == 'Junction':
-        return Junction_Type()
+    srt_to_cls = {
+        'Junction': Junction_Type
+        }
+    return srt_to_cls[region_str]()
     # TODO: Map other region(type)s

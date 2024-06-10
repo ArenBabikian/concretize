@@ -8,7 +8,7 @@ def parse_args():
     # Main Options
     main_opt = parser.add_argument_group('main options')
     main_opt.add_argument('-v', '--verbosity', type=int, choices=(0, 1, 2, 3), default=1,  help='verbosity level',)
-    main_opt.add_argument('-n', '--num-of-runs', type=int, default=1, help='Number of runs')
+    main_opt.add_argument('-n', '--num-of-scenarios', type=int, default=1, help='Number of concrete scenarios to generate')
     main_opt.add_argument('-t', '--timeout', type=int, default=60, help='Time limit in seconds')
     main_opt.add_argument('-m', '--map', default="maps/town02.xodr", help='path to map file')
 
@@ -30,6 +30,7 @@ def parse_args():
     mhs_cmd.add_argument('-algo', '--algorithm-name', choices=['nsga2', 'ga', 'nsga3'], default='nsga2', help='Evolutionary algorithm to use')
     mhs_cmd.add_argument('-rt', '--restart-time', type=float, default=-1, help='Restart time for the evolutionary algorithm')
     mhs_cmd.add_argument('-hist', '--history', choices=['none', 'shallow', 'deep'], default='none', help='History option for the MHS approach')
+    mhs_cmd.add_argument('-nr', '--num-of-mhs-runs', type=float, default=-1, help='Number of MHS runs to perform')
 
     # Brute Approach
     brute_cmd = approach_subcmd.add_parser('brute', help='Use the brute force approach')

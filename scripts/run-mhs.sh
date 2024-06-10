@@ -8,7 +8,7 @@ fi
 
 python concretize.py\
     -v 2\
-    -n 2\
+    -n -1\
     -t 5\
     -m maps/town05.xodr\
     -all\
@@ -17,4 +17,5 @@ python concretize.py\
     -s-diag output/diagram.png\
     -z\
     mhs\
-    scripts/specifications/example.concretize
+    --num-of-mhs-runs 2\
+    scripts/specifications/static.concretize

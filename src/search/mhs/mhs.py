@@ -8,11 +8,11 @@ from pymoo.optimize import minimize
 from pymoo.core.problem import ElementwiseProblem
 from pymoo.termination.collection import TerminationCollection
 from pymoo.termination.max_time import TimeBasedTermination
-from pymoo.algorithms.moo.nsga2 import NSGA2
 
 from src.results.result import Result
+from src.search.search_approach import Search_Approach
 
-class MHS_Approach:
+class MHS_Approach(Search_Approach):
 
     def __init__(self, args):
         self.aggregation_strategy = args.aggregation_strategy
@@ -20,6 +20,8 @@ class MHS_Approach:
         self.restart_time = args.restart_time
         self.history = args.history
         self.timeout = args.timeout
+        self.num_runs = args.num_of_mhs_runs
+        super().__init__(args)
 
     def getProblem(self, specification):
         actors = specification.actors
@@ -84,26 +86,44 @@ class MHS_Approach:
 
         return TerminationCollection(t1, t2)
 
+    def all_runs_done(self, run_id):
+        return (not self.num_runs == -1) and run_id >= self.num_runs
+
     def concretize(self, specification):
-        # GET PROBLEM
-        # TODO remove the num_objectives once the AGREATION_STRATEGY abstract class is created
+
+        # Returns a list of Result objects
+        # TODO add an option to show solutions as they are found. see atat_man.generate_upate_save
+        all_solutions = []
+
+        run_id = 0
+        while not self.all_runs_done(run_id) and not self.all_sols_found():
+
+            # GET PROBLEM
+            # TODO remove the num_objectives once the AGREATION_STRATEGY abstract class is created
+            problem, num_objectives = self.getProblem(specification)
+
+            # GET ALGORITHM
+            algorithm = self.getAlgo(num_objectives)
+
+            # GET TERMINATION
+            target_heuristic_values = [0 for _ in range(num_objectives)]
+            termination = self.getTermination(target_heuristic_values)
+
+            # RUN PROBLEM
+            # (For Repeatability) use seed=1 option
+            verbose_pymoo = logging.getLogger().getEffectiveLevel() < logging.WARNING
+            mhs_res = minimize(problem, algorithm, termination, save_history=self.history, verbose=verbose_pymoo)
+
+            # CREATE RESULT OBJECT
+            # Important Note: mhs_res only contains NDSs, so it is always <=, often <,  pop_size
+            res = Result(mhs_res, specification)
+            res.update_from_mhs()
+
+            logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
+
+            # Handle the solution
+            all_solutions.append(res)
+            self.solutions_found += res.n_solutions
+            run_id += 1
         
-        problem, num_objectives = self.getProblem(specification)
-
-        # GET ALGORITHM
-        algorithm = self.getAlgo(num_objectives)
-
-        # GET TERMINATION
-        target_heuristic_values = [0 for _ in range(num_objectives)]
-        termination = self.getTermination(target_heuristic_values)
-
-        # RUN PROBLEM
-        # (For Repeatability) use seed=1 option
-        verbose_pymoo = logging.getLogger().getEffectiveLevel() < logging.WARNING
-        mhs_res = minimize(problem, algorithm, termination, save_history=self.history, verbose=verbose_pymoo)
-
-        # CREATE RESULT OBJECT
-        # Important Note: mhs_res only contains NDSs, so it is always <=, often <,  pop_size
-        res = Result(mhs_res, specification)
-        res.update_from_mhs()
-        return res
+        return all_solutions

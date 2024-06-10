@@ -1,0 +1,10 @@
+Params {
+    map: 'maps/town05.xodr'
+    maneuverJunction: j1234
+}
+
+Car c1
+Car c2
+onRegion(c2, Junction)
+hasToLeft(c1, c2)
+distClose(c1, c2)

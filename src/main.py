@@ -73,25 +73,27 @@ def concretize():
     # TODO
 
     # 3.0 get the approach
-    if args.approach == 'mhs':
-        # TODO generalise this
-        approach = MHS_Approach(args)
-    elif args.approach == 'brute':
+    str2approach = {'mhs': MHS_Approach}
+
+    if args.approach not in str2approach:
+        logging.error(f"Invalid approach: {args.approach}")
         exit(1)
+    else:
+        approach = str2approach[args.approach](args)
 
     # Prepare the statistics container
     stat_man = Statistics_Manager(args, spec)
     stat_man.save()
 
-    for run_id in range(args.num_of_runs):
-        #   3 call the search approach
-        res = approach.concretize(spec)
-        logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
+    # 4.0 call the search approach
+    all_results = approach.concretize(spec)
 
-        #   4 save the result
-        stat_man.generate_update_save(run_id, res)
+    for res_id, res in enumerate(all_results):
+        #   5 save the result
+        stat_man.generate_update_save(res_id, res)
 
-        #   5 visualize 
+        #   6 visualize 
+        # TODO handle the case where many results are reurned by the same run
         sd = Scenario_Diagram(res.ordered_outcomes[0], args)
         sd.generate_diagram()
         sd.save_and_show()
