@@ -1,9 +1,17 @@
+<script setup>
+import { VAceEditor } from 'vue3-ace-editor';
+import './ace/mode-concretize'; // Load the language definition file used below
+</script>
 
 <template>
   <main>
     <div class="wrapper">
       <div class="input-area">
-        <textarea v-model="specificationsText" class="input-text block"></textarea>
+        <v-ace-editor
+          id="editor"
+          v-model:value="specificationsText"
+          class="input-text block"
+        />
         <button @click="onSubmit" class="submit-button block" :disabled="waiting">{{ buttonText }}</button>
         <div v-if="error" class="notification-text">Could not generate image</div>
         <textarea class="console" ref="resultsConsole" disabled v-model="consoleText"></textarea>
@@ -21,6 +29,12 @@
 
 <script>
 import { BASE_URL, generate, download } from '@/scripts/api'
+
+window.onload = function () {
+  var editor = ace.edit("editor");
+  editor.session.setMode("ace/mode/concretize")
+}
+
 export default {
   data() {
     return {
