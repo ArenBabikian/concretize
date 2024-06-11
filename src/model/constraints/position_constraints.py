@@ -1,4 +1,4 @@
-from src.model.constraints.static_constraints import Static_Con
+from src.model.constraints.constraint import Static_Con
 import src.model.constraints.utils as utils
 import math
 

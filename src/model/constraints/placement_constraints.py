@@ -1,5 +1,5 @@
 from src.model.road_components import Junction_Type
-from src.model.constraints.static_constraints import Static_Con
+from src.model.constraints.constraint import Static_Con
 import src.model.constraints.utils as utils
 
 class On_Region_Con(Static_Con):

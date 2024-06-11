@@ -1,6 +1,6 @@
 
 from src.model.constraints import utils
-from src.model.constraints.static_constraints import Static_Con
+from src.model.constraints.constraint import Static_Con
 
 class Is_Close_To_Con(Static_Con):
 

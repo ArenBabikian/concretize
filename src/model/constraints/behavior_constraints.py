@@ -1,11 +1,5 @@
-from abc import abstractmethod
-from src.model.constraints.constraint import Constraint
+from src.model.constraints.constraint import Behavior_Con
 
-class Behavior_Con(Constraint):
-    @abstractmethod
-    def get_possible_paths(self): # TODO: Confirm naming and implement
-        return []
-    
 class Danger_Con(Behavior_Con):
     pass
 
