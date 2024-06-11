@@ -4,7 +4,7 @@ from src.model.constraints.distance_constraints import *
 from src.model.constraints.placement_constraints import On_Region_Con
 from src.model.constraints.position_constraints import *
 from src.model.actor import Actor, Car, Pedestrian
-from src.model.params import Params
+from src.model.param import Param
 from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
@@ -35,7 +35,7 @@ def concretize():
     specification_file = args.specification
     spec = parser.parse(specification_file,
                         [Specification,
-                         Params,
+                         Param,
                          Actor,
                          Car, Pedestrian,
                          Constraint,

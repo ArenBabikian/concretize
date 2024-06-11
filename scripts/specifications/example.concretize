@@ -1,7 +1,5 @@
-Params {
-    map: 'maps/town05.xodr'
-    maneuverJunction: j1234
-}
+map: 'maps/town05.xodr'
+maneuverJunction: 'j1234'
 
 Car c1
 Car c2
