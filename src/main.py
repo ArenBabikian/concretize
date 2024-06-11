@@ -24,10 +24,7 @@ def concretize():
     # 1 setup
     logging_map = {0: logging.CRITICAL, 1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
     logging.root.setLevel(logging_map[args.verbosity])
-    logging.warning("Fix the map integration in command-line options") # TEMP 
-
-    # 1.1 parse the map file
-    map_file = args.map
+    logging.warning("Fix the map integration in command-line options") # TEMP
 
     # 2.0 read the scenario specification (constraints)
     # TODO address the case of a file being editted on a web-based editor
@@ -42,7 +39,14 @@ def concretize():
                          Static_Con,
                          Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con, Is_Close_To_Con, Is_Medium_Distance_From_Con, Is_Far_From_Con,
                          On_Region_Con,
-                         Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con])
+                         Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con]) 
+    
+    for param in spec.params:
+        args.__dict__[param.key] = param.value
+
+    # 1.1 parse the map file
+    map_file = args.map
+
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 
