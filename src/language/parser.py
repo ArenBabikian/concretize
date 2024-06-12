@@ -4,14 +4,21 @@ from src.model.constraints.constraint import Constraint
 from src.model.constraints.distance_constraints import *
 from src.model.constraints.placement_constraints import On_Region_Con
 from src.model.constraints.position_constraints import *
+from src.model.param import *
+from src.model.constraints.behavior_constraints import *
 from src.model.actor import Actor, Car, Pedestrian
 from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 from src.model.specification import Specification
 
-COMPONENT_CLASSES = [Specification, Actor, Constraint,
+COMPONENT_CLASSES = [Specification,
+                         Param,
+                         Actor,
                          Car, Pedestrian,
+                         Constraint,
+                         Static_Con,
                          Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con, Is_Close_To_Con, Is_Medium_Distance_From_Con, Is_Far_From_Con,
-                         On_Region_Con]
+                         On_Region_Con,
+                         Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con]
 
 baseFile = pathlib.Path(__file__).parent.resolve()
 

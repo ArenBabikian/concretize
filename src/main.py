@@ -1,8 +1,10 @@
+from src.model.constraints.behavior_constraints import Behavior_Con, Collision_Con, Danger_Con, Does_Maneuver_Con
 from src.model.constraints.constraint import Constraint
 from src.model.constraints.distance_constraints import *
 from src.model.constraints.placement_constraints import On_Region_Con
 from src.model.constraints.position_constraints import *
 from src.model.actor import Actor, Car, Pedestrian
+from src.model.param import Param
 from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
@@ -22,16 +24,20 @@ def concretize():
     # 1 setup
     logging_map = {0: logging.CRITICAL, 1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
     logging.root.setLevel(logging_map[args.verbosity])
-    logging.warning("Fix the map integration in command-line options") # TEMP 
-
-    # 1.1 parse the map file
-    map_file = args.map
+    logging.warning("Fix the map integration in command-line options") # TEMP
 
     # 2.0 read the scenario specification (constraints)
     # TODO address the case of a file being editted on a web-based editor
 
     specification_file = args.specification
     spec = parser.parse(specification_file)
+
+    for param in spec.params:
+        args.__dict__[param.key] = param.value
+
+    # 1.1 parse the map file
+    map_file = args.map
+
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 

@@ -13,7 +13,9 @@ def generateFromSpecs(constraintsStr, args, mapFileLoc = "../maps/town02.xodr"):
         actor.snap = True
     for constraint in model.constraints:
         constraint.roadmap = model.roadmap
-    
+    for param in model.params:
+        args.__dict__[param.key] = param.value
+        
     approach = None
     if args.approach == 'mhs':
         # TODO implement other approaches when ready

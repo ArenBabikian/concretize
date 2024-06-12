@@ -1,8 +1,8 @@
-from src.model.constraints.constraint import Constraint
+from src.model.constraints.constraint import Static_Con
 import src.model.constraints.utils as utils
 import math
 
-class Has_To_Left_Con(Constraint):
+class Has_To_Left_Con(Static_Con):
 
     def __init__(self, parent, actors):
         super().__init__(parent, "Has_To_Left", actors, None)
@@ -17,7 +17,7 @@ class Has_To_Left_Con(Constraint):
         return utils.position_helper(src_pos, src_heading+(math.pi/2), tgt_pos, math.atan(2.5/2))
 
 
-class Has_To_Right_Con(Constraint):
+class Has_To_Right_Con(Static_Con):
 
     def __init__(self, parent, actors):
         super().__init__(parent, "Has_To_Right", actors, None)
@@ -33,7 +33,7 @@ class Has_To_Right_Con(Constraint):
         return utils.position_helper(src_pos, src_heading-(math.pi/2), tgt_pos, math.atan(2.5/2))
 
 
-class Has_In_Front_Con(Constraint):
+class Has_In_Front_Con(Static_Con):
 
     def __init__(self, parent, actors):
         super().__init__(parent, "Has_In_Front", actors, None)
@@ -48,7 +48,7 @@ class Has_In_Front_Con(Constraint):
         return utils.position_helper(src_pos, src_heading, tgt_pos, math.atan(2/5))
 
 
-class Has_Behind_Con(Constraint):
+class Has_Behind_Con(Static_Con):
 
     def __init__(self, parent, actors):
         super().__init__(parent, "Has_Behind", actors, None)
