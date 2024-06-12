@@ -3,9 +3,10 @@
 :root {
     --font-sans: "Overpass", sans-serif;
     --font-serif: "PT Serif", "Times New Roman", "Liberation Serif", serif;
-    --font-mono: "Latin Modern Mono", "Courier New", Courier, monospace;
+    --font-mono: monospace;
     --text-size-big: 1.7em;
     --text-size-medium: 1.3em;
+    --text-size-small: 1em;
     --color-dark-text: hsl(0, 0%, 5%);
     --color-gray-text: hsl(0, 0%, 25%);
     --color-light-text: hsl(0, 0%, 95%);

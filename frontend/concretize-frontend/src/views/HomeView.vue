@@ -106,6 +106,8 @@ export default {
   height: 60vh;
   width: 100%;
   resize: none;
+  font-size: var(--text-size-small);
+  font-family: var(--font-mono);
 }
 
 .center-text {
