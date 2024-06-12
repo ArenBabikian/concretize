@@ -1,22 +1,18 @@
 from scenic.domains.driving.roads import Network
 
 from src.model.actor import Actor
+from src.model.constraints.junction import Junction
 
 class Specification:
     def __init__(self, params, actors, constraints):
-        # self.map_file = None
-        # self.roadmap = None
         self.params = params
         self.actors = actors
         self.constraints = constraints
-        # self.tested_junction = None
 
-    # def __init__(self, map_file):
-        # self.map_file = map_file
-        # self.roadmap = self.parsemap(map_file)
-        # self.actors = None
-        # self.constraints = None
-        # self.tested_junction = None
+        # Added from CLI or grammar
+        self.map_file = None
+        self.roadmap = None
+        self.junction = None
 
     def parsemap(self, map_file):
         # TODO leverage Scenic

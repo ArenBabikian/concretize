@@ -6,17 +6,19 @@ if [ ! -d output ]; then
     mkdir output
 fi
 
+# town 04, j916 is the 4-way 1-lane junction
+
 python concretize.py\
     -v 2\
-    -n -1\
+    -n 2\
     -t 5\
-    -m maps/town05.xodr\
+    -m maps/town01.xodr\
     -all\
     --output-directory output\
     --save-statistics-file stats.json\
-    --view-diagram\
     --save-diagram\
+    --show-maneuvers\
     -z\
-    mhs\
-    --num-of-mhs-runs 2\
-    scripts/specifications/static.concretize
+    complete\
+    -j 87\
+    scripts/specifications/dynamic.concretize

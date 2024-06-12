@@ -14,15 +14,19 @@ def parse_args():
 
     # Data Options
     data_opt = parser.add_argument_group('data options')
+    data_opt.add_argument('-o', '--output-directory', default=None, help='Path to save the outputs (statistics, diagrams, etc)')
     data_opt.add_argument('-all', '--store-all-outcomes', action='store_true', help='Store only the best solution')
-    data_opt.add_argument('-s-stat', '--save-path-statistics', default=None, help='Path to save the statistics')
+    data_opt.add_argument('-s-stat', '--save-statistics-file', default=None, help='Path name for statistics file')
+
 
     # Visualisation Options
     vis_opt = parser.add_argument_group('visualisation options')
     vis_opt.add_argument('-v-diag', '--view-diagram', action='store_true', help='Pop up diagram')
-    vis_opt.add_argument('-s-diag', '--save-path-diagram', default=None, help='Path to save the diagram')
-    vis_opt.add_argument('-z', '--zoom_diagram', action='store_true', help='Zoom to junction, or to the actors')
-
+    vis_opt.add_argument('-s-diag', '--save-diagram', action='store_true', help='Save the diagram')
+    vis_opt.add_argument('-z', '--zoom-diagram', action='store_true', help='Zoom to junction, or to the actors')
+    vis_opt.add_argument('-sh-act', '--hide-actors', action='store_true', help='Hide the actors in the visualization')
+    vis_opt.add_argument('-sh-man', '--show-maneuvers', action='store_true', help='Highlight the assigned maneuver regions in the visualization')
+    vis_opt.add_argument('-sh-expa', '--show-exact-paths', action='store_true', help='Show the assigned exact paths in the visualization')
 
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')
@@ -33,7 +37,8 @@ def parse_args():
     mhs_cmd.add_argument('-nr', '--num-of-mhs-runs', type=float, default=-1, help='Number of MHS runs to perform')
 
     # Brute Approach
-    brute_cmd = approach_subcmd.add_parser('brute', help='Use the brute force approach')
+    complete_cmd = approach_subcmd.add_parser('complete', help='Use a rule-based approach to generate a set of scenarios with abstract completeness')
+    complete_cmd.add_argument('-j', '--junction', type=str, help='Id of the junction where to perform search')
     
     # Reverse Approach
     # for now only statc, this would be quite complicated for dynamic

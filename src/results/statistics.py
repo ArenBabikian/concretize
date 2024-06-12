@@ -1,5 +1,6 @@
 import json
 import logging
+from pathlib import Path
 
 class Statistics_Manager:
 
@@ -13,36 +14,11 @@ class Statistics_Manager:
         self.global_stats = global_stats
 
         self.stor_all_outcomes = args.store_all_outcomes
-        self.json_path = args.save_path_statistics
+        print(args.output_directory, args.save_statistics_file)
+        self.json_path = Path(args.output_directory) / args.save_statistics_file
 
     def generate_stats(self, res):
-        data = {}
-        data['success'] = res.success
-        data['n_solutions'] = res.n_solutions
-        data['runtime'] = res.runtime
-        data['n_iterations'] = res.n_iterations
-        n_constraints = len(res.specification.constraints)
-        data['n_constraints'] = n_constraints
-        # data['restarts'] = res.restarts # TODO
-
-        all_outcome_data = {}
-        for i, outcome in enumerate(res.ordered_outcomes):
-            if i>0 and not self.stor_all_outcomes:
-                break
-            outcome_id = 'outcome_' + str(i)
-            outcome_data = {}
-
-            n_satisfactions = n_constraints - outcome.n_violations
-            outcome_data['n_satisfactions'] = n_satisfactions
-            outcome_data['p_satisfactions'] = -1 if n_constraints == 0 else n_satisfactions/n_constraints
-            outcome_data['heuristics'] = {str(k):v for k, v in outcome.constraint2heuristic.items()}
-            outcome_data['raw_positions'] = outcome.raw_res
-            # TODO missing some hard/soft constraint analysis here. Probably unnecessary
-            all_outcome_data[outcome_id] = outcome_data
-
-        data['outcomes'] = all_outcome_data
-        # TODO add history data analysis (see scenic>scenarios.py:L537-608)
-        return data
+        res.update_stats_map(self.stor_all_outcomes)
 
     def update(self, run_id, run_res):
         self.global_stats['runs'][run_id] = run_res
@@ -55,6 +31,6 @@ class Statistics_Manager:
             logging.info(f"Saved outcome statistics to {self.json_path}")   
 
     def generate_update_save(self, run_id, run_res):
-        one_run_data = self.generate_stats(run_res)
-        self.update(run_id, one_run_data)
+        self.generate_stats(run_res)
+        self.update(run_id, run_res.stats_map)
         self.save()

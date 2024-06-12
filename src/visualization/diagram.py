@@ -5,17 +5,25 @@ import matplotlib.pyplot as plt
 from scenic.core.object_types import Object
 from scenic.domains.driving.workspace import Workspace
 
+from src.model.constraints.danger_constraints import Collision_Con
+import src.visualization.utils as utils
+import src.visualization.colors as colors
+from pathlib import Path
 
 class Scenario_Diagram:
 
-    def __init__(self, instance, args):
+    def __init__(self, instance, diagram_id, args):
         self.spec = instance
         self.workspace = Workspace(instance.roadmap.drivableRegion)
         self.diagram = None
 
         self.view = args.view_diagram
-        self.save_path = args.save_path_diagram
+        self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
         self.zoom = args.zoom_diagram
+
+        self.hide_actors = args.hide_actors
+        self.show_maneuvers = args.show_maneuvers
+        self.show_exact_paths = args.show_exact_paths
 
     def generate_diagram(self):
         fig = plt.figure()
@@ -24,15 +32,30 @@ class Scenario_Diagram:
         self.spec.roadmap.show()
         # self.workspace.show(plt)
 
-        # draw objects
-        for ac in self.spec.actors:
-            logging.debug(f'{ac} positioned atr {ac.position}')
-            scenic_object = Object(position=ac.position, heading=ac.heading, width=ac.width, length=ac.length)
-            scenic_object.show(self.workspace, plt, True)
+        if self.show_maneuvers:
+            # draw maneuver regions
+            for i, ac in enumerate(self.spec.actors):
+                if ac.assigned_maneuver_instance:
+                    color = colors.COLOR_SEQ[i].light
+                    region = ac.assigned_maneuver_instance.connectingLane
+                    utils.show_region(plt, region, color)
+            
+            # draw overlap regions
+            for c in self.spec.constraints:
+                if isinstance(c, Collision_Con):
+                    r1 = c.actors[0].assigned_maneuver_instance.connectingLane
+                    r2 = c.actors[1].assigned_maneuver_instance.connectingLane
+                    utils.showPairwiseCollidingRegions(plt, [r1, r2], colors.gray, None)
 
-        # TODO this is from revious version
-        # if region_to_show is not None:
-        #     region_to_show.show(plt, color='k')
+        # draw actors
+        # TODO handle ego special case
+        if not self.hide_actors:
+            for i, ac in enumerate(self.spec.actors):
+                color = colors.COLOR_SEQ[i].default
+                logging.debug(f'{ac} positioned at {ac.position}')
+                scenic_object = Object(position=ac.position, heading=ac.heading, width=ac.width, length=ac.length)
+                scenic_object.color = color
+                scenic_object.show(self.workspace, plt, False)
 
         # TODO this is from revious version
         # if params.get('view_path'):
@@ -42,10 +65,10 @@ class Scenario_Diagram:
         #     map_utils.handle_paths(scene, params, plt, includeLongPathToIntersection=False)
 
         if self.zoom:
-            # TODO Add support for zooming to specific junction
-            # if scene.params.get('intersectiontesting') != None:
-            #     zoomToIntersection(scene, plt)
-            self.workspace.zoomAround(plt, self.spec.actors, expansion=1)
+            if self.spec.specification.junction:
+                utils.zoom_to_junction(plt, self.spec.specification.junction, margin=3)
+            else:
+                self.workspace.zoomAround(plt, self.spec.actors, expansion=1)
 
         self.diagram = None
 

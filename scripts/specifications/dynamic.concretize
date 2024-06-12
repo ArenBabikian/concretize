@@ -1,0 +1,10 @@
+Params {
+    map: 'maps/town05.xodr'
+    maneuverJunction: j1234
+}
+
+Car c1
+Car c2
+doesManeuver(c1, any)
+doesManeuver(c2, any)
+collision(c1, c2)

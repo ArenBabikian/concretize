@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import src.visualization.colors as colors
 
 class Actor(ABC):
     def __init__(self, parent, actor_id, snap=False):
@@ -6,9 +7,15 @@ class Actor(ABC):
         self.snap_to_waypoint = snap
         self.assigned_maneuver = None # Constraint object
         self.parent = parent
-        self.position = [None, None, None]
-        self.heading = None
+        
+        # Logical parameters
+        self.assigned_maneuver_instance = None
         self.current_lane = None
+
+        # Concrete parameters
+        self.position = None
+        self.heading = None
+        self.assigned_exact_path = None # TODO not yet integrated
 
     @abstractmethod
     def __str__(self):

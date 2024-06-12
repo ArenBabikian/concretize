@@ -1,17 +1,17 @@
-from src.model.constraints.behavior_constraints import Behavior_Con, Collision_Con, Danger_Con, Does_Maneuver_Con
+from src.model.constraints.behavior_constraints import Behavior_Con, Does_Maneuver_Con
 from src.model.constraints.constraint import Constraint
+from src.model.constraints.danger_constraints import Collision_Con, Danger_Con
 from src.model.constraints.distance_constraints import *
 from src.model.constraints.placement_constraints import On_Region_Con
 from src.model.constraints.position_constraints import *
 from src.model.actor import Actor, Car, Pedestrian
 from src.model.params import Params
-from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
+from src.search.complete.complete import Complete_Approach
 from src.search.mhs.mhs import MHS_Approach
 from src.language import parser
 import logging
-import pathlib
 
 from src.model.specification import Specification
 from src.visualization.diagram import Scenario_Diagram
@@ -42,7 +42,8 @@ def concretize():
                          Static_Con,
                          Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con, Is_Close_To_Con, Is_Medium_Distance_From_Con, Is_Far_From_Con,
                          On_Region_Con,
-                         Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con])
+                         Behavior_Con, Does_Maneuver_Con,
+                         Danger_Con, Collision_Con])
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 
@@ -73,30 +74,33 @@ def concretize():
     # TODO
 
     # 3.0 get the approach
-    str2approach = {'mhs': MHS_Approach}
+    str2approach = {'mhs': MHS_Approach, 'complete': Complete_Approach}
 
     if args.approach not in str2approach:
         logging.error(f"Invalid approach: {args.approach}")
         exit(1)
     else:
-        approach = str2approach[args.approach](args)
+        approach = str2approach[args.approach](args, spec)
 
     # Prepare the statistics container
     stat_man = Statistics_Manager(args, spec)
     stat_man.save()
 
     # 4.0 call the search approach
-    all_results = approach.concretize(spec)
+    approach.concretize()
 
-    for res_id, res in enumerate(all_results):
+    for res_id, res in enumerate(approach.all_solutions):
         #   5 save the result
         stat_man.generate_update_save(res_id, res)
 
         #   6 visualize 
         # TODO handle the case where many results are reurned by the same run
-        sd = Scenario_Diagram(res.ordered_outcomes[0], args)
-        sd.generate_diagram()
-        sd.save_and_show()
+        # see also TODO in MHS_Apprach.concretize.'CRETE RESULT OBJECT'
+        # TODO case where MHS oes not find a soolution, it is saving all partial solutions
+        for sol_id, sol in enumerate(res.ordered_outcomes):
+            sd = Scenario_Diagram(sol, f"{res_id}_{sol_id}", args)
+            sd.generate_diagram()
+            sd.save_and_show()
 
     #   5 simulate
     #   6 evaluate simulation run

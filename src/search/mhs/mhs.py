@@ -1,4 +1,5 @@
 
+from src.results.mhs_result import Mhs_Result
 from src.search.mhs.algorithm.geneticModAlgo import NSGA2MOD, GAMOD, NSGA3MOD
 from src.search.mhs.termination.oneSolutionHeuristicTermination import OneSolutionHeuristicTermination
 from src.search.mhs.utils import getMapBoundaries, handleConstraints, getHeuristic
@@ -9,19 +10,22 @@ from pymoo.core.problem import ElementwiseProblem
 from pymoo.termination.collection import TerminationCollection
 from pymoo.termination.max_time import TimeBasedTermination
 
-from src.results.result import Result
 from src.search.search_approach import Search_Approach
 
 class MHS_Approach(Search_Approach):
 
-    def __init__(self, args):
+    def __init__(self, args, specification):
         self.aggregation_strategy = args.aggregation_strategy
         self.algorithm_name = args.algorithm_name
         self.restart_time = args.restart_time
         self.history = args.history
         self.timeout = args.timeout
         self.num_runs = args.num_of_mhs_runs
-        super().__init__(args)
+        super().__init__(args, specification)
+
+    def validate_input_specification(self):
+        # TODO
+        pass
 
     def getProblem(self, specification):
         actors = specification.actors
@@ -89,18 +93,16 @@ class MHS_Approach(Search_Approach):
     def all_runs_done(self, run_id):
         return (not self.num_runs == -1) and run_id >= self.num_runs
 
-    def concretize(self, specification):
+    def concretize(self):
 
         # Returns a list of Result objects
         # TODO add an option to show solutions as they are found. see atat_man.generate_upate_save
-        all_solutions = []
-
         run_id = 0
         while not self.all_runs_done(run_id) and not self.all_sols_found():
 
             # GET PROBLEM
             # TODO remove the num_objectives once the AGREATION_STRATEGY abstract class is created
-            problem, num_objectives = self.getProblem(specification)
+            problem, num_objectives = self.getProblem(self.specification)
 
             # GET ALGORITHM
             algorithm = self.getAlgo(num_objectives)
@@ -116,14 +118,13 @@ class MHS_Approach(Search_Approach):
 
             # CREATE RESULT OBJECT
             # Important Note: mhs_res only contains NDSs, so it is always <=, often <,  pop_size
-            res = Result(mhs_res, specification)
-            res.update_from_mhs()
+            # TODO create one Result object for each solution in the MHS run, not for each MHS run
+            res = Mhs_Result(mhs_res, self.specification)
+            res.update()
 
             logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
 
             # Handle the solution
-            all_solutions.append(res)
+            self.all_solutions.append(res)
             self.solutions_found += res.n_solutions
             run_id += 1
-        
-        return all_solutions

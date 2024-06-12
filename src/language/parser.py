@@ -9,9 +9,10 @@ def parse(specification_file, classes):
 	# Also possible to just take a string:
 	# model = metamodel.model_from_str(str)
 
-	for o in model.actors:
-		print(f"{type(o).__name__}: {o.__dict__}\n")
-	for o in model.constraints:
-		print(f"{type(o).__name__}: {o.__dict__}\n")
+	# TODO remove below?
+	# for o in model.actors:
+	# 	print(f"{type(o).__name__}: {o.__dict__}\n")
+	# for o in model.constraints:
+	# 	print(f"{type(o).__name__}: {o.__dict__}\n")
 
 	return model
