@@ -19,9 +19,14 @@ def generate():
     # TODO: Support upload of map files
     try:
         diagramFileName = generateFromSpecs(constraints, args)
-        return {
-            "diagram_file_name": diagramFileName
-        }
+        if diagramFileName is None:
+            return {
+                "error": "Could not satisfy constraints"
+            }
+        else:
+            return {
+                "diagram_file_name": diagramFileName
+            }
     except Exception as e:
         return {
             "error": str(e)
