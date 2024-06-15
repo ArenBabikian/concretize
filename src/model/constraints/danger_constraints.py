@@ -5,7 +5,11 @@ from scenic.core.regions import EmptyRegion, PointSetRegion, PolylineRegion
 
 class Danger_Con(Constraint):
     @abstractmethod
-    def evaluate_danger_condition(self):
+    def evaluate_logical_condition(self):
+        pass
+
+    @abstractmethod
+    def evaluate_concrete_condition(self):
         pass
 
 class Collision_Con(Danger_Con):
@@ -15,9 +19,19 @@ class Collision_Con(Danger_Con):
         # self.type_id = ? # TODO
         self.ensure_centerline_intersection = True # TODO make customizable
         self.size_threshold = 2*4.5
+
+        self.coll_region = None
+        self.coll_heuristic = None
+
         super().__init__(parent, "Collision", actors, None)
 
-    def evaluate_danger_condition(self):
+    def evaluate_logical_condition(self):
+        reg, heu = self.get_logical_condition_results()
+        self.coll_region = reg
+        self.coll_heuristic = heu
+        return reg, heu
+
+    def get_logical_condition_results(self):
         """Returns the collision region between the regions assigned to the actors, if any, and a (preliminary, dichotomous) heuristic value (0 if collision, 1 otherwise)"""
 
         reg1 = self.actors[0].assigned_maneuver_instance.connectingLane
@@ -52,3 +66,7 @@ class Collision_Con(Danger_Con):
                 return collision_reg, 1
         
         return collision_reg, 0
+    
+    def evaluate_concrete_condition(self):
+        # TODO
+        pass

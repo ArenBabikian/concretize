@@ -27,6 +27,7 @@ def parse_args():
     vis_opt.add_argument('-sh-act', '--hide-actors', action='store_true', help='Hide the actors in the visualization')
     vis_opt.add_argument('-sh-man', '--show-maneuvers', action='store_true', help='Highlight the assigned maneuver regions in the visualization')
     vis_opt.add_argument('-sh-expa', '--show-exact-paths', action='store_true', help='Show the assigned exact paths in the visualization')
+    vis_opt.add_argument('-col', '--color-scheme', choices=['default', 'alternate'], default='default', help='Color scheme to use whie generating the diagram')
 
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')

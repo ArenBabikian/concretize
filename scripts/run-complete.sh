@@ -14,11 +14,13 @@ python concretize.py\
     -t 5\
     -m maps/town01.xodr\
     -all\
-    --output-directory output\
+    --output-directory output-new\
     --save-statistics-file stats.json\
     --save-diagram\
-    --show-maneuvers\
+    --show-maneuver\
+    --show-exact-paths\
+    --color-scheme alternate\
     -z\
     complete\
-    -j 87\
+    -j 306\
     scripts/specifications/dynamic.concretize

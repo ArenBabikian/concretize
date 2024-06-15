@@ -2,7 +2,6 @@
 import logging
 import time
 import matplotlib.pyplot as plt
-from scenic.core.object_types import Object
 from scenic.domains.driving.workspace import Workspace
 
 from src.model.constraints.danger_constraints import Collision_Con
@@ -21,52 +20,62 @@ class Scenario_Diagram:
         self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
         self.zoom = args.zoom_diagram
 
+        self.color_scheme = args.color_scheme
         self.hide_actors = args.hide_actors
         self.show_maneuvers = args.show_maneuvers
         self.show_exact_paths = args.show_exact_paths
 
-    def generate_diagram(self):
-        fig = plt.figure()
-        plt.gca().set_aspect('equal')
-        # display map
-        self.spec.roadmap.show()
-        # self.workspace.show(plt)
+    def show_road_map(self):
+        if self.color_scheme == 'default':
+            self.spec.roadmap.show()
+        elif self.color_scheme == 'alternate':
+            utils.show_alt_network(plt, self.spec.roadmap)
 
-        if self.show_maneuvers:
-            # draw maneuver regions
-            for i, ac in enumerate(self.spec.actors):
-                if ac.assigned_maneuver_instance:
-                    color = colors.COLOR_SEQ[i].light
-                    region = ac.assigned_maneuver_instance.connectingLane
-                    utils.show_region(plt, region, color)
-            
-            # draw overlap regions
-            for c in self.spec.constraints:
-                if isinstance(c, Collision_Con):
+
+    def generate_diagram(self):
+        fig = plt.figure(figsize=(10, 10), dpi=200)
+        plt.gca().set_aspect('equal')
+        
+        # display map
+        self.show_road_map()
+
+        for i, ac in enumerate(self.spec.actors):
+            # color = colors.COLOR_SEQ[i]
+            color = ac.color
+
+            # draw actors
+            if not self.hide_actors:
+                # TODO display actor ID on the image?
+                logging.debug(f'{ac} positioned at {ac.position}')
+                utils.show_object(plt, ac, color.default, size=(2, 4))
+
+            if ac.assigned_maneuver_instance:
+                region = ac.assigned_maneuver_instance.connectingLane
+                # draw maneuver regions
+                if self.show_maneuvers:
+                    utils.show_region(plt, region, color.light)
+                    if not self.show_exact_paths:
+                        utils.show_arrows(plt, region.centerline, 'w', pointsDelts=-1, size=1.5)
+
+                # draw exact paths
+                if self.show_exact_paths:
+                    utils.show_cl(plt, ac.assign_exact_path_for_vis, color.dark, '-', 2)
+                    utils.show_arrows(plt, ac.assign_exact_path_for_vis, color.dark, pointsDelts=5, size=5)
+        
+        # draw overlap regions
+        for c in self.spec.constraints:
+            if isinstance(c, Collision_Con):
+                if self.show_maneuvers:
                     r1 = c.actors[0].assigned_maneuver_instance.connectingLane
                     r2 = c.actors[1].assigned_maneuver_instance.connectingLane
                     utils.showPairwiseCollidingRegions(plt, [r1, r2], colors.gray, None)
+                # if self.show_exact_paths:
+                    # TODO handle visualization for the case where the exact paths are overlapping
 
-        # draw actors
-        # TODO handle ego special case
-        if not self.hide_actors:
-            for i, ac in enumerate(self.spec.actors):
-                color = colors.COLOR_SEQ[i].default
-                logging.debug(f'{ac} positioned at {ac.position}')
-                scenic_object = Object(position=ac.position, heading=ac.heading, width=ac.width, length=ac.length)
-                scenic_object.color = color
-                scenic_object.show(self.workspace, plt, False)
-
-        # TODO this is from revious version
-        # if params.get('view_path'):
-        #     import scenic.core.map.map_backwards_utils as map_utils
-        #     # Below is OLD. for when we were generating vehicles far from the intersection
-        #     # import scenic.core.evol.map_utils as map_utils
-        #     map_utils.handle_paths(scene, params, plt, includeLongPathToIntersection=False)
 
         if self.zoom:
             if self.spec.specification.junction:
-                utils.zoom_to_junction(plt, self.spec.specification.junction, margin=3)
+                utils.zoom_to_junction(plt, self.spec.specification.junction, margin=10)
             else:
                 self.workspace.zoomAround(plt, self.spec.actors, expansion=1)
 

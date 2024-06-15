@@ -30,6 +30,7 @@ def get_container(target, roadmap):
             return roadmap.drivableRegion # All sidewalks union all crossings.
         else:
             raise Exception(f'Unhandled target type <{target}>')
+        # TODO
         # TYPE2REGION = {
         #     'default': scenario.containerOfObject(vi), # Default region wrt. actor type
         #     'drivable': network.drivableRegion, # All lanes union all intersections.

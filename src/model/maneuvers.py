@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import logging
+from src.model import utils
 from scenic.domains.driving.roads import ManeuverType
 
 class Maneuver(ABC):
@@ -42,8 +43,7 @@ class Instance_Man(Maneuver):
     def get_scenic_maneuver_instances(self, junction):
         maneuver_w_id = list(filter(lambda x: x.connectingLane.uid == self.maneuver_id, junction.all_maneuvers))
         if len(maneuver_w_id) != 1:
-            logging.error(f"Invalid maneuver id <{self.maneuver_id}> at {junction}. Select among the following ids {[x.connectingLane.id for x in junction.all_maneuvers]}")
+            logging.error(f"Invalid maneuver <{self.maneuver_id}> at {junction}. Select among the following types {list(utils.MANEUVER_STRING_TO_CLASS.keys())} or maneuver ids {[x.connectingLane.id for x in junction.all_maneuvers]}")
             exit(1)
         return [maneuver_w_id[0]]
 
-        pass

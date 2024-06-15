@@ -21,6 +21,7 @@ class Mhs_Result(Result):
                 break
             outcome_id = 'outcome_' + str(i)
             outcome_data = {}
+            outcome_data['is_concrete_solution'] = outcome.is_concrete_solution
 
             n_satisfactions = n_constraints - outcome.n_violations
             outcome_data['n_satisfactions'] = n_satisfactions
@@ -61,6 +62,7 @@ class Mhs_Result(Result):
             # Think about this
             i_is_valid = self.check_element_validity_from_fitness(i_fitness)
             if i_is_valid:
+                i_instance.is_concrete_solution = True
                 all_solutions.append(i_instance)
 
             # 3 Check the validity of each input consraints

@@ -72,6 +72,7 @@ def concretize():
     
     # 2.1 validate the scenario specification
     # TODO
+    # TODO check duplicate actor IDs
 
     # 3.0 get the approach
     str2approach = {'mhs': MHS_Approach, 'complete': Complete_Approach}
@@ -97,10 +98,13 @@ def concretize():
         # TODO handle the case where many results are reurned by the same run
         # see also TODO in MHS_Apprach.concretize.'CRETE RESULT OBJECT'
         # TODO case where MHS oes not find a soolution, it is saving all partial solutions
+        con_sol_id=0
         for sol_id, sol in enumerate(res.ordered_outcomes):
-            sd = Scenario_Diagram(sol, f"{res_id}_{sol_id}", args)
-            sd.generate_diagram()
-            sd.save_and_show()
+            if sol.is_concrete_solution:
+                sd = Scenario_Diagram(sol, f"{res_id}_{con_sol_id}", args)
+                sd.generate_diagram()
+                sd.save_and_show()
+                con_sol_id+=1
 
     #   5 simulate
     #   6 evaluate simulation run

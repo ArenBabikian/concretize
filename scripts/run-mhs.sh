@@ -10,7 +10,7 @@ python concretize.py\
     -v 2\
     -n -1\
     -t 5\
-    -m maps/town05.xodr\
+    -m maps/town02.xodr\
     -all\
     --output-directory output\
     --save-statistics-file stats.json\

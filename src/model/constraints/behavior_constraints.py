@@ -1,7 +1,8 @@
 from abc import abstractmethod
 import logging
+from src.model import utils
 from src.model.constraints.constraint import Constraint
-from src.model.maneuvers import Go_Straight_Man, Instance_Man, Left_Turn_Man, Right_Turn_Man, U_Turn_Man
+from src.model.maneuvers import Instance_Man
 
 class Behavior_Con(Constraint):
     @abstractmethod
@@ -17,17 +18,9 @@ class Does_Maneuver_Con(Behavior_Con):
         self.maneuver_str = maneuver
         self.allowed_maneuver_types = self.get_allowed_path_regions(maneuver)
     
-    def get_allowed_path_regions(self, maneuver):
-        srt_to_cls = {
-            'right_turn': [Right_Turn_Man()],
-            'left_turn': [Left_Turn_Man()],
-            'go_straight': [Go_Straight_Man()],
-            'u_turn': [U_Turn_Man()],
-            'any': [Right_Turn_Man(), Left_Turn_Man(), Go_Straight_Man(), U_Turn_Man()],
-            }
-        
-        if maneuver in srt_to_cls:
-            return srt_to_cls[maneuver]
+    def get_allowed_path_regions(self, maneuver):        
+        if maneuver in utils.MANEUVER_STRING_TO_CLASS:
+            return utils.MANEUVER_STRING_TO_CLASS[maneuver]
         else:
             return [Instance_Man(maneuver)]
 

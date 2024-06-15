@@ -1,13 +1,14 @@
 from scenic.domains.driving.roads import Network
 
 from src.model.actor import Actor
-from src.model.constraints.junction import Junction
 
 class Specification:
     def __init__(self, params, actors, constraints):
         self.params = params
         self.actors = actors
         self.constraints = constraints
+
+        self.ego_id = self.get_ego_actor_id()
 
         # Added from CLI or grammar
         self.map_file = None
@@ -17,6 +18,12 @@ class Specification:
     def parsemap(self, map_file):
         # TODO leverage Scenic
         return Network.fromFile(map_file)
+    
+    def get_ego_actor_id(self):
+        for i, actor in enumerate(self.actors):
+            if actor.is_ego:
+                return i
+        return None
 
     def __str__(self):
         return f"""
@@ -40,6 +47,10 @@ class Specification_Instance:
         self.raw_res = None
         self.n_violations = None
         self.constraint2heuristic = None
+
+        # For scenario execution and visualisation
+        self.is_concrete_solution = False
+        self.measured_timeout = None
 
     def deepcopy(self, list_to_copy):
         # TODO optimize this to only deepcopy the necessary things

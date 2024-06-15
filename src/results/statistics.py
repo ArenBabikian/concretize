@@ -14,7 +14,6 @@ class Statistics_Manager:
         self.global_stats = global_stats
 
         self.stor_all_outcomes = args.store_all_outcomes
-        print(args.output_directory, args.save_statistics_file)
         self.json_path = Path(args.output_directory) / args.save_statistics_file
 
     def generate_stats(self, res):
@@ -28,7 +27,7 @@ class Statistics_Manager:
         if self.json_path:
             with open(self.json_path, 'w') as f:
                 json.dump(self.global_stats, f, indent=2)
-            logging.info(f"Saved outcome statistics to {self.json_path}")   
+            logging.info(f"Updated outcome statistics to {self.json_path}")   
 
     def generate_update_save(self, run_id, run_res):
         self.generate_stats(run_res)
