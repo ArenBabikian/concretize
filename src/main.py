@@ -41,6 +41,7 @@ def concretize():
                          On_Region_Con,
                          Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con]) 
     
+    # TODO: Think about validation here
     for param in spec.params:
         args.__dict__[param.key] = param.value
 

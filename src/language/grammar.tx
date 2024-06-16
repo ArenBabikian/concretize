@@ -4,18 +4,27 @@ Specification:
 	constraints += Constraint*
 ;
 
-Param: key = ID ':' value = STRING ;
+Param: 'Param' key = ID ':' value = STRING ;
 
 Actor: Car | Pedestrian ;
 
 Car:
 	'Car' name = ID
+	isEgo ?= 'isEgo'
+	( 'color' ':' color = ID ) ?
+	( 'speed' ':' speed = STRING ) ?
+	( 'controller' ':' controller = ID ) ?
+	// TODO: Ordering of attributes
 	// ('position' ':' x = FLOAT',' y = FLOAT)?
 	// ('heading' ':' heading = STRING)?
 	// ('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?
 ;
 Pedestrian:
 	'Pedestrian' name = ID
+	isEgo ?= 'isEgo'
+	( 'color' ':' color = ID ) ?
+	( 'speed' ':' speed = STRING ) ?
+	( 'controller' ':' controller = ID ) ?
 //	('position' ':' x = FLOAT',' y = FLOAT)?
 //	('heading' ':' heading = STRING)?
 //	('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?
