@@ -4,9 +4,10 @@ Param maneuverJunction: 'j1234'
 Car c1
     isEgo
     color: Blue
-    speed: '120.01'
+    speed: 120.01
     controller: Transfuser
 Car c2
+    speed: Transfuser
 Pedestrian p1
 doesManeuver(c1, X)
 collision(c1, c2)

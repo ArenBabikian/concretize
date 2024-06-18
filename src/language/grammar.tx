@@ -8,11 +8,13 @@ Param: 'Param' key = ID ':' value = STRING ;
 
 Actor: Car | Pedestrian ;
 
+SPEED: FLOAT | ID ;
+
 Car:
 	'Car' name = ID
 	isEgo ?= 'isEgo'
 	( 'color' ':' color = ID ) ?
-	( 'speed' ':' speed = STRING ) ?
+	( 'speed' ':' speed = SPEED ) ?
 	( 'controller' ':' controller = ID ) ?
 	// TODO: Ordering of attributes
 	// ('position' ':' x = FLOAT',' y = FLOAT)?
@@ -23,7 +25,7 @@ Pedestrian:
 	'Pedestrian' name = ID
 	isEgo ?= 'isEgo'
 	( 'color' ':' color = ID ) ?
-	( 'speed' ':' speed = STRING ) ?
+	( 'speed' ':' speed = SPEED ) ?
 	( 'controller' ':' controller = ID ) ?
 //	('position' ':' x = FLOAT',' y = FLOAT)?
 //	('heading' ':' heading = STRING)?
