@@ -22,9 +22,9 @@ import './ace/mode-concretize'; // Load the language definition file used below
           Your image will appear here
         </div>
         <div class="resultsNav" v-if="!showPlaceholder">
-          <button @click="goToPrev">PREV</button>
-          <span>{{ page }}</span>
-          <button @click="goToNext">NEXT</button>
+          <button @click="goToPrev" class="round-button" :disabled="page <= 0"><i class="bi bi-caret-left"></i></button>
+          <span class="notification-text">{{ page + 1 }}/{{ fileNames.length }}</span>
+          <button @click="goToNext" class="round-button" :disabled="page >= fileNames.length - 1"><i class="bi bi-caret-right"></i></button>
         </div>
       </div>
 
@@ -167,5 +167,15 @@ export default {
 .res-img {
   width: min(48vw, 100%);
   float:right;
+  display: block;
+}
+.img-display {
+  display: flex;
+  flex-direction: column;
+}
+
+.resultsNav {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
