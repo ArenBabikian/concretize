@@ -34,7 +34,7 @@ import './ace/mode-concretize'; // Load the language definition file used below
 
 <script>
 import { BASE_URL, generate, download } from '@/scripts/api'
-
+import { DEFAULT_PARAMS } from '@/assets/strings';
 window.onload = function () {
   var editor = ace.edit("editor");
   editor.session.setMode("ace/mode/concretize")
@@ -43,7 +43,7 @@ window.onload = function () {
 export default {
   data() {
     return {
-      specificationsText: "",
+      specificationsText: DEFAULT_PARAMS,
       waiting: false,
       consoleText: "",
       error: false,
@@ -89,28 +89,30 @@ export default {
     async onSubmit() {
       this.waiting = true;
       let res = await generate(this.specificationsText, {
-        approach: "mhs",
-        aggregation_strategy: "actors",
-        algorithm_name: "nsga2",
-        restart_time: -1,
-        history: "none",
-        num_of_mhs_runs: 10,
-        num_of_scenarios: 1,
-        color_scheme: "default",
-        hide_actors: false,
-        show_maneuvers: true,
-        show_exact_paths: true,
-        timeout: 60,
-       zoom_diagram: true
+        // approach: "mhs",
+        // aggregation_strategy: "actors",
+        // algorithm_name: "nsga2",
+        // restart_time: -1,
+        // history: "none",
+        // num_of_mhs_runs: 10,
+        // num_of_scenarios: 1,
+        // color_scheme: "default",
+        // hide_actors: false,
+        // show_maneuvers: true,
+        // show_exact_paths: true,
+        // timeout: 60,
+        // zoom_diagram: true
       })
       console.log(res)
       if (res?.data?.diagram_file_names) {
+        this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
         
       } else if (res?.data?.error) {
         this.consoleText += `${res?.data?.error}\n`;
         this.error = true;
       }
+      
       this.waiting = false;
     },
     goToPrev() {
