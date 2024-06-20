@@ -165,8 +165,8 @@ export default {
 }
 
 .res-img {
-  width: min(48vw, 100%);
-  float:right;
+  width: min(40vw, 100%);
+  align-self:center;
   display: block;
 }
 .img-display {
