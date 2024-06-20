@@ -21,6 +21,11 @@ import './ace/mode-concretize'; // Load the language definition file used below
         <div class="placeholder-text center-text" v-if="showPlaceholder">
           Your image will appear here
         </div>
+        <div class="resultsNav" v-if="!showPlaceholder">
+          <button @click="goToPrev">PREV</button>
+          <span>{{ page }}</span>
+          <button @click="goToNext">NEXT</button>
+        </div>
       </div>
 
     </div>
@@ -39,10 +44,11 @@ export default {
   data() {
     return {
       specificationsText: "",
-      imgSrc: "",
       waiting: false,
       consoleText: "",
-      error: false
+      error: false,
+      fileNames: [],
+      page: 0
     }
   },
   computed: {
@@ -54,6 +60,13 @@ export default {
         return "Loading...";
       } 
       return "Submit";
+    },
+    imgSrc() {
+      if (this.fileNames.length) {
+        return `${BASE_URL}/downloads/${this.fileNames[this.page]}`;
+      } else {
+        return "";
+      }
     }
   },
   watch: {
@@ -68,6 +81,10 @@ export default {
       });
     }
   },
+  mounted() {
+    var editor = ace.edit("editor");
+    editor.session.setMode("ace/mode/concretize")
+  },
   methods: {
     async onSubmit() {
       this.waiting = true;
@@ -77,19 +94,34 @@ export default {
         algorithm_name: "nsga2",
         restart_time: -1,
         history: "none",
-        num_of_runs: 10,
+        num_of_mhs_runs: 10,
+        num_of_scenarios: 1,
+        color_scheme: "default",
+        hide_actors: false,
+        show_maneuvers: true,
+        show_exact_paths: true,
         timeout: 60,
        zoom_diagram: true
       })
       console.log(res)
-      if (res?.data?.diagram_file_name) {
-        const filename = res?.data?.diagram_file_name;
-        this.imgSrc = `${BASE_URL}/downloads/${filename}`
+      if (res?.data?.diagram_file_names) {
+        this.fileNames = res?.data?.diagram_file_names;
+        
       } else if (res?.data?.error) {
         this.consoleText += `${res?.data?.error}\n`;
         this.error = true;
       }
       this.waiting = false;
+    },
+    goToPrev() {
+      if (this.page > 0) {
+        this.page -= 1;
+      }
+    },
+    goToNext() {
+      if (this.page < this.fileNames.length - 1) {
+        this.page += 1;
+      }
     }
   }
 }

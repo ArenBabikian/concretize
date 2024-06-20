@@ -3,6 +3,7 @@ from flask import Flask, current_app, request, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from src.controller import *
+import traceback
 
 app = Flask(__name__)
 CORS(app)
@@ -18,16 +19,17 @@ def generate():
     args.upload_folder = app.config['UPLOAD_FOLDER']
     # TODO: Support upload of map files
     try:
-        diagramFileName = generateFromSpecs(constraints, args)
-        if diagramFileName is None:
+        diagramFileNames = generateFromSpecs(constraints, args)
+        if diagramFileNames is None or len(diagramFileNames) == 0:
             return {
                 "error": "Could not satisfy constraints"
             }
         else:
             return {
-                "diagram_file_name": diagramFileName
+                "diagram_file_names": diagramFileNames
             }
     except Exception as e:
+        print(traceback.format_exc())
         return {
             "error": str(e)
         }

@@ -1,17 +1,9 @@
-from src.model.constraints.behavior_constraints import Behavior_Con, Collision_Con, Danger_Con, Does_Maneuver_Con
-from src.model.constraints.constraint import Constraint
-from src.model.constraints.distance_constraints import *
-from src.model.constraints.placement_constraints import On_Region_Con
-from src.model.constraints.position_constraints import *
-from src.model.actor import Actor, Car, Pedestrian
-from src.model.param import Param
-from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
+from src.search.complete.complete import Complete_Approach
 from src.search.mhs.mhs import MHS_Approach
 from src.language import parser
 import logging
-import pathlib
 
 from src.model.specification import Specification
 from src.visualization.diagram import Scenario_Diagram
@@ -66,30 +58,39 @@ def concretize():
     
     # 2.1 validate the scenario specification
     # TODO
+    # TODO check duplicate actor IDs
 
     # 3.0 get the approach
-    if args.approach == 'mhs':
-        # TODO generalise this
-        approach = MHS_Approach(args)
-    elif args.approach == 'brute':
+    str2approach = {'mhs': MHS_Approach, 'complete': Complete_Approach}
+
+    if args.approach not in str2approach:
+        logging.error(f"Invalid approach: {args.approach}")
         exit(1)
+    else:
+        approach = str2approach[args.approach](args, spec)
 
     # Prepare the statistics container
     stat_man = Statistics_Manager(args, spec)
     stat_man.save()
 
-    for run_id in range(args.num_of_runs):
-        #   3 call the search approach
-        res = approach.concretize(spec)
-        logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
+    # 4.0 call the search approach
+    approach.concretize()
 
-        #   4 save the result
-        stat_man.generate_update_save(run_id, res)
+    for res_id, res in enumerate(approach.all_solutions):
+        #   5 save the result
+        stat_man.generate_update_save(res_id, res)
 
-        #   5 visualize 
-        sd = Scenario_Diagram(res.ordered_outcomes[0], args)
-        sd.generate_diagram()
-        sd.save_and_show()
+        #   6 visualize 
+        # TODO handle the case where many results are reurned by the same run
+        # see also TODO in MHS_Apprach.concretize.'CRETE RESULT OBJECT'
+        # TODO case where MHS oes not find a soolution, it is saving all partial solutions
+        con_sol_id=0
+        for sol_id, sol in enumerate(res.ordered_outcomes):
+            if sol.is_concrete_solution:
+                sd = Scenario_Diagram(sol, f"{res_id}_{con_sol_id}", args)
+                sd.generate_diagram()
+                sd.save_and_show()
+                con_sol_id+=1
 
     #   5 simulate
     #   6 evaluate simulation run

@@ -1,5 +1,6 @@
 from textx import metamodel_from_file
 import pathlib
+from src.model.constraints.danger_constraints import Collision_Con, Danger_Con
 from src.model.constraints.constraint import Constraint
 from src.model.constraints.distance_constraints import *
 from src.model.constraints.placement_constraints import On_Region_Con
@@ -33,9 +34,10 @@ def parse(specification_file):
 	# Also possible to just take a string:
 	# model = metamodel.model_from_str(str)
 
-	for o in model.actors:
-		print(f"{type(o).__name__}: {o.__dict__}\n")
-	for o in model.constraints:
-		print(f"{type(o).__name__}: {o.__dict__}\n")
+	# TODO remove below?
+	# for o in model.actors:
+	# 	print(f"{type(o).__name__}: {o.__dict__}\n")
+	# for o in model.constraints:
+	# 	print(f"{type(o).__name__}: {o.__dict__}\n")
 
 	return model

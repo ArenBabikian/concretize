@@ -6,7 +6,7 @@ class Constraint(ABC):
     def __init__(self, parent, name, actors, roadmap):
         self.predicate_name = name
         self.parent = parent
-        self.actors = actors
+        self.actors = actors # TODO Improve this to avoid self.actors[0] in constraints 
         self.roadmap = roadmap
         self.arity = None # TODO Might be irrelevant
         self.type_id = None # TODO remove this in the future
