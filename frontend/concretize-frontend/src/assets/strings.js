@@ -11,4 +11,5 @@ show_maneuvers: true
 show_exact_paths: true
 timeout: 60
 zoom_diagram: true
+map_file: "../maps/town02.xodr"
 `;

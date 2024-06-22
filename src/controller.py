@@ -3,18 +3,20 @@ from src.search.mhs.mhs import MHS_Approach
 from src.visualization.diagram import Scenario_Diagram
 import time
 
-def generateFromSpecs(constraintsStr, args, mapFileLoc = "../maps/town02.xodr"):
+def generateFromSpecs(constraintsStr, args):
     spec = parser.parseStr(constraintsStr)
-    spec.map_file = mapFileLoc
-    spec.roadmap = spec.parsemap(mapFileLoc)
+    #spec.map_file = args.map_file
+    
     
     # TODO refactor to avoid redundant code with main.py
     for actor in spec.actors:
         actor.snap = True
-    for constraint in spec.constraints:
-        constraint.roadmap = spec.roadmap
     for param in spec.params:
         args.__dict__[param.key] = param.value
+    spec.roadmap = spec.parsemap(args.map_file)
+    for constraint in spec.constraints:
+        constraint.roadmap = spec.roadmap
+
         
     approach = None
     if args.approach == 'mhs':
