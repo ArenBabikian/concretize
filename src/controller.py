@@ -1,7 +1,9 @@
 from src.language import parser
 from src.search.mhs.mhs import MHS_Approach
+from src.search.complete.complete import Complete_Approach
 from src.visualization.diagram import Scenario_Diagram
 import time
+import logging
 
 def generateFromSpecs(constraintsStr, args):
     spec = parser.parseStr(constraintsStr)
@@ -20,15 +22,17 @@ def generateFromSpecs(constraintsStr, args):
     for constraint in spec.constraints:
         constraint.roadmap = spec.roadmap
 
-        
+    # Find appropriate approach 
     approach = None
-    if args.approach == 'mhs':
-        # TODO implement other approaches when ready
-        approach = MHS_Approach(args, spec)
-    else:
-        return None
-
+    str2approach = {'mhs': MHS_Approach, 'complete': Complete_Approach}
+    if args.approach not in str2approach:
+        logging.error(f"Invalid approach: {args.approach}")
+        raise Exception(f"Invalid approach: {args.approach}")
+    approach = str2approach[args.approach](args, spec)
+    
+    # Generate scenarios
     succRes = []
+
     approach.concretize()
     succRes = approach.all_solutions
     
