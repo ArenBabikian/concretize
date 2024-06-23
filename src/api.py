@@ -31,7 +31,7 @@ def generate():
     except Exception as e:
         print(traceback.format_exc())
         return {
-            "error": str(e)
+            "error": f"{str(e)}\n {traceback.format_exc()}"
         }
     
 

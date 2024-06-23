@@ -5,7 +5,6 @@ import time
 
 def generateFromSpecs(constraintsStr, args):
     spec = parser.parseStr(constraintsStr)
-    #spec.map_file = args.map_file
     
     
     # TODO refactor to avoid redundant code with main.py
@@ -13,7 +12,11 @@ def generateFromSpecs(constraintsStr, args):
         actor.snap = True
     for param in spec.params:
         args.__dict__[param.key] = param.value
+
+
+    spec.map_file = args.map_file
     spec.roadmap = spec.parsemap(args.map_file)
+    
     for constraint in spec.constraints:
         constraint.roadmap = spec.roadmap
 
