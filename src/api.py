@@ -4,6 +4,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from src.controller import *
 import traceback
+from pathlib import Path
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +18,8 @@ def generate():
     constraints = jsonData['constraints']
     args = AutoObject(jsonData['args'])
     args.upload_folder = app.config['UPLOAD_FOLDER']
+    Path(app.config['UPLOAD_FOLDER']).mkdir(parents=True, exist_ok=True)
+
     # TODO: Support upload of map files
     try:
         diagramFileNames = generateFromSpecs(constraints, args)
