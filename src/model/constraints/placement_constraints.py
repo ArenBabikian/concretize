@@ -1,4 +1,4 @@
-from src.model.road_components import Junction_Type
+from src.model.road_components import Drivable_Type, Road_Type, Junction_Type
 from src.model.constraints.constraint import Static_Con
 import src.model.constraints.utils as utils
 
@@ -23,6 +23,12 @@ class On_Region_Con(Static_Con):
         return maxDist
 
 def get_region_from_str(region_str):
-    if region_str == 'Junction':
+    if region_str == 'Drivable':
+        return Drivable_Type()
+    elif region_str == 'Road':
+        return Road_Type()
+    elif region_str == 'Junction':
         return Junction_Type()
-    # TODO: Map other region(type)s
+    else:
+        pass
+        # TODO: Handle instances with IDs
