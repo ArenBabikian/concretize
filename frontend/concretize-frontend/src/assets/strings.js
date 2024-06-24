@@ -11,5 +11,9 @@ show_maneuvers: true
 show_exact_paths: true
 timeout: 60
 zoom_diagram: true
-map_file: "../maps/town02.xodr"
+map: "../maps/town02.xodr"
+specification: "WEB EDITOR"
+store_all_outcomes: false
+output_directory: "../output"
+save_statistics_file: "../output/stats123.json"
 `;

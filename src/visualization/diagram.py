@@ -17,10 +17,11 @@ class Scenario_Diagram:
         self.diagram = None
 
         self.view = args.view_diagram
-        if hasattr(args, "output_directory"):
-            self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
-        else:
+        if hasattr(args, "save_path"):
             self.save_path = args.save_path
+        else:
+            
+            self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
         self.zoom = args.zoom_diagram
 
         self.color_scheme = args.color_scheme
@@ -87,6 +88,7 @@ class Scenario_Diagram:
     def save_and_show(self):
         if self.save_path:
             plt.savefig(self.save_path)
+            print(f"Save at {self.save_path}")
             logging.info(f'Saved diagram at {self.save_path}')
         if self.view:
             logging.debug('Showing diagram of the initial scene')

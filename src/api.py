@@ -8,7 +8,7 @@ import traceback
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_FOLDER_NAME = 'uploads'
+UPLOAD_FOLDER_NAME = '../output'
 app.config['UPLOAD_FOLDER'] = f'./{UPLOAD_FOLDER_NAME}'
 
 @app.post("/generate")
@@ -38,7 +38,8 @@ def generate():
 @app.get("/downloads/<filename>")
 def download(filename):
     abspath = os.path.join(current_app.root_path, f"/{UPLOAD_FOLDER_NAME}")
-    return send_file(f".{abspath}/{filename}")
+    print(f"Absolute path: {abspath}")
+    return send_file(f"./{abspath}/{filename}")
 
 class AutoObject(object):   
     def __init__(self, d: dict):

@@ -1,4 +1,5 @@
 from src.language import parser
+from src.results.statistics import Statistics_Manager
 from src.search.mhs.mhs import MHS_Approach
 from src.search.complete.complete import Complete_Approach
 from src.visualization.diagram import Scenario_Diagram
@@ -16,8 +17,8 @@ def generateFromSpecs(constraintsStr, args):
         args.__dict__[param.key] = param.value
 
 
-    spec.map_file = args.map_file
-    spec.roadmap = spec.parsemap(args.map_file)
+    spec.map_file = args.map
+    spec.roadmap = spec.parsemap(args.map)
     
     for constraint in spec.constraints:
         constraint.roadmap = spec.roadmap
@@ -33,6 +34,10 @@ def generateFromSpecs(constraintsStr, args):
     # Generate scenarios
     succRes = []
 
+
+    stat_man = Statistics_Manager(args, spec)
+    stat_man.save()
+    
     approach.concretize()
     succRes = approach.all_solutions
     
@@ -41,6 +46,8 @@ def generateFromSpecs(constraintsStr, args):
     
     fileNames = []
     for idx, res in enumerate(succRes):
+        stat_man.generate_update_save(idx, res)
+
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
                 fileName = f"temp_diagram_{time.time()}_{idx}_{sol_id}.png"
