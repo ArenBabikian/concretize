@@ -1,4 +1,5 @@
 
+from src.results.mhs_result import Mhs_Result
 from src.search.mhs.algorithm.geneticModAlgo import NSGA2MOD, GAMOD, NSGA3MOD
 from src.search.mhs.termination.oneSolutionHeuristicTermination import OneSolutionHeuristicTermination
 from src.search.mhs.utils import getMapBoundaries, handleConstraints, getHeuristic
@@ -8,18 +9,23 @@ from pymoo.optimize import minimize
 from pymoo.core.problem import ElementwiseProblem
 from pymoo.termination.collection import TerminationCollection
 from pymoo.termination.max_time import TimeBasedTermination
-from pymoo.algorithms.moo.nsga2 import NSGA2
 
-from src.results.result import Result
+from src.search.search_approach import Search_Approach
 
-class MHS_Approach:
+class MHS_Approach(Search_Approach):
 
-    def __init__(self, args):
+    def __init__(self, args, specification):
         self.aggregation_strategy = args.aggregation_strategy
         self.algorithm_name = args.algorithm_name
         self.restart_time = args.restart_time
         self.history = args.history
         self.timeout = args.timeout
+        self.num_runs = args.num_of_mhs_runs
+        super().__init__(args, specification)
+
+    def validate_input_specification(self):
+        # TODO
+        pass
 
     def getProblem(self, specification):
         actors = specification.actors
@@ -84,26 +90,41 @@ class MHS_Approach:
 
         return TerminationCollection(t1, t2)
 
-    def concretize(self, specification):
-        # GET PROBLEM
-        # TODO remove the num_objectives once the AGREATION_STRATEGY abstract class is created
-        
-        problem, num_objectives = self.getProblem(specification)
+    def all_runs_done(self, run_id):
+        return (not self.num_runs == -1) and run_id >= self.num_runs
 
-        # GET ALGORITHM
-        algorithm = self.getAlgo(num_objectives)
+    def concretize(self):
 
-        # GET TERMINATION
-        target_heuristic_values = [0 for _ in range(num_objectives)]
-        termination = self.getTermination(target_heuristic_values)
+        # Returns a list of Result objects
+        # TODO add an option to show solutions as they are found. see atat_man.generate_upate_save
+        run_id = 0
+        while not self.all_runs_done(run_id) and not self.all_sols_found():
 
-        # RUN PROBLEM
-        # (For Repeatability) use seed=1 option
-        verbose_pymoo = logging.getLogger().getEffectiveLevel() < logging.WARNING
-        mhs_res = minimize(problem, algorithm, termination, save_history=self.history, verbose=verbose_pymoo)
+            # GET PROBLEM
+            # TODO remove the num_objectives once the AGREATION_STRATEGY abstract class is created
+            problem, num_objectives = self.getProblem(self.specification)
 
-        # CREATE RESULT OBJECT
-        # Important Note: mhs_res only contains NDSs, so it is always <=, often <,  pop_size
-        res = Result(mhs_res, specification)
-        res.update_from_mhs()
-        return res
+            # GET ALGORITHM
+            algorithm = self.getAlgo(num_objectives)
+
+            # GET TERMINATION
+            target_heuristic_values = [0 for _ in range(num_objectives)]
+            termination = self.getTermination(target_heuristic_values)
+
+            # RUN PROBLEM
+            # (For Repeatability) use seed=1 option
+            verbose_pymoo = logging.getLogger().getEffectiveLevel() < logging.WARNING
+            mhs_res = minimize(problem, algorithm, termination, save_history=self.history, verbose=verbose_pymoo)
+
+            # CREATE RESULT OBJECT
+            # Important Note: mhs_res only contains NDSs, so it is always <=, often <,  pop_size
+            # TODO create one Result object for each solution in the MHS run, not for each MHS run
+            res = Mhs_Result(mhs_res, self.specification)
+            res.update()
+
+            logging.info(f"{'SUCC' if res.success else 'FAIL'}: Run {run_id} generated {res.n_solutions} solutions in {res.runtime} seconds.")
+
+            # Handle the solution
+            self.all_solutions.append(res)
+            self.solutions_found += res.n_solutions
+            run_id += 1
