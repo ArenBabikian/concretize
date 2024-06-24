@@ -8,7 +8,7 @@ import traceback
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_FOLDER_NAME = '../output'
+UPLOAD_FOLDER_NAME = '../output/scenarios'
 app.config['UPLOAD_FOLDER'] = f'./{UPLOAD_FOLDER_NAME}'
 
 @app.post("/generate")
