@@ -1,4 +1,3 @@
-from src.model.road_components import Drivable_Type, Road_Type, Junction_Type
 from src.model.constraints.constraint import Static_Con
 from src.model.constraints.utils import get_container
 import src.model.utils as utils

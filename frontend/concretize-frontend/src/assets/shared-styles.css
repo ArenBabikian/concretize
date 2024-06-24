@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("../../node_modules/bootstrap-icons/font/bootstrap-icons.css");
+:root {
+    --font-sans: "Overpass", sans-serif;
+    --font-serif: "PT Serif", "Times New Roman", "Liberation Serif", serif;
+    --font-mono: monospace;
+    --text-size-big: 1.7em;
+    --text-size-medium: 1.3em;
+    --text-size-small: 1em;
+    --color-dark-text: hsl(0, 0%, 5%);
+    --color-gray-text: hsl(0, 0%, 25%);
+    --color-light-text: hsl(0, 0%, 95%);
+    --color-accent: #184461;
+    --navbar-height: 50px;
+}
+
+button {
+    color: var(--color-light-text);
+    background-color:var(--color-accent);
+    font-family: var(--font-sans);
+    font-size: var(--text-size-big);
+    border: 0px;
+    transition: 0.2s;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    padding-top: 5px;
+    font-weight: 600;
+    box-shadow: gray 0px 2px 3px;
+}  
+button:hover {
+    background-color: hsl(from var(--color-accent) h s calc(l + 10));
+}
+
+button:disabled {
+    background-color: var(--color-gray-text);
+}
+
+.placeholder-text {
+    color: var(--color-gray-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-size-medium);
+}
+
+.notification-text {
+    color: var(--color-gray-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-size-medium);
+}
+
+.block {
+    display:block;
+}
+
+.no-underline {
+    text-decoration: none !important;
+}
+
+.round-button {
+    border-radius: 50%;
+    padding: 5px 9px;
+}
+
+.concretize-logo {
+    background: url(./concretize-logo.svg);
+    width: 50px;
+    background-size: 45px 45px;
+    height: var(--navbar-height);
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: invert(70%);
+}

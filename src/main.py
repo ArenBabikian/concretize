@@ -1,12 +1,3 @@
-from src.model.constraints.behavior_constraints import Behavior_Con, Does_Maneuver_Con
-from src.model.constraints.constraint import Constraint
-from src.model.constraints.danger_constraints import Collision_Con, Danger_Con
-from src.model.constraints.distance_constraints import *
-from src.model.constraints.placement_constraints import On_Region_Con
-from src.model.constraints.position_constraints import *
-from src.model.actor import Actor, Car, Pedestrian
-from src.model.param import Param
-from src.model.road_components import Drivable_Type, Junction_Type, Road_Type
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
 from src.search.complete.complete import Complete_Approach
@@ -31,18 +22,8 @@ def concretize():
     # TODO address the case of a file being editted on a web-based editor
 
     specification_file = args.specification
-    spec = parser.parse(specification_file,
-                        [Specification,
-                         Param,
-                         Actor,
-                         Car, Pedestrian,
-                         Constraint,
-                         Static_Con,
-                         Has_To_Left_Con, Has_To_Right_Con, Has_Behind_Con, Has_In_Front_Con, Is_Close_To_Con, Is_Medium_Distance_From_Con, Is_Far_From_Con,
-                         On_Region_Con,
-                         Behavior_Con, Does_Maneuver_Con, Danger_Con, Collision_Con]) 
-    
-    # TODO: Think about validation here
+    spec = parser.parse(specification_file)
+
     for param in spec.params:
         args.__dict__[param.key] = param.value
 

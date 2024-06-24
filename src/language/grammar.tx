@@ -5,6 +5,8 @@ Specification:
 ;
 
 Param: 'Param' key = ID ':' value = STRING ;
+//ParamValue: STRING | INT | BOOL;
+//Param: key = ID ':' value = ParamValue ;
 
 Actor: Car | Pedestrian ;
 

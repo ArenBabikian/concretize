@@ -1,6 +1,7 @@
 __pycache__/
 output*/
 .venv/
+uploads/
 
 # Road Map File
 *.snet

@@ -4,7 +4,6 @@ import logging
 from src.model import utils
 from src.model.maneuvers import Instance_Man
 
-
 class Does_Maneuver_Con(Behavior_Con):
 
     def __init__(self, parent, actors, maneuver):
