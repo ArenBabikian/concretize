@@ -12,22 +12,22 @@ Actor: Car | Pedestrian ;
 SPEED: FLOAT | ID ;
 
 Car:
-	'Car' name = ID
-	isEgo ?= 'isEgo'
-	( 'color' ':' color = ID ) ?
-	( 'speed' ':' speed = SPEED ) ?
-	( 'controller' ':' controller = ID ) ?
+	'Car' name = ID ';'
+	(isEgo = 'isEgo' ';') ?
+	( 'color' ':' color = ID ';') ?
+	( 'speed' ':' speed = SPEED ';') ?
+	( 'controller' ':' controller = ID ';') ?
 	// TODO: Ordering of attributes
 	// ('position' ':' x = FLOAT',' y = FLOAT)?
 	// ('heading' ':' heading = STRING)?
 	// ('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?
 ;
 Pedestrian:
-	'Pedestrian' name = ID
-	isEgo ?= 'isEgo'
-	( 'color' ':' color = ID ) ?
-	( 'speed' ':' speed = SPEED ) ?
-	( 'controller' ':' controller = ID ) ?
+	'Pedestrian' name = ID ';'
+	(isEgo = 'isEgo' ';') ?
+	( 'color' ':' color = ID ';') ?
+	( 'speed' ':' speed = SPEED ';') ?
+	( 'controller' ':' controller = ID ';') ?
 //	('position' ':' x = FLOAT',' y = FLOAT)?
 //	('heading' ':' heading = STRING)?
 //	('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?

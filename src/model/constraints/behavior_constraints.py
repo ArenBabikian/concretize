@@ -25,8 +25,7 @@ class Does_Maneuver_Con(Behavior_Con):
             all_allowed_maneuver_instances.extend(man_type.get_scenic_maneuver_instances(junction))
         if all_allowed_maneuver_instances == []:
             allowed_maneuver_types = [x for x in junction.maneuver_type_to_instance.keys() if junction.maneuver_type_to_instance[x] != []]
-            logging.error(f"No maneuvers of type <{self.maneuver_str}> are allowed at {junction}. Select among the following types {allowed_maneuver_types} or ids {[x.connectingLane.id for x in junction.all_maneuvers]}")
-            exit(1)
+            raise Exception(f"No maneuvers of type <{self.maneuver_str}> are allowed at {junction}. Select among the following types {allowed_maneuver_types} or ids {[x.connectingLane.id for x in junction.all_maneuvers]}")
 
         return all_allowed_maneuver_instances
 

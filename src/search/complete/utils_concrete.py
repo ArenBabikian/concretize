@@ -13,7 +13,7 @@ def detect_ego_and_other_actors(c, log=True):
     # validate; ensure that ego actor is involved
     ego_actor, other_actor = None, None
     for a in c.actors:
-        if a.is_ego:
+        if a.isEgo:
             ego_actor = a
         else:
             other_actor = a
@@ -235,8 +235,7 @@ def find_init_position(actor, t_total, d_in_junction, lane_inside_junction, test
             d_before_before_junc = d_before_junc - reg_before_junc.centerline.length
 
             if len(lane_before_junc.sections) > 1:
-                logging.error('Not implemented: Complex 1')
-                exit()
+                raise Exception('Not implemented: Complex 1')
 
             lane_before_before_junc = lane_before_junc._predecessor
             if lane_before_before_junc == None:
@@ -258,8 +257,7 @@ def find_init_position(actor, t_total, d_in_junction, lane_inside_junction, test
 
             # COMPUTE DISTANCE IN BEFORE BEFORE ELEMENT
             if d_before_before_junc > lane_before_before_junc.centerline.length:
-                logging.error('Not implemented: Complex 2')
-                exit()
+                raise Exception('Not implemented: Complex 2')
             
             real_reg_before_before_junc = lane_before_before_junc.sections[-1]
             starting_pos = real_reg_before_before_junc.centerline.pointAlongBy(-d_before_before_junc)

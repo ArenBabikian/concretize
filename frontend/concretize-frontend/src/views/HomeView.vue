@@ -161,7 +161,7 @@ export default {
   margin-top: 10px;
 }
 .input-text {
-  height: 60vh;
+  height: 70vh;
   width: 97%;
   margin: 5px 0;
   padding: 0 5px;
@@ -208,7 +208,7 @@ export default {
 }
 
 .res-img {
-  width: min(35vw, 100%);
+  width: min(30vw, 100%);
   margin: 10px;
   align-self:center;
   display: block;

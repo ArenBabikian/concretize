@@ -21,7 +21,7 @@ class Specification:
     
     def get_ego_actor_id(self):
         for i, actor in enumerate(self.actors):
-            if actor.is_ego:
+            if actor.isEgo:
                 return i
         return None
 

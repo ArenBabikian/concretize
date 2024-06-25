@@ -14,8 +14,7 @@ class Speed_Profile:
             self.speed_in_junction = s
             self.speed_on_road = s
         else:
-            logging.error(f"Invalid speed profile id <{speed_profile_id}>. Select among the following ids ['transfuser', <float>]")
-            exit(1)
+            raise Exception(f"Invalid speed profile id <{speed_profile_id}>. Select among the following ids ['transfuser', <float>]")
 
     def speed_at_position(self):
         return self.speed_profile

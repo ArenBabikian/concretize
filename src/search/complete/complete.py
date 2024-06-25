@@ -32,23 +32,20 @@ class Complete_Approach(Search_Approach):
 
     def validate_input_specification(self):
         actors = self.specification.actors
-        if len([a for a in actors if a.is_ego]) != 1:
-            logging.error("The scenario must contain exactly one ego actor.")
-            exit(1)
+        if len([a for a in actors if a.isEgo]) != 1:
+            raise Exception("The scenario must contain exactly one ego actor.")
 
         actors_w_behavior = set()
         constraints = self.specification.constraints
         for con in constraints:
             if not isinstance(con, Behavior_Con) and not isinstance(con, Danger_Con):
-                logging.error(f"Invalid constraint type {con}. Only behavior constraints or danger constraints are allowed when using the complete mode.")
-                exit(1)
+                raise Exception(f"Invalid constraint type {con}. Only behavior constraints or danger constraints are allowed when using the complete mode.")
             else:
                 actors_w_behavior.add(con.actors[0])
 
         diff = set(actors).difference(actors_w_behavior)
         if diff:
-            logging.error(f"Every actor must be assigned a behavior. {diff} {'is' if len(diff) == 1 else 'are'} not assigned a behavior.")
-            exit(1)
+            raise Exception(f"Every actor must be assigned a behavior. {diff} {'is' if len(diff) == 1 else 'are'} not assigned a behavior.")
 
     def handle_constraints(self, specification):
         danger_constraints = []

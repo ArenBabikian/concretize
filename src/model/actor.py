@@ -9,13 +9,11 @@ class Actor(ABC):
     def __init__(self, parent, name, isEgo, color, speed, controller, snap=False):
         self.id = name
         self.isEgo = isEgo
-        self.color = color
+        self.color = colors.get_color_object(color if color else 'random')
         self.speed = speed
         self.controller = controller
         self.snap_to_waypoint = snap
-        self.is_ego = True if self.id == 'c1' else False # TODO get this from the grammar
         self.speed_id = 'transfuser' # TODO get this from the grammar
-        self.color = colors.COLOR_SEQ[int(self.id[-1])] # TODO get this from the grammar
         self.controller = None # TODO get this from the grammar
         self.parent = parent
 

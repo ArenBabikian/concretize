@@ -64,8 +64,7 @@ def concretize():
     str2approach = {'mhs': MHS_Approach, 'complete': Complete_Approach}
 
     if args.approach not in str2approach:
-        logging.error(f"Invalid approach: {args.approach}")
-        exit(1)
+        raise Exception(f"Invalid approach: {args.approach}")
     else:
         approach = str2approach[args.approach](args, spec)
 

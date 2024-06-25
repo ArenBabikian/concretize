@@ -27,7 +27,6 @@ def generateFromSpecs(constraintsStr, args):
     approach = None
     str2approach = {'mhs': MHS_Approach, 'complete': Complete_Approach}
     if args.approach not in str2approach:
-        logging.error(f"Invalid approach: {args.approach}")
         raise Exception(f"Invalid approach: {args.approach}")
     approach = str2approach[args.approach](args, spec)
     

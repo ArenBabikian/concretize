@@ -29,5 +29,4 @@ class On_Region_Con(Static_Con):
         if region_str in utils.ROAD_COMPONENT_STRING_TO_CLASS:
             return utils.ROAD_COMPONENT_STRING_TO_CLASS[region_str]
         else:
-            logging.error(f"Invalid region type <{region_str}> in <{self}>. Select among the following types {list(utils.ROAD_COMPONENT_STRING_TO_CLASS.keys())}")
-            exit(1)
+            raise Exception(f"Invalid region type <{region_str}> in <{self}>. Select among the following types {list(utils.ROAD_COMPONENT_STRING_TO_CLASS.keys())}")

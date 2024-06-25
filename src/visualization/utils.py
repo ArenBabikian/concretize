@@ -126,7 +126,7 @@ def show_object(plt, actor, c, size=None, zorder=101):
     corners = actor.get_rectangular_region(size).corners
     x, y = zip(*corners)
     w = 1
-    if actor.is_ego:
+    if actor.isEgo:
         # TODO make this visually more appealing
 
         w = 2
