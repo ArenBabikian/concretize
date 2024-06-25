@@ -3,6 +3,15 @@ import { VAceEditor } from 'vue3-ace-editor';
 import './ace/mode-concretize'; // Load the language definition file used below
 </script>
 
+<!-- TODOs for the UI:
+ 1. make the "Generate scenarios" button les wide, and centered on the left column
+ 2. fix the position of the error log at the bottom of the screen, and the status bar right on top of it
+ 3. Add simulate "Download" and "Simulate" buttons at the bottom of the left part
+ 4. Change the initial contenbt of the editor + add documentation for the tool usage.
+ 5. Alow the user to abort a scenario generation run at any stage.
+ 6. handle the case where no models are generated.
+-->
+
 <template>
   <main>
     <div class="wrapper">
