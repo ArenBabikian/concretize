@@ -5,8 +5,9 @@ var DiffHighlightRules = function () {
     this.$rules = {
         "start": [
             {
-                regex: "^([^\:\ \(]*)(\:)", // Params
+                regex: "^(Param )([^\:\ \(]*)(\:)", // Params
                 token: [
+                    "keyword", // "Param"
                     "variable", // Key, before colon
                     "text" // Colon
                 ]
@@ -14,7 +15,7 @@ var DiffHighlightRules = function () {
             {
                 regex: "^([^\:\ \(]*)(\ )", // Objects
                 token: [
-                    "keyword", // "Class", before whitespace
+                    "constant", // "Class", before whitespace
                     "text" // Whitespace
                 ]
             },

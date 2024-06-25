@@ -1,19 +1,19 @@
-export const DEFAULT_PARAMS = `approach: "mhs"
-aggregation_strategy: "actors"
-algorithm_name: "nsga2"
-restart_time: -1
-history: "none"
-num_of_mhs_runs: 10
-num_of_scenarios: 1
-color_scheme: "default"
-hide_actors: false
-show_maneuvers: true
-show_exact_paths: true
-timeout: 60
-zoom_diagram: true
-map: "../maps/town02.xodr"
-specification: "WEB EDITOR"
-store_all_outcomes: false
-output_directory: "../output"
-save_statistics_file: "../output/stats123.json"
+export const DEFAULT_PARAMS = `Param approach: "mhs"
+Param aggregation_strategy: "actors"
+Param algorithm_name: "nsga2"
+Param restart_time: -1
+Param history: "none"
+Param num_of_mhs_runs: 10
+Param num_of_scenarios: 1
+Param color_scheme: "default"
+Param hide_actors: false
+Param show_maneuvers: true
+Param show_exact_paths: true
+Param timeout: 60
+Param zoom_diagram: true
+Param map: "../maps/town02.xodr"
+Param specification: "WEB EDITOR"
+Param store_all_outcomes: false
+Param output_directory: "../output"
+Param save_statistics_file: "../output/stats123.json"
 `;
