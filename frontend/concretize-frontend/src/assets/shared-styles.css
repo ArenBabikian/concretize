@@ -12,12 +12,14 @@
     --color-gray-text: hsl(0, 0%, 25%);
     --color-light-text: hsl(0, 0%, 95%);
     --color-accent: #184461;
+    --color-alt: #aa2d2d;
+    --color-bg: #d0dde6;
     --navbar-height: 50px;
 }
 
 button {
     color: var(--color-light-text);
-    background-color:var(--color-accent);
+    background-color:var(--color-alt);
     font-family: var(--font-sans);
     font-size: var(--text-size-big);
     border: 0px;
@@ -29,7 +31,7 @@ button {
     box-shadow: gray 0px 2px 3px;
 }  
 button:hover {
-    background-color: hsl(from var(--color-accent) h s calc(l + 10));
+    background-color: hsl(from var(--color-alt) h s calc(l + 10));
 }
 
 button:disabled {
@@ -43,6 +45,7 @@ button:disabled {
 }
 
 .notification-text {
+    padding: 11px 0 0 0 ;
     color: var(--color-gray-text);
     font-family: var(--font-sans);
     font-size: var(--text-size-medium);
@@ -58,7 +61,8 @@ button:disabled {
 
 .round-button {
     border-radius: 50%;
-    padding: 5px 9px;
+    padding: 7px 8px 0px 8px;
+    justify-content: center;
 }
 
 .concretize-logo {

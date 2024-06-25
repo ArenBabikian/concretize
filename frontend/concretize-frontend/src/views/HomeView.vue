@@ -3,6 +3,15 @@ import { VAceEditor } from 'vue3-ace-editor';
 import './ace/mode-concretize'; // Load the language definition file used below
 </script>
 
+<!-- TODOs for the UI:
+ 1. make the "Generate scenarios" button les wide, and centered on the left column
+ 2. fix the position of the error log at the bottom of the screen, and the status bar right on top of it
+ 3. Add simulate "Download" and "Simulate" buttons at the bottom of the left part
+ 4. Change the initial contenbt of the editor + add documentation for the tool usage.
+ 5. Alow the user to abort a scenario generation run at any stage.
+ 6. handle the case where no models are generated.
+-->
+
 <template>
   <main>
     <div class="wrapper">
@@ -12,11 +21,16 @@ import './ace/mode-concretize'; // Load the language definition file used below
           v-model:value="specificationsText"
           class="input-text block"
         />
-        <button @click="onSubmit" class="submit-button block" :disabled="waiting">{{ buttonText }}</button>
-        <div v-if="error" class="notification-text">Could not generate image</div>
-        <textarea class="console" ref="resultsConsole" disabled v-model="consoleText"></textarea>
+        <!-- <button @click="onSubmit" class="submit-button block" :disabled="waiting">{{ buttonText }}</button> -->
+        <!-- <div v-if="error" class="diagnostics">Could not generate image</div> -->
+        <div class="diagnostics center-text" :style="{backgroundColor: diagnostic[1]}">{{ diagnostic[0] }}</div>
+        <!-- <div class="diagnostics">{{ diagnostic }}</div> -->
+
+        <!-- <textarea class="console" ref="resultsConsole" disabled v-model="consoleText"></textarea> -->
+        <div class="console" ref="resultsConsole" disabled >{{ consoleText }}</div>
       </div>
       <div class="img-display">
+        <button @click="onSubmit" class="submit-button" :disabled="waiting">{{ buttonText }}</button>
         <img :src="imgSrc" class="res-img"/>
         <div class="placeholder-text center-text" v-if="showPlaceholder">
           Your image will appear here
@@ -57,9 +71,19 @@ export default {
     },
     buttonText() {
       if (this.waiting) {
-        return "Loading...";
+        return "Running...";
       } 
-      return "Submit";
+      return "Generate scenarios";
+    },
+    diagnostic() {
+      if (this.waiting) {
+        return ["Status: Running...", "var(--color-gray-text)"];
+      } 
+      if (! this.error) {
+        return ["Status: Ready", "green"];
+      } else {
+        return ["Status: Error", "red"];
+      }
     },
     imgSrc() {
       if (this.fileNames.length) {
@@ -107,12 +131,12 @@ export default {
       if (res?.data?.diagram_file_names) {
         this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
-        
+        this.consoleText = "";
       } else if (res?.data?.error) {
-        this.consoleText += `${res?.data?.error}\n`;
+        // this.consoleText += `${res?.data?.error}\n`;
+        this.consoleText = `${res?.data?.error}\n`;
         this.error = true;
-      }
-      
+      }      
       this.waiting = false;
     },
     goToPrev() {
@@ -138,8 +162,9 @@ export default {
 }
 .input-text {
   height: 60vh;
-  width: 100%;
-  resize: none;
+  width: 97%;
+  margin: 5px 0;
+  padding: 0 5px;
   font-size: var(--text-size-small);
   font-family: var(--font-mono);
 }
@@ -150,30 +175,48 @@ export default {
   margin-top: 30vh;
 }
 .submit-button {
-  margin-top: 5px;
+  display: block;
+  margin: 5px;
   float: right;
-  position: relative;
+  position: static;
   left: 5px; 
 }
 
 .console {
-  height: 20vh;
-  width: 100%;
-  margin-top: 5px;
+  height: 14vh;
+  width: 97%;
+  padding: 0 5px;
   background-color: var(--color-dark-text);
   color: var(--color-light-text);
   font-family: var(--font-mono);
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.diagnostics {
+  height: 2vh;
+  width: 97%;
+  margin: 5px 0;
+  padding: 0 5px;
+  background-color: var(--color-dark-text);
+  color: var(--color-light-text);
+  font-family: var(--font-mono);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .res-img {
-  width: min(40vw, 100%);
+  width: min(35vw, 100%);
+  margin: 10px;
   align-self:center;
   display: block;
 }
 .img-display {
   display: flex;
   flex-direction: column;
+  background-color: var(--color-bg);
 }
 
 .resultsNav {
