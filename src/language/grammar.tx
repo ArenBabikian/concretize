@@ -13,7 +13,7 @@ SPEED: FLOAT | ID ;
 
 Car:
 	'Car' name = ID ';'
-	(isEgo = 'isEgo' ';') ?
+	( isEgo = 'isEgo' ';' ) ?
 	( 'color' ':' color = ID ';') ?
 	( 'speed' ':' speed = SPEED ';') ?
 	( 'controller' ':' controller = ID ';') ?
@@ -24,10 +24,7 @@ Car:
 ;
 Pedestrian:
 	'Pedestrian' name = ID ';'
-	(isEgo = 'isEgo' ';') ?
-	( 'color' ':' color = ID ';') ?
 	( 'speed' ':' speed = SPEED ';') ?
-	( 'controller' ':' controller = ID ';') ?
 //	('position' ':' x = FLOAT',' y = FLOAT)?
 //	('heading' ':' heading = STRING)?
 //	('dimensions' ':' w = FLOAT',' l = FLOAT',' h = FLOAT)?
