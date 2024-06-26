@@ -2,6 +2,8 @@ services:
   backend:
     build:
       dockerfile: ./Dockerfile-backend
+    volumes:
+      - ./output:/app/output
     ports:
       - "5001:5001"
   frontend:
