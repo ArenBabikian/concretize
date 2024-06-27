@@ -5,6 +5,10 @@ var DiffHighlightRules = function () {
     this.$rules = {
         "start": [
             {
+                regex: "^(\#.*)$", // Comments
+                token: ["comment"]
+            },
+            {
                 regex: "^(Param )([^\:\ \(]*)(\:)", // Params
                 token: [
                     "keyword", // "Param"
