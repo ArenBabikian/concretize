@@ -14,13 +14,13 @@ class Scenario_Diagram:
     def __init__(self, instance, diagram_id, args):
         self.spec = instance
         self.workspace = Workspace(instance.roadmap.drivableRegion)
-        self.diagram = None
+        self.diagram = None # TODO remove this?
 
+        #TODO improve below, avoid the "hasattr"
         self.view = args.view_diagram
-        if hasattr(args, "save_path"):
-            self.save_path = args.save_path
+        if hasattr(args, "save_path_png"):
+            self.save_path = args.save_path_png
         else:
-            
             self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
         self.zoom = args.zoom_diagram
 

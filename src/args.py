@@ -18,7 +18,6 @@ def parse_args():
     data_opt.add_argument('-all', '--store-all-outcomes', action='store_true', help='Store only the best solution')
     data_opt.add_argument('-s-stat', '--save-statistics-file', default=None, help='Path name for statistics file')
 
-
     # Visualisation Options
     vis_opt = parser.add_argument_group('visualisation options')
     vis_opt.add_argument('-v-diag', '--view-diagram', action='store_true', help='Pop up diagram')
@@ -28,6 +27,14 @@ def parse_args():
     vis_opt.add_argument('-sh-man', '--show-maneuvers', action='store_true', help='Highlight the assigned maneuver regions in the visualization')
     vis_opt.add_argument('-sh-expa', '--show-exact-paths', action='store_true', help='Show the assigned exact paths in the visualization')
     vis_opt.add_argument('-col', '--color-scheme', choices=['default', 'alternate'], default='default', help='Color scheme to use whie generating the diagram')
+
+    # Simulation Options
+    sim_opt = parser.add_argument_group('simulation options')
+    sim_opt.add_argument('-sim', '--simulate', action='store_true', help='Run the simulation')
+    sim_opt.add_argument('-sim-path', '--simulation-path', default=None, help='Path to the simulation executable')
+    sim_opt.add_argument('-sim-ip', '--simulation-ip', type=str, default='localhost', help='Ip address of running simulator')
+    sim_opt.add_argument('-sim-port', '--simulation-port', type=int, default=2000, help='Port of running simulator')
+    sim_opt.add_argument('-sim-weather', '--simulation-weather', type=str, default="CloudyNoon", help='Weather preset for simulation')
 
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')

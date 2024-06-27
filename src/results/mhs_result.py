@@ -43,6 +43,9 @@ class Mhs_Result(Result):
         # TODO handle different number of solutions (see scenic>scenarios.py:L280-343)
         mhs_pop = self.raw_res.X
         mhs_fitness = self.raw_res.F
+        if len(mhs_pop.shape) == 1:
+            mhs_pop = [mhs_pop]
+            mhs_fitness = [mhs_fitness]
 
         all_solutions = []
         elements_ordered_by_n_violations = []

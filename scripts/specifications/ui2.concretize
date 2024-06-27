@@ -1,4 +1,4 @@
-Param approach: "complete"
+Param approach: "mhs"
 Param aggregation_strategy: "actors"
 Param algorithm_name: "nsga2"
 Param restart_time: -1
@@ -11,19 +11,20 @@ Param show_maneuvers: true
 Param show_exact_paths: true
 Param timeout: 60
 Param zoom_diagram: true
-Param map: "maps/town01.xodr"
+Param map: "maps/town02.xodr"
 Param specification: "WEB EDITOR"
 Param store_all_outcomes: false
-Param output_directory: "output-yassou"
+Param output_directory: "output-yassou2"
 Param save_statistics_file: "stats123.json"
 Param junction: 306
+Param verbosity: 3
 
 Param simulate: true
 
-Car a1; isEgo; color: red;
-Car a2;
-
-doesManeuver(a1, any)
-doesManeuver(a2, any)
+Car c1;
+Car c2;
+onRegion(c2, Junction)
+onRegion(c1, Junction)
+distClose(c1, c2)
 
 

@@ -3,4 +3,4 @@
 
 python concretize.py\
     complete\
-    scripts/specifications/ui.concretize
+    scripts/specifications/ui2.concretize
