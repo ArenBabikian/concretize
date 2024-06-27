@@ -73,8 +73,8 @@ class Car(Actor):
 
 
 class Pedestrian(Actor):
-    def __init__(self, parent, name, isEgo, color, speed, controller, snap=False):
-        super().__init__(parent, name, isEgo, color, speed, controller, snap)
+    def __init__(self, parent, name, speed, snap=False):
+        super().__init__(parent, name, False, None, speed, None, snap)
         self.width = 1
         self.length = 1
 
