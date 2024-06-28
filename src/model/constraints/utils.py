@@ -1,7 +1,7 @@
 import inspect
 import scenic.core.geometry as geom
 
-from src.model.road_components import Drivable_Type, Junction_Type, Map_Element_Instance, Map_Element_Type, Road_Type
+from src.model.road_components import Drivable_Type, Junction_Type, Map_Element_Instance, Map_Element_Type, Road_Type, Walkable_Type
 
 def position_helper(src_pos, src_head, tgt_pos, angle):
     a = geom.viewAngleToPoint(tgt_pos[:2], src_pos[:2], src_head)
@@ -28,6 +28,8 @@ def get_container(target, roadmap):
         elif isinstance(target, Drivable_Type):
             # has to be after its subtypes
             return roadmap.drivableRegion # All sidewalks union all crossings.
+        elif isinstance(target, Walkable_Type):
+            return roadmap.walkableRegion
         else:
             raise Exception(f'Unhandled target type <{target}>')
         # TODO

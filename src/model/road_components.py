@@ -28,6 +28,14 @@ class Drivable_Type(Map_Element_Type):
     def __str__(self):
         return f"Any Drivable Element"
 
+class Walkable_Type(Map_Element_Type):
+
+    def __init__(self):
+        super().__init__()
+
+    def __str__(self):
+        return f"Any Walkable Element"
+
 class Road_Type(Drivable_Type, Map_Element_Type):
     def __init__(self):
         super().__init__()
