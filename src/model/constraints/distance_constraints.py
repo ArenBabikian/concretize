@@ -12,7 +12,9 @@ class Is_Close_To_Con(Static_Con):
     def get_heuristic_value(self):
         src_pos = self.actors[0].position
         tgt_pos = self.actors[1].position
-        return utils.distance_helper(src_pos, tgt_pos, 0, 10)
+        # TODO below should be 0..10.
+        # Tentatively 3..10 since not_overlaping is not implemented.
+        return utils.distance_helper(src_pos, tgt_pos, 3, 10)
 
 
 class Is_Medium_Distance_From_Con(Static_Con):
