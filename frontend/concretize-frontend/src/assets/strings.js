@@ -16,6 +16,11 @@ Param specification: "WEB EDITOR";
 Param store_all_outcomes: false;
 Param output_directory: "../output";
 Param save_statistics_file: "../output/stats123.json";
+Param simulate: true;
+Param simulation_path: "../output/simResults.xml";
+Param simulation_ip: "localhost";
+Param simulation_port: 2000;
+Param simulation_weather: "CloudyNoon";
 
 Car c1; isEgo; color: red;
 Car c2; color: blue;
@@ -24,5 +29,7 @@ onRegion(c1, Road);
 onRegion(c2, Junction);
 
 distClose(c1, c2);
+
+
 
 `;
