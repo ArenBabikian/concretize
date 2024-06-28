@@ -158,7 +158,7 @@ class Complete_Approach(Search_Approach):
 
             # 8. If some actors are not assigned an exact path, we position them right outside the junction
             for actor in scenario.actors:
-                if actor.assigned_exact_path_for_vis is None:
+                if actor.assign_exact_path_for_vis is None:
                     ac_man_reg = actor.assigned_maneuver_instance.connectingLane
                     ac_start_reg = ac_man_reg._predecessor.sections[-1]
                     ac_start_cl = ac_start_reg.centerline
@@ -222,4 +222,6 @@ class Complete_Approach(Search_Approach):
         # GET ALL DANGEROUS CONCRETE SCENARIOS
         self.get_dangerous_concrete_scenarios()
 
-        # TODO go back to `initializeAbstractScenarioDetails` from scenic, l63
+        # SAVE EXECUTABLE XML FILES
+
+        # TODO go back to `initializeAbstractScenarioDetails` from scenic, l63, for the analysis at the end

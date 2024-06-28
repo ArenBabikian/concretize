@@ -2,11 +2,11 @@
 import math
 import carla
 from src.model.actor import Car, Pedestrian
+from scenic.core.vectors import Vector
 
 
 def fix_map(client, world_name, ip, port):
     cur_world = client.get_world().get_map().name
-    print(cur_world, world_name)
 
     if cur_world != f"Carla/Maps/{world_name}":
         client.load_world(world_name)
@@ -39,15 +39,32 @@ def fix_spectator(world, xs, ys):
 
     cam_x = (maxx+minx)/2
     cam_y = (maxy+miny)/2
-    cam_z = max(abs(maxx-minx), abs(maxy-miny))*5
+    if len(xs) == 1:
+        cam_z = 10
+    else:
+        cam_z = max(abs(maxx-minx), abs(maxy-miny))
 
     loc = carla.Location(x=cam_x, y=cam_y, z=cam_z)
     rot = carla.Rotation(pitch=-88.99, yaw=0.01, roll=-179.99) # camera pointing down
-    world.get_spectator().set_transform(carla.Transform(loc, rot))
+    return world.get_spectator().set_transform(carla.Transform(loc, rot))
 
 def posToCarlaLocation(pos, z=None):
-	return carla.Location(pos.x, -pos.y, 5)
+    if isinstance(pos, Vector):
+        x, y = pos.x, pos.y
+    elif isinstance(pos, list):
+        x, y = pos[0], pos[1]
+    else:
+        raise Exception("Invalid position type")
+    return carla.Location(x, -y, 5)
 
 def posToCarlaRotation(heading):
 	yaw = math.degrees(-heading) - 90
 	return carla.Rotation(yaw=yaw)
+
+def destroy_all_actors(world):
+    vehicles = world.get_actors().filter('vehicle.*')
+    pedestrians = world.get_actors().filter('walker.*')
+    for actor in vehicles:
+        actor.destroy()
+    for actor in pedestrians:
+        actor.destroy()

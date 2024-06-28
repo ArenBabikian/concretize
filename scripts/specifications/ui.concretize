@@ -23,7 +23,7 @@ Param simulate: true
 Car a1; isEgo; color: red;
 Car a2;
 
-doesManeuver(a1, any)
-doesManeuver(a2, any)
+doesManeuver(a1, left_turn)
+doesManeuver(a2, go_straight)
 
 
