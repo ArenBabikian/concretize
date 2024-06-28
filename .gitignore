@@ -2,6 +2,10 @@ __pycache__/
 output*/
 .venv/
 uploads/
+.vscode
 
 # Road Map File
 *.snet
+
+# UI Files
+.vite/

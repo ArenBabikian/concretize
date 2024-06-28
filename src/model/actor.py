@@ -13,7 +13,7 @@ class Actor(ABC):
         self.speed = speed
         self.controller = controller
         self.snap_to_waypoint = snap
-        self.speed_id = 'transfuser' # TODO get this from the grammar
+        self.speed_id = '5' # TODO get this from the grammar
         self.controller = None # TODO get this from the grammar
         self.parent = parent
 
@@ -24,11 +24,12 @@ class Actor(ABC):
         # Concrete parameters
         self.position = None
         self.heading = None
-        self.assigned_exact_path_for_vis = None
+        self.assign_exact_path_for_vis = None
 
         # Derived parameters
         self.speed_profile = Speed_Profile(self.speed_id)
         self.current_lane = None
+        self.end_of_junction_point = None
 
     @abstractmethod
     def __str__(self):

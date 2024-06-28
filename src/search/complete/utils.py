@@ -50,6 +50,7 @@ def fill_concrete_actors(actor, pos, current_region, pre_junc_pos=None, pre_junc
             in_junc_cl = get_sub_line(lane_in_junction.centerline, pos)
         path = PolylineRegion.unionAll([in_junc_cl, post_junc_cl])
 
+    actor.end_of_junction_point = post_junc_cl.pointAlongBy(5)
     actor.assign_exact_path_for_vis = path
 
     # TODO below

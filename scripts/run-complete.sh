@@ -18,6 +18,7 @@ python concretize.py\
     --save-statistics-file stats.json\
     --save-diagram\
     --show-maneuver\
+    --view-diagram\
     --show-exact-paths\
     --color-scheme alternate\
     -z\

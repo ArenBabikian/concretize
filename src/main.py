@@ -6,6 +6,7 @@ from src.language import parser
 import logging
 
 from src.model.specification import Specification
+from src.simulation.simulation import Scenario_Simulation
 from src.visualization.diagram import Scenario_Diagram
 
 def concretize():
@@ -90,6 +91,16 @@ def concretize():
                 sd.generate_diagram()
                 sd.save_and_show()
                 con_sol_id+=1
+
+                # TODO do we want to simulate every generated scenario?
+                ss = Scenario_Simulation(sol, f"{res_id}_{con_sol_id}", args)
+                # TODO
+                # if args.simulation_path:
+                #     ss.save_executable()
+                if args.simulate:
+                    ss.execute_simulation()
+
+                # logging.warning("No save path provided. The scenario is not simulated")
 
     #   5 simulate
     #   6 evaluate simulation run
