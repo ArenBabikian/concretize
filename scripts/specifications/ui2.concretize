@@ -22,9 +22,6 @@ Param verbosity: 3
 Param simulate: true
 
 Car c1;
-Car c2;
-onRegion(c2, Junction)
 onRegion(c1, Junction)
-distClose(c1, c2)
 
 

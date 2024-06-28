@@ -50,7 +50,7 @@ def generateFromSpecs(constraintsStr, args):
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
                 fileName = f"temp_diagram_{time.time()}_{idx}_{sol_id}.png"
-                args.save_path = f"{args.upload_folder}/{fileName}"
+                args.save_path_png = f"{args.upload_folder}/{fileName}"
                 args.view_diagram = False
                 sd = Scenario_Diagram(sol, f"{idx} {sol_id}", args)
                 sd.generate_diagram()

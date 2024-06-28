@@ -1,4 +1,4 @@
-export const DEFAULT_PARAMS = `Param approach: "mhs";
+Param approach: "complete";
 Param aggregation_strategy: "actors";
 Param algorithm_name: "nsga2";
 Param restart_time: -1;
@@ -11,18 +11,21 @@ Param show_maneuvers: true;
 Param show_exact_paths: true;
 Param timeout: 60;
 Param zoom_diagram: true;
-Param map: "../maps/town02.xodr";
+Param map: "maps/town05.xodr";
 Param specification: "WEB EDITOR";
 Param store_all_outcomes: false;
-Param output_directory: "../output";
-Param save_statistics_file: "../output/stats123.json";
+Param output_directory: "output-yassou3";
+Param save_statistics_file: "stats123.json";
+
+Param junction: 2240;
 
 Car c1; isEgo; color: red;
 Car c2; color: blue;
 
-onRegion(c1, Road)
-onRegion(c2, Junction)
+doesManeuver(c1, left_turn);
+doesManeuver(c2, any);
+# onRegion(c1, Road);
+# onRegion(c2, Junction);
 
-distClose(c1, c2)
+# distClose(c1, c2);
 
-`;
