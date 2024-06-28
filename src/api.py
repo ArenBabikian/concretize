@@ -44,6 +44,19 @@ def download(filename):
     print(f"Absolute path: {abspath}")
     return send_file(f"./{abspath}/{filename}")
 
+@app.get("/simulate/<filename>")
+def simulate(filename):
+    try:
+        simulateSolution(filename)
+        return {
+            "message": f"simulating {filename}"
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        return {
+            "error": str(e)
+        }
+
 class AutoObject(object):   
     def __init__(self, d: dict):
         for key, value in d.items():

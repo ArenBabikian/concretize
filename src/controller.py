@@ -3,8 +3,13 @@ from src.results.statistics import Statistics_Manager
 from src.search.mhs.mhs import MHS_Approach
 from src.search.complete.complete import Complete_Approach
 from src.visualization.diagram import Scenario_Diagram
-import time
+from src.simulation.simulation import Scenario_Simulation
+import datetime
 import logging
+
+# Cache for solutions
+# Key: filename; value: tuple(solution object, result id, concrete solution id)
+solutionsCache = {}
 
 def generateFromSpecs(constraintsStr, args):
     spec = parser.parseStr(constraintsStr)
@@ -44,17 +49,36 @@ def generateFromSpecs(constraintsStr, args):
         return None
     
     fileNames = []
-    for idx, res in enumerate(succRes):
+    
+    # Clear solutions cache
+    solutionsCache = {}
+    # ensure arguments are persisted
+    solutionsCache["args"] = args
+    
+    for res_id, res in enumerate(succRes):
         stat_man.generate_update_save(idx, res)
 
+        con_sol_id = 0
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
-                fileName = f"temp_diagram_{time.time()}_{idx}_{sol_id}.png"
+                con_sol_id += 1
+                fileName = f"sol_{datetime.now.strftime("%y%m%d%H%M%S")}_{res_id}_{sol_id}.png"
                 args.save_path_png = f"{args.upload_folder}/{fileName}"
                 args.view_diagram = False
-                sd = Scenario_Diagram(sol, f"{idx} {sol_id}", args)
+                sd = Scenario_Diagram(sol, f"{res_id} {sol_id}", args)
                 sd.generate_diagram()
                 sd.save_and_show()
                 fileNames.append(fileName)
+                # Save solution as tuple
+                solutionsCache[fileName] = (sol, res_id, con_sol_id)
     return fileNames
-    
+
+def simulateSolution(filename):
+    if not filename in solutionsCache:
+        raise Exception(f"Could not find {filename} in solutions cache.")
+    sol = solutionsCache[filename][0]
+    res_id = solutionsCache[filename][1]
+    con_sol_id = solutionsCache[filename][2]
+    args = solutionsCache["args"]
+    ss = Scenario_Simulation(sol, f"{res_id}_{con_sol_id}", args)
+    ss.execute_simulation()
