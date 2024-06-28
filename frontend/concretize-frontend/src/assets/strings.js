@@ -20,9 +20,9 @@ Param save_statistics_file: "../output/stats123.json";
 Car c1; isEgo; color: red;
 Car c2; color: blue;
 
-onRegion(c1, Road)
-onRegion(c2, Junction)
+onRegion(c1, Road);
+onRegion(c2, Junction);
 
-distClose(c1, c2)
+distClose(c1, c2);
 
 `;

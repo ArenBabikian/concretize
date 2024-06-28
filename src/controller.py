@@ -4,7 +4,7 @@ from src.search.mhs.mhs import MHS_Approach
 from src.search.complete.complete import Complete_Approach
 from src.visualization.diagram import Scenario_Diagram
 from src.simulation.simulation import Scenario_Simulation
-import datetime
+from datetime import datetime
 import logging
 
 # Cache for solutions
@@ -12,6 +12,7 @@ import logging
 solutionsCache = {}
 
 def generateFromSpecs(constraintsStr, args):
+    global solutionsCache
     spec = parser.parseStr(constraintsStr)
     
     
@@ -56,13 +57,13 @@ def generateFromSpecs(constraintsStr, args):
     solutionsCache["args"] = args
     
     for res_id, res in enumerate(succRes):
-        stat_man.generate_update_save(idx, res)
+        stat_man.generate_update_save(res_id, res)
 
         con_sol_id = 0
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
                 con_sol_id += 1
-                fileName = f"sol_{datetime.now.strftime("%y%m%d%H%M%S")}_{res_id}_{sol_id}.png"
+                fileName = f"sol_{datetime.now().strftime('%y%m%d%H%M%S')}_{res_id}_{sol_id}.png"
                 args.save_path_png = f"{args.upload_folder}/{fileName}"
                 args.view_diagram = False
                 sd = Scenario_Diagram(sol, f"{res_id} {sol_id}", args)
@@ -74,6 +75,7 @@ def generateFromSpecs(constraintsStr, args):
     return fileNames
 
 def simulateSolution(filename):
+    global solutionsCache
     if not filename in solutionsCache:
         raise Exception(f"Could not find {filename} in solutions cache.")
     sol = solutionsCache[filename][0]

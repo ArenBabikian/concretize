@@ -5,11 +5,29 @@ const api = axios.create({
 });
 
 export async function generate(constraints, args) {
-    let res = await api.post("/generate", {"constraints": constraints, "args": args});
-    return res;
+    try {
+        let res = await api.post("/generate", {"constraints": constraints, "args": args});
+        return res;
+    } catch (e) {
+        const resObj = {
+            data: {
+                error: `API request failed with error ${e.message}`
+            }
+        }
+        return resObj;
+    }
 }
 
-export async function download(filename) {
-    let res = await api.get(`/downloads/${filename}`);
-    return res;
+export async function simulate(filename) {
+    try {
+        let res = await api.get(`/simulate/${filename}`);
+        return res;
+    } catch (e) {
+        const resObj = {
+            data: {
+                error: `API request failed with error ${e.message}`
+            }
+        }
+        return resObj;
+    }
 }

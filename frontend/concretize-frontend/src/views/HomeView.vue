@@ -37,7 +37,8 @@ import './ace/mode-concretize'; // Load the language definition file used below
         </div>
         <div class="resultsNav" v-if="!showPlaceholder">
           <button @click="goToPrev" class="round-button" :disabled="page <= 0"><i class="bi bi-caret-left"></i></button>
-          <span class="notification-text">{{ page + 1 }}/{{ fileNames.length }}</span>
+          <div class="notification-text">{{ page + 1 }}/{{ fileNames.length }}</div>
+          <button @click="simulate(fileNames[page])"> Simulate </button>
           <button @click="goToNext" class="round-button" :disabled="page >= fileNames.length - 1"><i class="bi bi-caret-right"></i></button>
         </div>
       </div>
@@ -47,7 +48,7 @@ import './ace/mode-concretize'; // Load the language definition file used below
 </template>
 
 <script>
-import { BASE_URL, generate, download } from '@/scripts/api'
+import { BASE_URL, generate, simulate } from '@/scripts/api'
 import { DEFAULT_PARAMS } from '@/assets/strings';
 window.onload = function () {
   var editor = ace.edit("editor");
@@ -98,11 +99,11 @@ export default {
       // Exit error state if user has changed the text
       this.error = false;
     },
-    consoleText() {
+    consoleText(newTxt) {
       // Automatically scrolls console to bottom on update
-      this.$nextTick(() => {
-        this.$refs.resultsConsole.scrollTop = this.$refs.resultsConsole.scrollHeight;
-      });
+      // this.$nextTick(() => {
+      //   this.$refs.resultsConsole.scrollTop = this.$refs.resultsConsole.scrollHeight;
+      // });
     }
   },
   mounted() {
@@ -110,6 +111,17 @@ export default {
     editor.session.setMode("ace/mode/concretize")
   },
   methods: {
+    async simulate(filename) {
+      console.log("Before call")
+      const res = await simulate(filename);
+      console.log("after call")
+      if (res?.data?.message) {
+        this.consoleText = res.data.message + '\n';
+      } else {
+        this.consoleText = (res?.data?.error || "Unknown error occurred") + '\n';
+      }
+      console.log(`Console text: ${this.consoleText}`);
+    },
     async onSubmit() {
       this.waiting = true;
       let res = await generate(this.specificationsText, {
@@ -127,7 +139,6 @@ export default {
         // timeout: 60,
         // zoom_diagram: true
       })
-      console.log(res)
       if (res?.data?.diagram_file_names) {
         this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
