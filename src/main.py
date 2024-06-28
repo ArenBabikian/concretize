@@ -94,8 +94,9 @@ def concretize():
 
                 # TODO do we want to simulate every generated scenario?
                 ss = Scenario_Simulation(sol, f"{res_id}_{con_sol_id}", args)
-                if args.simulation_path:
-                    ss.save_executable()
+                # TODO
+                # if args.simulation_path:
+                #     ss.save_executable()
                 if args.simulate:
                     ss.execute_simulation()
 
