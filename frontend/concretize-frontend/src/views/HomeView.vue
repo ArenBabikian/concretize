@@ -38,7 +38,7 @@ import './ace/mode-concretize'; // Load the language definition file used below
         <div class="resultsNav" v-if="!showPlaceholder">
           <button @click="goToPrev" class="round-button" :disabled="page <= 0"><i class="bi bi-caret-left"></i></button>
           <div class="notification-text">{{ page + 1 }}/{{ fileNames.length }}</div>
-          <button @click="simulate(fileNames[page])"> Simulate </button>
+          <button @click="onSimulate(fileNames[page])" :disabled="waiting"> Simulate </button>
           <button @click="goToNext" class="round-button" :disabled="page >= fileNames.length - 1"><i class="bi bi-caret-right"></i></button>
         </div>
       </div>
@@ -111,16 +111,17 @@ export default {
     editor.session.setMode("ace/mode/concretize")
   },
   methods: {
-    async simulate(filename) {
-      console.log("Before call")
+    async onSimulate(filename) {
+      this.waiting = true;
       const res = await simulate(filename);
-      console.log("after call")
       if (res?.data?.message) {
         this.consoleText = res.data.message + '\n';
-      } else {
+      } 
+      if (res?.data?.error){
         this.consoleText = (res?.data?.error || "Unknown error occurred") + '\n';
       }
-      console.log(`Console text: ${this.consoleText}`);
+      this.waiting = false;
+
     },
     async onSubmit() {
       this.waiting = true;
