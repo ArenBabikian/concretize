@@ -3,6 +3,7 @@ output*/
 .venv/
 uploads/
 .vscode
+.archive/
 
 # Road Map File
 *.snet
