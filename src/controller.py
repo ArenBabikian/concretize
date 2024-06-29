@@ -27,8 +27,8 @@ def generateFromSpecs(constraintsStr, args):
     # args.algorithm_name = "nsga2"
     args.restart_time = -1
     args.history = "none"
-    args.num_of_mhs_runs = 1
-    args.num_of_scenarios = 1
+    args.num_of_mhs_runs = -1
+    # args.num_of_scenarios = 3
     # args.color_scheme = "default"
     args.hide_actors = False
     args.view_diagram = False
@@ -39,10 +39,10 @@ def generateFromSpecs(constraintsStr, args):
     # args.map = "Town02"
     args.specification = "WEB EDITOR"
     args.store_all_outcomes = False
-    # args.output_directory = "../output"
+    args.output_directory = "../output"
     args.simulate = True
-    # args.simulation_path = "../output/simResults.xml"
-    args.simulation_ip = "localhost"
+    args.simulation_path = "../output/simResults.xml"
+    args.simulation_ip = "host.docker.internal"
     args.simulation_port = 2000
     # args.simulation_weather = "CloudyNoon"
 

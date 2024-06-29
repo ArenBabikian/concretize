@@ -51,7 +51,7 @@ def fix_spectator(world, junction, xs, ys):
     else:
         minx, maxx = min(xs), max(xs)
         miny, maxy = min(ys), max(ys)
-        c_add = 0
+        c_add = 5
 
     cam_x = (maxx+minx)/2
     cam_y = (maxy+miny)/2

@@ -113,6 +113,7 @@ export default {
   methods: {
     async onSimulate(filename) {
       this.waiting = true;
+      this.consoleText = "";
       const res = await simulate(filename);
       if (res?.data?.message) {
         this.consoleText = res.data.message + '\n';
@@ -125,6 +126,7 @@ export default {
     },
     async onSubmit() {
       this.waiting = true;
+      this.consoleText = "";
       let res = await generate(this.specificationsText, {
         // approach: "mhs",
         // aggregation_strategy: "actors",
@@ -143,7 +145,7 @@ export default {
       if (res?.data?.diagram_file_names) {
         this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
-        this.consoleText = "";
+        // this.consoleText = "";
       } else if (res?.data?.error) {
         // this.consoleText += `${res?.data?.error}\n`;
         this.consoleText = `${res?.data?.error}\n`;
