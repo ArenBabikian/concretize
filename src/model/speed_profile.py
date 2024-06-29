@@ -9,7 +9,7 @@ class Speed_Profile:
         elif speed_profile_id == 'transfuser':
             self.speed_in_junction = 3
             self.speed_on_road = 4
-        elif speed_profile_id.isdigit():
+        elif isinstance(speed_profile_id, (int, float)):
             s = float(speed_profile_id)
             self.speed_in_junction = s
             self.speed_on_road = s

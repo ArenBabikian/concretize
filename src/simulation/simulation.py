@@ -85,7 +85,12 @@ class Scenario_Simulation:
                     # given for free with the ConstantVelocityAgent
 
                     # define agent
-                    agent = ConstantVelocityAgent(carla_actor, ac.speed_profile.speed_on_road) # TODO temporary
+                    opt_dict = {'ignore_traffic_light': True, 'ignore_stop_signs': True}
+                    agent = ConstantVelocityAgent(carla_actor, 
+                                                  target_speed=ac.speed_profile.speed_on_road, 
+                                                  opt_dict=opt_dict) # TODO temporary
+                    if not ac.isEgo:
+                        agent.ignore_vehicles()
                     target = utils.posToCarlaLocation(ac.end_of_junction_point)
                     agent.set_destination(target)
                     carla_agents[ac] = agent
