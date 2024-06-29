@@ -4,6 +4,7 @@ import time
 import matplotlib.pyplot as plt
 from scenic.domains.driving.workspace import Workspace
 
+from src.model.actor import Car, Pedestrian
 from src.model.constraints.danger_constraints import Collision_Con
 import src.visualization.utils as utils
 import src.visualization.colors as colors
@@ -51,7 +52,11 @@ class Scenario_Diagram:
             if not self.hide_actors:
                 # TODO display actor ID on the image?
                 logging.debug(f'{ac} positioned at {ac.position}')
-                utils.show_object(plt, ac, color.default, size=(2, 4))
+                if isinstance(ac, Car):
+                    size = (2, 4)
+                elif isinstance(ac, Pedestrian):
+                    size = (1, 1)
+                utils.show_object(plt, ac, color.default, size=size)
 
             if ac.assigned_maneuver_instance:
                 region = ac.assigned_maneuver_instance.connectingLane

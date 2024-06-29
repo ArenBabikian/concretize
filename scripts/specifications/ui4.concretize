@@ -17,14 +17,14 @@ Param specification: "WEB EDITOR";
 Param store_all_outcomes: false;
 Param output_directory: "output-yassou4";
 Param save_statistics_file: "stats123.json";
-Param simulate: true;
+Param simulate: false;
 Param simulation_path: "../output/simResults.xml";
 Param simulation_ip: "localhost";
 Param simulation_port: 2000;
 Param simulation_weather: "CloudyNoon";
 
 Car c1; isEgo; color: red;
-Car c2; color: blue;
+Pedestrian c2;
 
 onRegion(c1, Road);
 onRegion(c2, Junction);
