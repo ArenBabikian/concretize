@@ -36,16 +36,24 @@ def spawn_fixed_actors(world, actor):
     # TODO not sure if return is correct
     return world.spawn_actor(bp, tr)
 
-def fix_spectator(world, xs, ys):
-    minx, maxx = min(xs), max(xs)
-    miny, maxy = min(ys), max(ys)
+def fix_spectator(world, junction, xs, ys):
+    if junction:
+        j = junction.junction_in_network
+        aabb = j.getAABB()
+        minx, maxx = aabb[0][0], aabb[1][0]
+        miny, maxy = -aabb[0][1], -aabb[1][1] # TEMP
+        c_add = 0
+    else:
+        minx, maxx = min(xs), max(xs)
+        miny, maxy = min(ys), max(ys)
+        c_add = 0
 
     cam_x = (maxx+minx)/2
     cam_y = (maxy+miny)/2
-    if len(xs) == 1:
+    if junction is None and len(xs) == 1:
         cam_z = 10
     else:
-        cam_z = max(abs(maxx-minx), abs(maxy-miny))
+        cam_z = max(abs(maxx-minx), abs(maxy-miny))+c_add
 
     loc = carla.Location(x=cam_x, y=cam_y, z=cam_z)
     rot = carla.Rotation(pitch=270, yaw=270, roll=0) # camera pointing down

@@ -67,7 +67,7 @@ class Scenario_Simulation:
             print("Actors spawned")
 
             # set the camera to the top of the scenario
-            utils.fix_spectator(world, xs, ys)
+            utils.fix_spectator(world, self.spec.specification.junction, xs, ys)
             print("Camera spawned")
 
             # alows time for actors to spawn and drop on the road
