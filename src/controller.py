@@ -17,12 +17,39 @@ def generateFromSpecs(constraintsStr, args):
     spec = parser.parseStr(constraintsStr)
     
     
-    # TODO refactor to avoid redundant code with main.py
+    # big TODO refactor to avoid redundant code with main.py
     for actor in spec.actors:
         actor.snap = True
+
+    # initialize arguments
+    # args.approach = "mhs"
+    args.aggregation_strategy = "actors"
+    # args.algorithm_name = "nsga2"
+    args.restart_time = -1
+    args.history = "none"
+    args.num_of_mhs_runs = 1
+    args.num_of_scenarios = 1
+    # args.color_scheme = "default"
+    args.hide_actors = False
+    args.view_diagram = False
+    args.show_maneuvers = True
+    args.show_exact_paths = True
+    # args.timeout = 60
+    args.zoom_diagram = True
+    # args.map = "Town02"
+    args.specification = "WEB EDITOR"
+    args.store_all_outcomes = False
+    # args.output_directory = "../output"
+    args.simulate = True
+    # args.simulation_path = "../output/simResults.xml"
+    args.simulation_ip = "localhost"
+    args.simulation_port = 2000
+    # args.simulation_weather = "CloudyNoon"
+
     for param in spec.params:
         args.__dict__[param.key] = param.value
-
+        
+    args.save_statistics_file = f"{args.output_directory}/stats.json"
 
     map_file = utils.get_and_validate_map_file(args.map, "../maps")
     spec.map_file = map_file

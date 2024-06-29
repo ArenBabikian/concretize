@@ -6,6 +6,7 @@ from src.controller import *
 import traceback
 from pathlib import Path
 
+# TODO refactor this into a seperate folder
 app = Flask(__name__)
 CORS(app)
 
