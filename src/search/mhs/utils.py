@@ -23,15 +23,24 @@ def getMapBoundaries(specifcation, num_obj):
     # if we are testing the entire map
     # TODO we might be able to get rid of this entire by checking getAABB() of the network
     # TODO make the first one an elif
-    if map_name == "town02.xodr":
+    if map_name == "Town01.xodr":
+        bounds = [-8, -384, 403, 9]
+        bounds = [-8, -225, 196, 9] # small
+    elif map_name == "Town02.xodr":
         bounds = [-15, -315, 200, -98]
-    elif map_name == "town05.xodr":
+    elif map_name == "Town03.xodr":
+        bounds = [-158, -215, 257, 215]
+        bounds = [-158, -215, 41, 64] # small
+    elif map_name == "Town04.xodr":
+        bounds = [-525, -250, 425, 219]
+        bounds = [-32, 112, 425, 219] # small
+    elif map_name == "Town05.xodr":
         bounds = [-31, -72, 71, 78]
-    elif map_name == "town10HD.xodr":
+    elif map_name == "Town10HD.xodr":
         bounds = [-126, -151, 121, 80]
-    elif map_name == "tram05.xodr":
+    elif map_name == "Tram05.xodr":
         bounds = [-155, -101, 103, 80]
-    elif map_name == "tram05-mod.xodr":
+    elif map_name == "Tram05-mod.xodr":
         bounds = [-140, -160, 215, 70]
     elif map_name == "zalaFullcrop.xodr":
         bounds = [-59, 1337, 211, 1811] # full smart-city section

@@ -1,3 +1,4 @@
+from src import utils
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
 from src.search.complete.complete import Complete_Approach
@@ -29,8 +30,7 @@ def concretize():
         args.__dict__[param.key] = param.value
 
     # 1.1 parse the map file
-    map_file = args.map
-
+    map_file = utils.get_and_validate_map_file(args.map, "maps")
     spec.map_file = map_file
     spec.roadmap = spec.parsemap(map_file)
 
@@ -39,23 +39,6 @@ def concretize():
         actor.snap = True
     for constraint in spec.constraints:
         constraint.roadmap = spec.roadmap
-
-    # spec = Specification(map_file)
-
-    # acs = []
-    # acs.append(Car(0, True))
-    # acs.append(Pedestrian(1, True))
-
-    # cons = []
-    # cons.append(Has_In_Front_Con([acs[0], acs[1]]))
-    # cons.append(Is_Close_To_Con([acs[0], acs[1]]))
-    # cons.append(On_Region_Con([acs[1], Junction_Type()], spec.roadmap))
-    # cons.append(On_Region_Con([acs[0], Road_Type()], spec.roadmap))
-
-    #potentialy
-    # c3 = TurnsLeft([a0]) # which would setthe a0.assigned_maneuver to TurnsLeft
-    # spec.actors = acs
-    # spec.constraints = cons
     
     # 2.1 validate the scenario specification
     # TODO

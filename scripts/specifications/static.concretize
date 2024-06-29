@@ -1,4 +1,4 @@
-Param map: 'maps/town05.xodr'
+Param map: 'Town05'
 Param maneuverJunction: 'j1234'
 
 Car c1

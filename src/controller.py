@@ -1,3 +1,4 @@
+from src import utils
 from src.language import parser
 from src.results.statistics import Statistics_Manager
 from src.search.mhs.mhs import MHS_Approach
@@ -23,8 +24,9 @@ def generateFromSpecs(constraintsStr, args):
         args.__dict__[param.key] = param.value
 
 
-    spec.map_file = args.map
-    spec.roadmap = spec.parsemap(args.map)
+    map_file = utils.get_and_validate_map_file(args.map, "../maps")
+    spec.map_file = map_file
+    spec.roadmap = spec.parsemap(map_file)
     
     for constraint in spec.constraints:
         constraint.roadmap = spec.roadmap

@@ -29,7 +29,7 @@ class Scenario_Simulation:
             self.save_path = Path(args.output_directory) / "scenarios" / f"{simulation_id}.xml"
             raise Exception(self.save_path)
         
-        self.carla_map = 'T'+args.map[6:11]
+        self.carla_map = args.map
 
         self.ip = args.simulation_ip
         self.port = args.simulation_port

@@ -10,7 +10,7 @@ def parse_args():
     main_opt.add_argument('-v', '--verbosity', type=int, choices=(0, 1, 2, 3), default=1,  help='verbosity level',)
     main_opt.add_argument('-n', '--num-of-scenarios', type=int, default=1, help='Number of concrete scenarios to generate')
     main_opt.add_argument('-t', '--timeout', type=int, default=60, help='Time limit in seconds')
-    main_opt.add_argument('-m', '--map', default="maps/town02.xodr", help='path to map file')
+    main_opt.add_argument('-m', '--map', default="Town02", help='path to map file')
 
     # Data Options
     data_opt = parser.add_argument_group('data options')

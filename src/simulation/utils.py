@@ -9,7 +9,10 @@ def fix_map(client, world_name, ip, port):
     cur_world = client.get_world().get_map().name
 
     if cur_world != f"Carla/Maps/{world_name}":
-        client.load_world(world_name)
+        try:
+            client.load_world(world_name)
+        except:
+            raise Exception(f"World {world_name} not found")
         client = carla.Client(ip, port)
         client.set_timeout(3.0)
 

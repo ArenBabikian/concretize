@@ -8,7 +8,7 @@ Param show_maneuvers: true;
 Param show_exact_paths: true;
 Param timeout: 60;
 Param zoom_diagram: true;
-Param map: "../maps/town05.xodr";
+Param map: "Town05";
 Param specification: "WEB EDITOR";
 Param store_all_outcomes: false;
 Param output_directory: "../output";
