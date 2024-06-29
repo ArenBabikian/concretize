@@ -21,11 +21,17 @@ def spawn_fixed_actors(world, actor):
     if isinstance(actor, Pedestrian):
         bp = world.get_blueprint_library().find("walker.pedestrian.0001")
     elif isinstance(actor, Car):
-        bp = world.get_blueprint_library().find("vehicle.bmw.grandtourer")
+        # bp = world.get_blueprint_library().find("vehicle.bmw.grandtourer")
+        bp = world.get_blueprint_library().find("vehicle.tesla.model3")
 
-        # TODO get color
-        color = '128,64,0'
-        bp.set_attribute("color", color)
+        c = actor.color.default
+        r = int(c[1:3], 16)
+        g = int(c[3:5], 16)
+        b = int(c[5:7], 16)
+        color = carla.Color(r=r, g=g, b=b)
+        color = f"({r},{g},{b})"
+        # TODO red color not showing up well in simulation
+        bp.set_attribute("color", str(color))
 
     loc = posToCarlaLocation(actor.position)
     rot = posToCarlaRotation(actor.heading)
@@ -33,7 +39,6 @@ def spawn_fixed_actors(world, actor):
     # tr = world.get_map().get_waypoint(loc).transform  # Migt cause issues with pedestrian
     # tr.location = tr.location + carla.Location(0,0,20)
 
-    # TODO not sure if return is correct
     return world.spawn_actor(bp, tr)
 
 def fix_spectator(world, junction, xs, ys):
@@ -66,7 +71,7 @@ def posToCarlaLocation(pos, z=None):
         x, y = pos[0], pos[1]
     else:
         raise Exception("Invalid position type")
-    return carla.Location(x, -y, 5)
+    return carla.Location(x, -y, 2)
 
 def posToCarlaRotation(heading):
 	yaw = math.degrees(-heading) - 90
