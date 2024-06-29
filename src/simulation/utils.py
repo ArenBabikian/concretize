@@ -48,7 +48,7 @@ def fix_spectator(world, xs, ys):
         cam_z = max(abs(maxx-minx), abs(maxy-miny))
 
     loc = carla.Location(x=cam_x, y=cam_y, z=cam_z)
-    rot = carla.Rotation(pitch=-88.99, yaw=0.01, roll=-179.99) # camera pointing down
+    rot = carla.Rotation(pitch=270, yaw=270, roll=0) # camera pointing down
     return world.get_spectator().set_transform(carla.Transform(loc, rot))
 
 def posToCarlaLocation(pos, z=None):
