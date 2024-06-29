@@ -2,7 +2,10 @@
 import math
 import carla
 from src.model.actor import Car, Pedestrian
+from scenic.domains.driving.roads import ManeuverType
 from scenic.core.vectors import Vector
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def fix_map(client, world_name, ip, port):
@@ -84,3 +87,63 @@ def destroy_all_actors(world):
         actor.destroy()
     for actor in pedestrians:
         actor.destroy()
+
+def get_type_string(type):
+    if type == ManeuverType.LEFT_TURN:
+        return "Left Turn"
+    if type == ManeuverType.RIGHT_TURN:
+        return "Right Turn"
+    if type == ManeuverType.STRAIGHT:
+        return "Straight"
+    if type == ManeuverType.U_TURN:
+        return "U Turn"
+
+def agg_attempt_collision_near_miss(data):
+    d = {}
+    d['attempts'] = data['collision_occured'].count()
+    d['collision'] = data['collision_occured'].sum()
+    return pd.Series(d)
+
+def generate_and_save_figure(df, groupby, further_group, file_name, xlabel, save_dir):
+
+    
+    if further_group:
+        df = df[df['ego_maneuver_type'] == further_group]
+        if len(df) == 0:
+            return
+    df_agg = df.groupby([groupby]).apply(agg_attempt_collision_near_miss)
+
+    fig, ax = plt.subplots(figsize=(4, 4))
+    categories = df_agg.index
+
+    colors = ['#2ca02c', '#B3233B']
+    attributes = ['attempts', 'collision']
+    labels = ['Success', 'Collision']
+
+    data = df_agg[attributes].values
+
+    # NORMALIZE DATA
+    # for i, d in enumerate(data):
+    #     d2 = d / d.max() * 100
+    #     data[i] = d2
+
+    # Create positions for bars
+    x = range(len(categories))
+    x_positions = []
+    for i in range(len(attributes)):
+        x_positions.append([j for j in x])
+
+    # Create the bars
+    for i in range(len(attributes)):
+        plt.bar(x_positions[i], data[:, i], label=labels[i], color=colors[i % len(colors)])
+
+    # Add axis titles
+    ax.set_ylabel('Percentage of simulation runs')
+    plt.xticks([i for i in x], categories)
+    ax.set_xlabel(xlabel)
+
+    plt.tight_layout(pad=0.25)
+    plt.legend()
+
+    # Save the plot
+    plt.savefig(f'{save_dir}/{file_name}.png')

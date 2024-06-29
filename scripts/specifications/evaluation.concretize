@@ -1,0 +1,27 @@
+Param approach: "complete";
+Param color_scheme: "default";
+Param hide_actors: false;
+Param view_diagram: false;
+Param show_maneuvers: true;
+Param show_exact_paths: true;
+Param timeout: 60;
+Param zoom_diagram: true;
+Param map: "Town02";
+Param specification: "WEB EDITOR";
+Param store_all_outcomes: false;
+Param output_directory: "output-yassou3";
+Param save_statistics_file: "stats123.json";
+Param simulate: true;
+Param save_simulation_stats: true;
+Param simulation_ip: "localhost";
+Param simulation_port: 2000;
+Param simulation_weather: "CloudyNoon";
+
+Param junction: 349;
+
+Car c1; isEgo; color: red; speed: 10;
+Car c2; color: blue; speed: 10;
+
+doesManeuver(c1, left_turn);
+doesManeuver(c2, any);
+collision(c1, c2);

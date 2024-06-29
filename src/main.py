@@ -56,6 +56,9 @@ def concretize():
     stat_man = Statistics_Manager(args, spec)
     stat_man.save()
 
+    # Prepare the simulation container
+    ss = Scenario_Simulation(args)
+
     # 4.0 call the search approach
     approach.concretize()
 
@@ -76,12 +79,13 @@ def concretize():
                 con_sol_id+=1
 
                 # TODO do we want to simulate every generated scenario?
-                ss = Scenario_Simulation(sol, f"{res_id}_{con_sol_id}", args)
-                # TODO
+                # TODO integrate the number of simulations
+                # TODO below
                 # if args.simulation_path:
                 #     ss.save_executable()
                 if args.simulate:
-                    ss.execute_simulation()
+                    sim_stats = ss.execute_simulation(sol, f"{res_id}_{con_sol_id}")
+                    ss.save_and_update(sim_stats)
 
                 # logging.warning("No save path provided. The scenario is not simulated")
 
