@@ -3,8 +3,4 @@ WORKDIR /app
 COPY frontend/concretize-frontend/package*.json .
 RUN npm install
 COPY frontend/concretize-frontend .
-ARG BACKEND_PORT=5001
-ARG FRONTEND_PORT=5173
-ENV VITE_BACKEND_PORT=$BACKEND_PORT
-ENV VITE_FRONTEND_PORT=$FRONTEND_PORT
 CMD npm run dev -- --host 0.0.0.0 --port $VITE_FRONTEND_PORT

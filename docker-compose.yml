@@ -2,8 +2,8 @@ services:
   backend:
     build:
       dockerfile: ./Dockerfile-backend
-      args:
-        BACKEND_PORT: $BACKEND_PORT
+    environment:
+      BACKEND_PORT: $BACKEND_PORT
     volumes:
       - ./output:/app/output
     ports:
@@ -11,8 +11,8 @@ services:
   frontend:
     build:
       dockerfile: ./Dockerfile-frontend
-      args:
-        BACKEND_PORT: $BACKEND_PORT
-        FRONTEND_PORT: $FRONTEND_PORT
+    environment:
+      VITE_BACKEND_PORT: $BACKEND_PORT
+      VITE_FRONTEND_PORT: $FRONTEND_PORT
     ports:
       - "$FRONTEND_PORT:$FRONTEND_PORT"
