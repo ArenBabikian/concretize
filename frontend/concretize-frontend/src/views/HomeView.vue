@@ -176,7 +176,6 @@ export default {
 }
 .input-text {
   height: 70vh;
-  width: 97%;
   margin: 5px 0;
   padding: 0 5px;
   font-size: var(--text-size-small);
@@ -198,7 +197,6 @@ export default {
 
 .console {
   height: 14vh;
-  width: 97%;
   padding: 0 5px;
   background-color: var(--color-dark-text);
   color: var(--color-light-text);
@@ -210,9 +208,7 @@ export default {
 
 .diagnostics {
   height: 2vh;
-  width: 97%;
   margin: 5px 0;
-  padding: 0 5px;
   background-color: var(--color-dark-text);
   color: var(--color-light-text);
   font-family: var(--font-mono);
