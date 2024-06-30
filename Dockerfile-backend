@@ -5,4 +5,6 @@ RUN pip install -r requirements.txt
 COPY . .
 WORKDIR /app/src
 RUN if [ ! -d uploads ] ; then mkdir ./uploads ; fi
-CMD [ "flask", "--app", "api.py", "run", "--host", "0.0.0.0", "--port", "5001" ]
+ARG BACKEND_PORT=5001
+ENV BACKEND_PORT=$BACKEND_PORT
+CMD flask --app api.py run --host 0.0.0.0 --port $BACKEND_PORT

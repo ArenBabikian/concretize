@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const BASE_URL = 'http://localhost:5001/'
+export const BASE_URL = `http://localhost:${import.meta.env.VITE_BACKEND_PORT}/`
 const api = axios.create({
     baseURL: BASE_URL
 });

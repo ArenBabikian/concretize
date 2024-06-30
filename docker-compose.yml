@@ -2,12 +2,17 @@ services:
   backend:
     build:
       dockerfile: ./Dockerfile-backend
+      args:
+        BACKEND_PORT: $BACKEND_PORT
     volumes:
       - ./output:/app/output
     ports:
-      - "5001:5001"
+      - "$BACKEND_PORT:$BACKEND_PORT"
   frontend:
     build:
       dockerfile: ./Dockerfile-frontend
+      args:
+        BACKEND_PORT: $BACKEND_PORT
+        FRONTEND_PORT: $FRONTEND_PORT
     ports:
-      - "5173:5173"
+      - "$FRONTEND_PORT:$FRONTEND_PORT"
