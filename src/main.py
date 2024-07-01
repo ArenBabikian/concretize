@@ -26,6 +26,7 @@ def concretize():
     specification_file = args.specification
     spec = parser.parse(specification_file)
 
+    # TODO create a 'set_default_args' function
     for param in spec.params:
         args.__dict__[param.key] = param.value
 

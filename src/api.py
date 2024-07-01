@@ -10,7 +10,9 @@ from pathlib import Path
 app = Flask(__name__)
 CORS(app)
 
+# TODO ../output is hardcoded for now
 UPLOAD_FOLDER_NAME = '../output/scenarios'
+SIM_FOLDER_NAME = '../output/simulation'
 app.config['UPLOAD_FOLDER'] = f'./{UPLOAD_FOLDER_NAME}'
 
 @app.post("/generate")
@@ -20,6 +22,8 @@ def generate():
     args = AutoObject(jsonData['args'])
     args.upload_folder = app.config['UPLOAD_FOLDER']
     Path(app.config['UPLOAD_FOLDER']).mkdir(parents=True, exist_ok=True)
+    args.save_path_sim = f"./{SIM_FOLDER_NAME}"
+    Path(args.save_path_sim).mkdir(parents=True, exist_ok=True)
 
     # TODO: Support upload of map files
     try:
@@ -48,9 +52,10 @@ def download(filename):
 @app.get("/simulate/<filename>")
 def simulate(filename):
     try:
+        # TODO improve this
         simulateSolution(filename)
         return {
-            "message": f"simulating {filename}"
+            "message": f"Simulated {filename}"
         }
     except Exception as e:
         print(traceback.format_exc())

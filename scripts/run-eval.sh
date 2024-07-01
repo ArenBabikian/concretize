@@ -3,4 +3,4 @@
 
 python concretize.py\
     complete\
-    scripts/specifications/evaluation.concretize
+    scripts/specifications/error.concretize

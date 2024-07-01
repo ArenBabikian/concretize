@@ -17,6 +17,9 @@ import src.simulation.utils as utils
 class Scenario_Simulation:
 
     def __init__(self, args):
+        self.stats_df = pd.DataFrame()
+        if args is None:
+            return
 
         #TODO improve below, avoid the "hasattr"
         self.simulate = args.simulate
@@ -29,8 +32,28 @@ class Scenario_Simulation:
         # stats        
         self.save = args.save_simulation_stats
         if self.save:
-            self.save_dir = Path(args.output_directory) / "simulation"
-        self.stats_df = pd.DataFrame()
+            if hasattr(args, "save_path_sim"):
+                self.save_dir = args.save_path_sim
+            else:
+                self.save_dir = Path(args.output_directory) / "simulation"
+
+
+    # TODO Refactort this
+    def update_args(self, args):
+
+        self.simulate = args.simulate
+        self.carla_map = args.map
+        self.weather = args.simulation_weather
+        self.ip = args.simulation_ip
+        self.port = args.simulation_port
+
+        # stats        
+        self.save = args.save_simulation_stats
+        if self.save:
+            if hasattr(args, "save_path_sim"):
+                self.save_dir = Path(args.save_path_sim)
+            else:
+                self.save_dir = Path(args.output_directory) / "simulation"
 
 
     def execute_simulation(self, instance, simulation_id):
@@ -87,8 +110,8 @@ class Scenario_Simulation:
 
             # Run behaviors untill timeout or collision
             timeout = 10 if not instance.measured_timeout else instance.measured_timeout
+            collision_occured = False
             if run_behavior:
-                collision_occured = False
                 timeout_occured = False
                 start_time = time.time()
                 while not collision_occured and not timeout_occured:
@@ -109,7 +132,8 @@ class Scenario_Simulation:
             # store and return simulation data
             data = {}
             data['map'] = self.carla_map
-            data['junction'] = instance.specification.junction.junction_id
+            jun = instance.specification.junction
+            data['junction'] = jun.junction_id if jun else None
             data['weather'] = self.weather
             data['simulation_id'] = simulation_id
             data['num_actors'] = len(instance.actors)
@@ -118,10 +142,15 @@ class Scenario_Simulation:
             data['non_ego_maneuver_types'] = set()
 
             for ac in instance.actors:
-                man_uid = ac.assigned_maneuver_instance.connectingLane.uid
-                man_type = utils.get_type_string(ac.assigned_maneuver_instance.type)
+                assigned_man_instance = ac.assigned_maneuver_instance
+                if assigned_man_instance is None:
+                    man_uid = 'None'
+                    man_type = 'None'
+                else:
+                    man_uid = assigned_man_instance.connectingLane.uid
+                    man_type = utils.get_type_string(assigned_man_instance.type)
                 if ac.isEgo:
-                    data['ego_maneuver_id'] =man_uid
+                    data['ego_maneuver_id'] = man_uid
                     data['ego_maneuver_type'] = man_type
                 else:
                     data['non_ego_maneuvers_id'].add(man_uid)

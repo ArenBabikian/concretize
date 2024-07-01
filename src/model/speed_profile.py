@@ -4,8 +4,8 @@ class Speed_Profile:
     def __init__(self, speed_profile_id):
 
         if speed_profile_id == None:
-            self.speed_in_junction = 0
-            self.speed_on_road = 0
+            self.speed_in_junction = 5 # default changed from 0 to 5
+            self.speed_on_road = 5 # default changed from 0 to 5
         elif speed_profile_id == 'transfuser':
             self.speed_in_junction = 3
             self.speed_on_road = 4

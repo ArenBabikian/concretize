@@ -11,11 +11,14 @@ import logging
 # Cache for solutions
 # Key: filename; value: tuple(solution object, result id, concrete solution id)
 solutionsCache = {}
+ss = Scenario_Simulation(None)
+
 
 def generateFromSpecs(constraintsStr, args):
     global solutionsCache
+    gen_run_id = datetime.now().strftime('%y%m%d%H%M%S')
+
     spec = parser.parseStr(constraintsStr)
-    
     
     # big TODO refactor to avoid redundant code with main.py
     for actor in spec.actors:
@@ -41,15 +44,16 @@ def generateFromSpecs(constraintsStr, args):
     args.store_all_outcomes = False
     args.output_directory = "../output"
     args.simulate = True
-    args.simulation_path = "../output/simResults.xml"
+    args.simulation_path = "../output/simResults.xml" # irrelevant
     args.simulation_ip = "host.docker.internal"
     args.simulation_port = 2000
+    args.save_simulation_stats = True
     # args.simulation_weather = "CloudyNoon"
 
     for param in spec.params:
         args.__dict__[param.key] = param.value
         
-    args.save_statistics_file = f"{args.output_directory}/stats.json"
+    args.save_statistics_file = f"{args.output_directory}/stats_{gen_run_id}.json"
 
     map_file = utils.get_and_validate_map_file(args.map, "../maps")
     spec.map_file = map_file
@@ -92,7 +96,7 @@ def generateFromSpecs(constraintsStr, args):
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
                 con_sol_id += 1
-                fileName = f"sol_{datetime.now().strftime('%y%m%d%H%M%S')}_{res_id}_{sol_id}.png"
+                fileName = f"sol_{gen_run_id}_{res_id}_{sol_id}.png"
                 args.save_path_png = f"{args.upload_folder}/{fileName}"
                 args.view_diagram = False
                 sd = Scenario_Diagram(sol, f"{res_id} {sol_id}", args)
@@ -105,11 +109,13 @@ def generateFromSpecs(constraintsStr, args):
 
 def simulateSolution(filename):
     global solutionsCache
+    global ss
     if not filename in solutionsCache:
         raise Exception(f"Could not find {filename} in solutions cache.")
     sol = solutionsCache[filename][0]
     res_id = solutionsCache[filename][1]
     con_sol_id = solutionsCache[filename][2]
     args = solutionsCache["args"]
-    ss = Scenario_Simulation(sol, f"{res_id}_{con_sol_id}", args)
-    ss.execute_simulation()
+    ss.update_args(args)
+    sim_stats = ss.execute_simulation(sol, f"filename",)
+    ss.save_and_update(sim_stats)

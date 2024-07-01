@@ -9,7 +9,7 @@ Param map: "Town02";
 Param color_scheme: "default";
 Param simulation_weather: "CloudyNoon";
 
-# Scenario specfication
+# Scenario specification
 Car c1; isEgo; color: green;
 Car c2; color: blue;
 

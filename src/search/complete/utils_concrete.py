@@ -7,7 +7,7 @@ from scenic.core.regions import EmptyRegion
 from scenic.core.vectors import Vector
 from shapely.geometry import MultiLineString, LineString
 
-from src.search.complete.utils import fill_concrete_actors
+from src.search.complete.utils import fill_concrete_actors, validate_speed_profiles
 
 def detect_ego_and_other_actors(c, log=True):
     # validate; ensure that ego actor is involved
@@ -61,6 +61,7 @@ def setup_other_actors(collision_constraints, all_collision_stats, tested_juncti
 
         # validate; ensure that ego actor is involved
         ego_actor, other_actor = detect_ego_and_other_actors(c, False)
+        validate_speed_profiles(other_actor)
         if ego_actor is None:
             continue
 

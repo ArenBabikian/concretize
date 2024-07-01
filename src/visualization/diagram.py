@@ -18,6 +18,7 @@ class Scenario_Diagram:
         self.diagram = None # TODO remove this?
 
         #TODO improve below, avoid the "hasattr"
+        # Below is for the linkage between the backend and frontend
         self.view = args.view_diagram
         if hasattr(args, "save_path_png"):
             self.save_path = args.save_path_png

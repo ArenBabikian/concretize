@@ -5,6 +5,10 @@ from scenic.domains.driving.roads import ManeuverType
 from shapely.geometry import Point
 from scenic.core.vectors import Vector
 
+def validate_speed_profiles(actor):
+    if actor.speed_profile.speed_in_junction <= 1 or actor.speed_profile.speed_on_road <= 1:
+        raise ValueError(f"Speeds must be greater than 1. Actor {actor.id} has speeds {actor.speed_in_junction}.")
+
 def fill_logical_actors(specification):
     for actor in specification.actors:
 

@@ -1,0 +1,34 @@
+# Search approach parameters
+Param aggregation_strategy: "actors";
+Param restart_time: -1;
+Param history: "none";
+Param num_of_mhs_runs: -1;
+Param num_of_scenarios: 3;
+
+Param approach: "mhs";
+Param algorithm_name: "nsga2";
+Param timeout: 60;
+Param num_of_scenarios: 3;
+Param map: "Town05";
+Param junction: 2240;
+
+
+Param output_directory: "output-yassou5";
+Param save_statistics_file: "stats123.json";
+# Visual Settings
+Param color_scheme: "default";
+Param simulation_weather: "CloudyNoon";
+Param simulate: True;
+Param save_simulation_stats: True;
+
+# Scenario specification
+Car c1; isEgo; color: green;
+Car c2; color: blue;
+
+# doesManeuver(c1, left_turn);
+#doesManeuver(c2, any);
+
+onRegion(c1, Road);
+onRegion(c2, Junction);
+distClose(c1, c2);
+hasInFront(c1, c2);

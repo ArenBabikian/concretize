@@ -113,6 +113,7 @@ class Complete_Approach(Search_Approach):
         for i_sc, scenario in enumerate(scenario_instances):
             # 1. get logical params of ego
             ego_actor = scenario.actors[scenario.specification.ego_id]
+            utils.validate_speed_profiles(ego_actor)
             ego_man = ego_actor.assigned_maneuver_instance
             ego_man_reg = ego_man.connectingLane
 
