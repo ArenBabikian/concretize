@@ -91,25 +91,37 @@ class Scenario_Simulation:
             carla_agents = {}
             for ac in instance.actors:
                 carla_actor = carla_actors[ac]
-                if ac.assigned_maneuver_instance is not None:
+                if ac.controller:
                     run_behavior = True
 
-                    # Add collision sensor
-                    # given for free with the ConstantVelocityAgent
+                    id2options = {
+                        'BasicAgent': {'ignore_traffic_light': True, 'ignore_stop_signs': True},
+                        'DummyAgent': {'ignore_traffic_light': True, 'ignore_stop_signs': True, 'ignore_vehicles': True}
+                    }
 
-                    # define agent
-                    opt_dict = {'ignore_traffic_light': True, 'ignore_stop_signs': True}
-                    agent = ConstantVelocityAgent(carla_actor, 
-                                                  target_speed=ac.speed_profile.speed_on_road, 
-                                                  opt_dict=opt_dict) # TODO temporary
-                    if not ac.isEgo:
-                        agent.ignore_vehicles()
-                    target = utils.posToCarlaLocation(ac.end_of_junction_point)
-                    agent.set_destination(target)
+                    if ac.controller not in id2options:
+                        raise Exception(f"Unknown controller {str(ac.controller)}. Please assign one of the following controllers: {str(id2options.keys())}.")
+                    
+                    # TODO add a warning if ego is assigned a DummyAgent
+                    
+                    opt_dict = id2options[ac.controller]
+                    agent = ConstantVelocityAgent(carla_actor, target_speed=ac.speed_profile.speed_on_road, opt_dict=opt_dict)
+
+                    if ac.assigned_maneuver_instance is not None:
+                        target = utils.posToCarlaLocation(ac.end_of_junction_point)
+                        agent.set_destination(target)
+                    
                     carla_agents[ac] = agent
 
+                elif ac.assigned_maneuver_instance is not None:
+                    raise Exception("No controller assigned to actor" + str(ac))
+
             # Run behaviors untill timeout or collision
-            timeout = 10 if not instance.measured_timeout else instance.measured_timeout
+            timeout = 7
+            if run_behavior:
+                timeout = 12
+            if instance.measured_timeout:
+                timeout = instance.measured_timeout
             collision_occured = False
             if run_behavior:
                 timeout_occured = False

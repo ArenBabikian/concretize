@@ -47,6 +47,7 @@ class Complete_Approach(Search_Approach):
         if diff:
             raise Exception(f"Every actor must be assigned a behavior. {diff} {'is' if len(diff) == 1 else 'are'} not assigned a behavior.")
 
+    # TODO refactor this w/ the autopilot approach
     def handle_constraints(self, specification):
         danger_constraints = []
         for con in specification.constraints:

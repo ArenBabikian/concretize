@@ -10,10 +10,9 @@ class Actor(ABC):
         self.id = name
         self.isEgo = isEgo
         self.color = colors.get_color_object(color if color else 'random')
-        self.controller = controller
         self.snap_to_waypoint = snap
         self.speed_id = speed
-        self.controller = None # TODO get this from the grammar
+        self.controller = controller
         self.parent = parent
 
         # # Searched parameters
