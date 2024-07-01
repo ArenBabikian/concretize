@@ -1,0 +1,34 @@
+
+Param color_scheme: "alternate";
+Param hide_actors: false;
+Param view_diagram: false;
+Param show_maneuvers: true;
+Param show_exact_paths: true;
+Param timeout: 60;
+Param zoom_diagram: true;
+# Param specification: "WEB EDITOR";
+Param simulate: true;
+Param save_simulation_stats: true;
+Param simulation_ip: "localhost";
+Param simulation_port: 2000;
+
+Param approach: "complete";
+Param output_directory: "scripts/evaluation/output";
+Param save_statistics_file: "stats.json";
+Param num_simulation_runs: 2;
+
+Param simulation_weather: "CloudyNoon";
+Param map: "Town04";
+Param junction: 916;
+
+Car c1; isEgo;
+        color: black;
+        speed: 10;
+        controller: BasicAgent;
+Car c2; color: black;
+        speed: 10;
+        controller: DummyAgent;
+
+doesManeuver(c1, any);
+doesManeuver(c2, any);
+collision(c1, c2);

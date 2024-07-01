@@ -28,11 +28,14 @@ def spawn_fixed_actors(world, actor):
         bp = world.get_blueprint_library().find("vehicle.tesla.model3")
 
         c = actor.color.default
-        r = int(c[1:3], 16)
-        g = int(c[3:5], 16)
-        b = int(c[5:7], 16)
-        color = carla.Color(r=r, g=g, b=b)
-        color = f"({r},{g},{b})"
+        if not c.startswith("#"):
+            color = "(0,0,0)"
+        else:                
+            r = int(c[1:3], 16)
+            g = int(c[3:5], 16)
+            b = int(c[5:7], 16)
+            color = carla.Color(r=r, g=g, b=b)
+            color = f"({r},{g},{b})"
         # TODO red color not showing up well in simulation
         bp.set_attribute("color", str(color))
 

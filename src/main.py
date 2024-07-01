@@ -85,8 +85,9 @@ def concretize():
                 # if args.simulation_path:
                 #     ss.save_executable()
                 if args.simulate:
-                    sim_stats = ss.execute_simulation(sol, f"{res_id}_{con_sol_id}")
-                    ss.save_and_update(sim_stats)
+                    for sim_i in range(args.num_simulation_runs):
+                        sim_stats = ss.execute_simulation(sol, f"{res_id}_{con_sol_id}_{sim_i}")
+                        ss.save_and_update(sim_stats)
 
                 # logging.warning("No save path provided. The scenario is not simulated")
 

@@ -31,6 +31,7 @@ def parse_args():
     # Simulation Options
     sim_opt = parser.add_argument_group('simulation options')
     sim_opt.add_argument('-sim', '--simulate', action='store_true', help='Run the simulation')
+    sim_opt.add_argument('-sim-num', '--num-simulation-runs', type=int, default=1, help='Number of simulation runs per generated scenario.')
     sim_opt.add_argument('-sim-stats', '--save-simulation-stats', action='store_true', help='Whether or not to save simulation statistics')
     sim_opt.add_argument('-sim-ip', '--simulation-ip', type=str, default='localhost', help='Ip address of running simulator')
     sim_opt.add_argument('-sim-port', '--simulation-port', type=int, default=2000, help='Port of running simulator')
