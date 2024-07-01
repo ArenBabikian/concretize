@@ -5,7 +5,9 @@ services:
     environment:
       BACKEND_PORT: $BACKEND_PORT
     volumes:
+      - .:/app
       - ./output:/app/output
+      - /app/.venv/
     ports:
       - "$BACKEND_PORT:$BACKEND_PORT"
   frontend:
@@ -14,5 +16,8 @@ services:
     environment:
       VITE_BACKEND_PORT: $BACKEND_PORT
       VITE_FRONTEND_PORT: $FRONTEND_PORT
+    volumes:
+      - ./frontend/concretize-frontend:/app
+      - /app/node_modules/
     ports:
       - "$FRONTEND_PORT:$FRONTEND_PORT"
