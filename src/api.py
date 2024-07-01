@@ -10,24 +10,16 @@ from pathlib import Path
 app = Flask(__name__)
 CORS(app)
 
-# TODO ../output is hardcoded for now
-UPLOAD_FOLDER_NAME = '../output/scenarios'
-SIM_FOLDER_NAME = '../output/simulation'
-app.config['UPLOAD_FOLDER'] = f'./{UPLOAD_FOLDER_NAME}'
-
 @app.post("/generate")
 def generate():
     jsonData = request.get_json()
     constraints = jsonData['constraints']
     args = AutoObject(jsonData['args'])
-    args.upload_folder = app.config['UPLOAD_FOLDER']
-    Path(app.config['UPLOAD_FOLDER']).mkdir(parents=True, exist_ok=True)
-    args.save_path_sim = f"./{SIM_FOLDER_NAME}"
-    Path(args.save_path_sim).mkdir(parents=True, exist_ok=True)
 
     # TODO: Support upload of map files
     try:
-        diagramFileNames = generateFromSpecs(constraints, args)
+        [uploadFolderName, diagramFileNames] = generateFromSpecs(constraints, args)
+        app.config['UPLOAD_FOLDER'] = uploadFolderName
         if diagramFileNames is None or len(diagramFileNames) == 0:
             return {
                 "error": "Could not satisfy constraints"
@@ -45,7 +37,7 @@ def generate():
 
 @app.get("/downloads/<filename>")
 def download(filename):
-    abspath = os.path.join(current_app.root_path, f"/{UPLOAD_FOLDER_NAME}")
+    abspath = os.path.join(current_app.root_path, f"/{app.config['UPLOAD_FOLDER']}")
     print(f"Absolute path: {abspath}")
     return send_file(f"./{abspath}/{filename}")
 

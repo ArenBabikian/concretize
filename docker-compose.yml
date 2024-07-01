@@ -6,7 +6,6 @@ services:
       BACKEND_PORT: $BACKEND_PORT
     volumes:
       - .:/app
-      - ./output:/app/output
       - /app/.venv/
     ports:
       - "$BACKEND_PORT:$BACKEND_PORT"

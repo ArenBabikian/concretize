@@ -1,3 +1,4 @@
+from pathlib import Path
 from src import utils
 from src.language import parser
 from src.results.statistics import Statistics_Manager
@@ -53,7 +54,10 @@ def generateFromSpecs(constraintsStr, args):
     for param in spec.params:
         args.__dict__[param.key] = param.value
         
-    args.save_statistics_file = f"{args.output_directory}/stats_{gen_run_id}.json"
+    Path(args.output_directory).mkdir(parents=True, exist_ok=True)
+    args.upload_folder = Path(args.output_directory) / "scenarios"
+    Path(args.upload_folder).mkdir(parents=True, exist_ok=True)
+    args.save_statistics_file = f"stats_{gen_run_id}.json"
 
     map_file = utils.get_and_validate_map_file(args.map, "../maps")
     spec.map_file = map_file
@@ -105,7 +109,7 @@ def generateFromSpecs(constraintsStr, args):
                 fileNames.append(fileName)
                 # Save solution as tuple
                 solutionsCache[fileName] = (sol, res_id, con_sol_id)
-    return fileNames
+    return [args.upload_folder, fileNames]
 
 def simulateSolution(filename):
     global solutionsCache
