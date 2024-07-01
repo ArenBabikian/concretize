@@ -9,7 +9,7 @@ var DiffHighlightRules = function () {
                 token: ["comment"]
             },
             {
-                regex: "^(Param )([^\:\ \(]*)(\:)", // Params
+                regex: "^(Param )([^\:\ \(]*)(.*)", // Params
                 token: [
                     "keyword", // "Param"
                     "variable", // Key, before colon
