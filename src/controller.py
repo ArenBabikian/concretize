@@ -34,6 +34,8 @@ def generateFromSpecs(constraintsStr, args):
     args.num_of_mhs_runs = -1
     # args.num_of_scenarios = 3
     args.color_scheme = "default"
+    args.num_of_scenarios = 1
+    # args.color_scheme = "default"
     args.hide_actors = False
     args.view_diagram = False
     args.show_maneuvers = True
@@ -53,6 +55,11 @@ def generateFromSpecs(constraintsStr, args):
 
     for param in spec.params:
         args.__dict__[param.key] = param.value
+
+    valid_weather = ['Default', 'ClearNoon', 'CloudyNoon', 'WetNoon', 'WetCloudyNoon', 'MidRainyNoon', 'HardRainNoon', 'SoftRainNoon', 'ClearSunset', 'CloudySunset', 'WetSunset', 'WetCloudySunset', 'MidRainSunset', 'HardRainSunset', 'SoftRainSunset']
+
+    if args.simulation_weather not in valid_weather:
+        raise Exception(f"Invalid weather <{args.simulation_weather}>. Please select among the following: {valid_weather}.")
 
     # Prepend ../ to folder and file names
     args.output_directory = f"../{args.output_directory}"

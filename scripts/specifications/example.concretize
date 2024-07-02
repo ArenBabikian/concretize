@@ -10,7 +10,7 @@ Car c2
     speed: Transfuser
 Pedestrian p1
 doesManeuver(c1, X)
-collision(c1, c2)
+potentiallyCollide(c1, c2)
 onRegion(p1, Junction)
 hasToLeft(c1, p1)
 distFar(c1, p1)

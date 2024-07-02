@@ -24,4 +24,4 @@ Car c2; color: blue; speed: 10;
 
 doesManeuver(c1, left_turn);
 doesManeuver(c2, any);
-collision(c1, c2);
+potentiallyCollide(c1, c2);

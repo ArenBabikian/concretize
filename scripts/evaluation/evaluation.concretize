@@ -17,7 +17,7 @@ Param output_directory: "scripts/evaluation/output";
 Param save_statistics_file: "stats.json";
 Param num_simulation_runs: 2;
 
-Param simulation_initial_file: "oveslantoun2/simulation/simulation_data.csv";
+Param simulation_initial_file: "scripts/evaluation/output2/simulation/simulation_data.csv";
 
 Param simulation_weather: "CloudyNoon";
 Param map: "Town04";
@@ -33,4 +33,4 @@ Car c2; color: black;
 
 doesManeuver(c1, any);
 doesManeuver(c2, any);
-collision(c1, c2);
+potentiallyCollide(c1, c2);

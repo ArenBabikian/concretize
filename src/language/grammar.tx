@@ -49,7 +49,7 @@ Behavior_Con: Does_Maneuver_Con | Danger_Con ;
 Danger_Con: Collision_Con ;
 
 Does_Maneuver_Con: 'doesManeuver' '(' actors += [Actor] ',' maneuver = ID ')' ';' ;
-Collision_Con: 'collision' '(' actors += [Actor] ',' actors += [Actor] ')' ';' ;
+Collision_Con: 'potentiallyCollide' '(' actors += [Actor] ',' actors += [Actor] ')' ';' ;
 
 On_Region_Con: 'onRegion' '(' actors += [Actor] ',' region = ID ')' ';' ;
 

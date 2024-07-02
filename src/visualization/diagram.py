@@ -36,6 +36,9 @@ class Scenario_Diagram:
             self.spec.roadmap.show()
         elif self.color_scheme == 'alternate':
             utils.show_alt_network(plt, self.spec.roadmap)
+        else:
+            allowed = ['default', 'alternate']
+            raise ValueError(f'Invalid color scheme <{self.color_scheme}>. Please select among the following: {allowed}.')
 
 
     def generate_diagram(self):
@@ -87,6 +90,7 @@ class Scenario_Diagram:
             if self.spec.specification.junction:
                 utils.zoom_to_junction(plt, self.spec.specification.junction, margin=10)
             else:
+                e = 1 if len(self.spec.actors) < 3 else 0.9
                 self.workspace.zoomAround(plt, self.spec.actors, expansion=1)
 
         self.diagram = None
