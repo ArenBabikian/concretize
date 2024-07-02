@@ -33,6 +33,7 @@ def parse_args():
     sim_opt.add_argument('-sim', '--simulate', action='store_true', help='Run the simulation')
     sim_opt.add_argument('-sim-num', '--num-simulation-runs', type=int, default=1, help='Number of simulation runs per generated scenario.')
     sim_opt.add_argument('-sim-stats', '--save-simulation-stats', action='store_true', help='Whether or not to save simulation statistics')
+    sim_opt.add_argument('-sim-init', '--simulation-initial-file', type=str, help='Location of the file containing initial simulation data')
     sim_opt.add_argument('-sim-ip', '--simulation-ip', type=str, default='localhost', help='Ip address of running simulator')
     sim_opt.add_argument('-sim-port', '--simulation-port', type=int, default=2000, help='Port of running simulator')
     sim_opt.add_argument('-sim-weather', '--simulation-weather', type=str, default="CloudyNoon", help='Weather preset for simulation')

@@ -17,6 +17,8 @@ Param output_directory: "scripts/evaluation/output";
 Param save_statistics_file: "stats.json";
 Param num_simulation_runs: 2;
 
+Param simulation_initial_file: "oveslantoun2/simulation/simulation_data.csv";
+
 Param simulation_weather: "CloudyNoon";
 Param map: "Town04";
 Param junction: 916;

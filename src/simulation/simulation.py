@@ -17,7 +17,10 @@ import src.simulation.utils as utils
 class Scenario_Simulation:
 
     def __init__(self, args):
-        self.stats_df = pd.DataFrame()
+        if hasattr(args, 'simulation_initial_file') and args.simulation_initial_file:
+            self.stats_df = pd.read_csv(args.simulation_initial_file)
+        else:
+            self.stats_df = pd.DataFrame()
         if args is None:
             return
 

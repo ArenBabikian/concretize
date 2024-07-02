@@ -59,8 +59,9 @@ def generateFromSpecs(constraintsStr, args):
         
     Path(args.output_directory).mkdir(parents=True, exist_ok=True)
     args.upload_folder = Path(args.output_directory) / "scenarios"
-    args.upload_folder = Path(args.output_directory) / "simulation"
     Path(args.upload_folder).mkdir(parents=True, exist_ok=True)
+    sim_folder = Path(args.output_directory) / "simulation"
+    Path(sim_folder).mkdir(parents=True, exist_ok=True)
     args.save_statistics_file = f"stats_{gen_run_id}.json"
 
     map_file = utils.get_and_validate_map_file(args.map, "../maps")
