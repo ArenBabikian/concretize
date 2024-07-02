@@ -43,7 +43,7 @@ def generateFromSpecs(constraintsStr, args):
     # args.map = "Town02"
     args.specification = "WEB EDITOR"
     args.store_all_outcomes = False
-    args.output_directory = "../output"
+    args.output_directory = "output"
     args.simulate = True
     args.simulation_path = "../output/simResults.xml" # irrelevant
     args.simulation_ip = "host.docker.internal"
@@ -53,9 +53,13 @@ def generateFromSpecs(constraintsStr, args):
 
     for param in spec.params:
         args.__dict__[param.key] = param.value
+
+    # Prepend ../ to folder and file names
+    args.output_directory = f"../{args.output_directory}"
         
     Path(args.output_directory).mkdir(parents=True, exist_ok=True)
     args.upload_folder = Path(args.output_directory) / "scenarios"
+    args.upload_folder = Path(args.output_directory) / "simulation"
     Path(args.upload_folder).mkdir(parents=True, exist_ok=True)
     args.save_statistics_file = f"stats_{gen_run_id}.json"
 
