@@ -8,10 +8,13 @@ Param map: "Town02";
 # Visual Settings
 Param color_scheme: "default";
 Param simulation_weather: "CloudyNoon";
+Param output_directory: "output";
 
 # Scenario specification
 Car c1; isEgo; color: green;
+        speed: 5; controller: BasicAgent;
 Car c2; color: blue;
+        speed: 10; controller: BasicAgent;
 
 onRegion(c1, Road);
 onRegion(c2, Junction);
