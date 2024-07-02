@@ -114,6 +114,15 @@ def generate_and_save_figure(df, groupby, further_group, file_name, xlabel, save
         df = df[df['ego_maneuver_type'] == further_group]
         if len(df) == 0:
             return
+        
+    id2type = {}
+    index = 0
+    for _, row in df[::-1].iterrows():
+        ego_maneuver_id = row['ego_maneuver_id']
+        ego_maneuver_type = row['ego_maneuver_type']
+        if ego_maneuver_id not in id2type:
+            id2type[ego_maneuver_id] = f"{ego_maneuver_type} {index}"
+            index += 1
     df_agg = df.groupby([groupby]).apply(agg_attempt_collision_near_miss)
 
     fig, ax = plt.subplots(figsize=(4, 4))
@@ -140,9 +149,17 @@ def generate_and_save_figure(df, groupby, further_group, file_name, xlabel, save
     for i in range(len(attributes)):
         plt.bar(x_positions[i], data[:, i], label=labels[i], color=colors[i % len(colors)])
 
+    # Adjust ticks
+    num2rot= [0, 0, 0, 30]
+    if groupby == 'ego_maneuver_id':
+        ticks = [id2type[i] for i in categories]
+        rot = 45 if len(num2rot) <= len(categories) else num2rot[len(categories)-1]
+        plt.xticks([i for i in x], ticks, rotation=rot)
+    else:
+        plt.xticks([i for i in x], categories)
+
     # Add axis titles
     ax.set_ylabel('Percentage of simulation runs')
-    plt.xticks([i for i in x], categories)
     ax.set_xlabel(xlabel)
 
     plt.tight_layout(pad=0.25)
