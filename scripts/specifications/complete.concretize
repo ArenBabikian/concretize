@@ -1,30 +1,14 @@
-# Parameters
-
 Param approach: "complete";
 Param num_of_scenarios: 1;
 Param color_scheme: "default";
+Param zoom_diagram: true;
+Param map: "Town05";
+Param junction: 2240;
 Param hide_actors: false;
 Param show_maneuvers: true;
 Param show_exact_paths: true;
-Param timeout: 60;
-Param zoom_diagram: true;
-Param map: "Town05";
-Param specification: "WEB EDITOR";
-Param store_all_outcomes: false;
-Param output_directory: "../output";
-Param save_statistics_file: "../output/stats123.json";
-Param junction: 2240;
-
-# Actors
-
-Car c1;
-    isEgo;
-    color: blue;
-Car c2;
-    color: red;
-
-# Constraints
-
+Car c1; isEgo; color: blue;
+Car c2; color: red;
 doesManeuver(c1, left_turn);
 doesManeuver(c2, any);
 collision(c1, c2);
