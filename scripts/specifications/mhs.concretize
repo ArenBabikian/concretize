@@ -1,18 +1,23 @@
+# Parameters
 Param approach: "mhs";
-Param algorithm_name: "nsga2";
-Param timeout: 60;
 Param num_of_scenarios: 1;
 Param map: "Town02";
-Param color_scheme: "default";
-Param zoom_diagram: true;
+
+# Actors
 Car c1; isEgo; color: blue;
-Car c2; color: red;
+Car c2;        color: green;
 Pedestrian p1;
+
+# Region Constraints
 onRegion(c1, Road);
 onRegion(c2, Drivable);
 onRegion(p1, Walkable);
-hasToLeft(p1, c1);
-hasInFront(c1, p1);
+
+# Positional Constraints
 hasBehind(c1, c2);
-distClose(c1, p1);
+hasInFront(c1, p1);
+hasToLeft(p1, c1);
+
+# Distance Constraints
 distClose(c1, c2);
+distClose(c1, p1);
