@@ -114,7 +114,7 @@ export default {
     async onSimulate(filename) {
       this.waiting = true;
       this.consoleText = "";
-      const res = await simulate(filename);
+      const res = await simulate(filename, this.specificationsText);
       if (res?.data?.message) {
         this.consoleText = res.data.message + '\n';
       } 

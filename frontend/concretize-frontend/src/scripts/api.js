@@ -18,9 +18,9 @@ export async function generate(constraints, args) {
     }
 }
 
-export async function simulate(filename) {
+export async function simulate(filename, constraintsStr) {
     try {
-        let res = await api.get(`/simulate/${filename}`);
+        let res = await api.post(`/simulate/${filename}`, {"constraints": constraintsStr});
         return res;
     } catch (e) {
         const resObj = {

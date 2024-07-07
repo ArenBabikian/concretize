@@ -41,11 +41,15 @@ def download(filename):
     print(f"Absolute path: {abspath}")
     return send_file(f"./{abspath}/{filename}")
 
-@app.get("/simulate/<filename>")
+@app.post("/simulate/<filename>")
 def simulate(filename):
     try:
         # TODO improve this
-        simulateSolution(filename)
+        jsonData = request.get_json()
+        constraints = jsonData['constraints']
+
+        simulateSolution(filename, constraints)
+        
         return {
             "message": f"Simulated {filename}"
         }

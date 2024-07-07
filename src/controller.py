@@ -116,7 +116,7 @@ def generateFromSpecs(constraintsStr, args):
                 solutionsCache[fileName] = (sol, res_id, con_sol_id)
     return [args.upload_folder, fileNames]
 
-def simulateSolution(filename):
+def simulateSolution(filename, constraintsStr):
     global solutionsCache
     global ss
     if not filename in solutionsCache:
@@ -124,7 +124,13 @@ def simulateSolution(filename):
     sol = solutionsCache[filename][0]
     res_id = solutionsCache[filename][1]
     con_sol_id = solutionsCache[filename][2]
+
+    # Update to use new arguments
+    spec = parser.parseStr(constraintsStr)
     args = solutionsCache["args"]
+    for param in spec.params:
+        args.__dict__[param.key] = param.value
+
     ss.update_args(args)
     sim_stats = ss.execute_simulation(sol, f"filename",)
     ss.save_and_update(sim_stats)
