@@ -1,8 +1,0 @@
-- add LICENSE file
-- add Documentation
-- Integrate Docker
-- add some kind of build system
-- extend onRegion
-- extend constaints
-- include support for negation ofconsraints
-- junction focus for visualisation and testing

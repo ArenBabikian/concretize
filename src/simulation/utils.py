@@ -135,9 +135,9 @@ def generate_and_save_figure(df, groupby, further_group, file_name, xlabel, save
     data = df_agg[attributes].values
 
     # NORMALIZE DATA
-    # for i, d in enumerate(data):
-    #     d2 = d / d.max() * 100
-    #     data[i] = d2
+    for i, d in enumerate(data):
+        d2 = d / d.max() * 100
+        data[i] = d2
 
     # Create positions for bars
     x = range(len(categories))
