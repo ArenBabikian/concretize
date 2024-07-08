@@ -14,10 +14,10 @@ Param output_directory: "output";
 Car c1; isEgo;
         color: green;
         speed: 5;
-        controller: BasicAgent;
+        controller: SimpleAgent;
 Car c2; color: blue;
         speed: 10;
-        controller: BasicAgent;
+        controller: SimpleAgent;
 
 onRegion(c1, Road);
 onRegion(c2, Junction);

@@ -26,7 +26,7 @@ Param junction: 916;
 Car c1; isEgo;
         color: black;
         speed: 10;
-        controller: BasicAgent;
+        controller: SimpleAgent;
 Car c2; color: black;
         speed: 10;
         controller: DummyAgent;

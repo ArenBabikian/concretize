@@ -98,7 +98,7 @@ class Scenario_Simulation:
                     run_behavior = True
 
                     id2options = {
-                        'BasicAgent': {'ignore_traffic_light': True, 'ignore_stop_signs': True},
+                        'SimpleAgent': {'ignore_traffic_light': True, 'ignore_stop_signs': True},
                         'DummyAgent': {'ignore_traffic_light': True, 'ignore_stop_signs': True, 'ignore_vehicles': True}
                     }
 
@@ -117,7 +117,7 @@ class Scenario_Simulation:
                     carla_agents[ac] = agent
 
                 elif ac.assigned_maneuver_instance is not None:
-                    raise Exception("No controller assigned to actor" + str(ac))
+                    raise Exception(f"Actor {str(ac)} is assigned a maneuver but no controller. Please assign a controller.")
 
             # Run behaviors untill timeout or collision
             timeout = 7
