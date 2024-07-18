@@ -55,6 +55,10 @@ window.onload = function () {
   editor.session.setMode("ace/mode/concretize")
 }
 
+const TIMEOUT_CODE = "Param timeout:"
+const DEFAULT_TIMEOUT = 60
+const ADDITIONAL_TIMEOUT_ALLOWANCE = 10 //add additional allowance in case of issues like network delays
+
 export default {
   data() {
     return {
@@ -127,6 +131,24 @@ export default {
     async onSubmit() {
       this.waiting = true;
       this.consoleText = "";
+      let timeoutLen = DEFAULT_TIMEOUT
+      const timeoutIdx = this.specificationsText.indexOf(TIMEOUT_CODE)
+      const nextSemicolonIdx = this.specificationsText.indexOf(";", timeoutIdx)
+      if (timeoutIdx != -1 && nextSemicolonIdx != -1) {
+        const timeoutSubstr = this.specificationsText.substring(timeoutIdx + TIMEOUT_CODE.length, nextSemicolonIdx)
+        const tempTimeoutLen = Number.parseInt(timeoutSubstr, 10)
+        if (!Number.isNaN(tempTimeoutLen)){
+          timeoutLen = tempTimeoutLen
+        }
+      }
+      //this.consoleText = `Timeout: ${timeoutLen}`
+      setTimeout(() => {
+        if (this.waiting == true && this.error == false) {
+          this.waiting = false;
+          this.error = true;
+          this.consoleText = "Program timed out before solutions could be generated"
+        }
+      }, (timeoutLen + ADDITIONAL_TIMEOUT_ALLOWANCE) * 1000 )
       let res = await generate(this.specificationsText, {
         // approach: "mhs",
         // aggregation_strategy: "actors",
@@ -145,7 +167,8 @@ export default {
       if (res?.data?.diagram_file_names) {
         this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
-        // this.consoleText = "";
+        this.error = false;
+        this.consoleText = "";
       } else if (res?.data?.error) {
         // this.consoleText += `${res?.data?.error}\n`;
         this.consoleText = `${res?.data?.error}\n`;
