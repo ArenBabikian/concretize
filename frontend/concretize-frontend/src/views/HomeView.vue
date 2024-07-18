@@ -55,13 +55,22 @@ window.onload = function () {
   editor.session.setMode("ace/mode/concretize")
 }
 
+const TIMEOUT_CODE = "Param timeout:"
+const DEFAULT_TIMEOUT = 60
+const ADDITIONAL_TIMEOUT_ALLOWANCE = 10 //add additional allowance in case of issues like network delays
+const ERR_CODES = {
+  normal: 0,
+  otherError: 1,
+  timeout: 2
+}
+
 export default {
   data() {
     return {
       specificationsText: DEFAULT_PARAMS,
       waiting: false,
       consoleText: "",
-      error: false,
+      error: ERR_CODES.normal,
       fileNames: [],
       page: 0
     }
@@ -80,10 +89,12 @@ export default {
       if (this.waiting) {
         return ["Status: Running...", "var(--color-gray-text)"];
       } 
-      if (! this.error) {
+      if (this.error == ERR_CODES.normal) {
         return ["Status: Ready", "green"];
-      } else {
+      } else if (this.error == ERR_CODES.otherError) {
         return ["Status: Error", "red"];
+      } else if (this.error == ERR_CODES.timeout) {
+        return ["Status: Timeout", "black"];
       }
     },
     imgSrc() {
@@ -97,7 +108,7 @@ export default {
   watch: {
     specificationsText() {
       // Exit error state if user has changed the text
-      this.error = false;
+      this.error = ERR_CODES.normal;
     },
     consoleText(newTxt) {
       // Automatically scrolls console to bottom on update
@@ -127,6 +138,25 @@ export default {
     async onSubmit() {
       this.waiting = true;
       this.consoleText = "";
+      let timeoutLen = DEFAULT_TIMEOUT
+      const timeoutIdx = this.specificationsText.indexOf(TIMEOUT_CODE)
+      const nextSemicolonIdx = this.specificationsText.indexOf(";", timeoutIdx)
+      if (timeoutIdx != -1 && nextSemicolonIdx != -1) {
+        const timeoutSubstr = this.specificationsText.substring(timeoutIdx + TIMEOUT_CODE.length, nextSemicolonIdx)
+        const tempTimeoutLen = Number.parseInt(timeoutSubstr, 10)
+        if (!Number.isNaN(tempTimeoutLen)){
+          timeoutLen = tempTimeoutLen
+        }
+      }
+      //this.consoleText = `Timeout: ${timeoutLen}`
+      setTimeout(() => {
+        //check if result has arrived within timeout; avoid overwriting errors
+        if (this.waiting == true && this.error == ERR_CODES.normal) {
+          this.waiting = false;
+          this.error = ERR_CODES.timeout;
+          this.consoleText = "Program timed out before solutions could be generated"
+        }
+      }, (timeoutLen + ADDITIONAL_TIMEOUT_ALLOWANCE) * 1000 )
       let res = await generate(this.specificationsText, {
         // approach: "mhs",
         // aggregation_strategy: "actors",
@@ -142,14 +172,17 @@ export default {
         // timeout: 60,
         // zoom_diagram: true
       })
-      if (res?.data?.diagram_file_names) {
+
+      // Discard results that arrive after timeout
+      if (res?.data?.diagram_file_names && this.error != ERR_CODES.timeout) {
         this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
-        // this.consoleText = "";
+        this.error = ERR_CODES.normal;
+        this.consoleText = "";
       } else if (res?.data?.error) {
         // this.consoleText += `${res?.data?.error}\n`;
         this.consoleText = `${res?.data?.error}\n`;
-        this.error = true;
+        this.error = ERR_CODES.otherError;
       }      
       this.waiting = false;
     },
