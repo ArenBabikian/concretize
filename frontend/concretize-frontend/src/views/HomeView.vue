@@ -58,6 +58,11 @@ window.onload = function () {
 const TIMEOUT_CODE = "Param timeout:"
 const DEFAULT_TIMEOUT = 60
 const ADDITIONAL_TIMEOUT_ALLOWANCE = 10 //add additional allowance in case of issues like network delays
+const ERR_CODES = {
+  normal: 0,
+  otherError: 1,
+  timeout: 2
+}
 
 export default {
   data() {
@@ -65,7 +70,7 @@ export default {
       specificationsText: DEFAULT_PARAMS,
       waiting: false,
       consoleText: "",
-      error: false,
+      error: ERR_CODES.normal,
       fileNames: [],
       page: 0
     }
@@ -84,10 +89,12 @@ export default {
       if (this.waiting) {
         return ["Status: Running...", "var(--color-gray-text)"];
       } 
-      if (! this.error) {
+      if (this.error == ERR_CODES.normal) {
         return ["Status: Ready", "green"];
-      } else {
+      } else if (this.error == ERR_CODES.otherError) {
         return ["Status: Error", "red"];
+      } else if (this.error == ERR_CODES.timeout) {
+        return ["Status: Timeout", "black"];
       }
     },
     imgSrc() {
@@ -101,7 +108,7 @@ export default {
   watch: {
     specificationsText() {
       // Exit error state if user has changed the text
-      this.error = false;
+      this.error = ERR_CODES.normal;
     },
     consoleText(newTxt) {
       // Automatically scrolls console to bottom on update
@@ -143,9 +150,10 @@ export default {
       }
       //this.consoleText = `Timeout: ${timeoutLen}`
       setTimeout(() => {
-        if (this.waiting == true && this.error == false) {
+        //check if result has arrived within timeout; avoid overwriting errors
+        if (this.waiting == true && this.error == ERR_CODES.normal) {
           this.waiting = false;
-          this.error = true;
+          this.error = ERR_CODES.timeout;
           this.consoleText = "Program timed out before solutions could be generated"
         }
       }, (timeoutLen + ADDITIONAL_TIMEOUT_ALLOWANCE) * 1000 )
@@ -164,15 +172,17 @@ export default {
         // timeout: 60,
         // zoom_diagram: true
       })
-      if (res?.data?.diagram_file_names) {
+
+      // Discard results that arrive after timeout
+      if (res?.data?.diagram_file_names && this.error != ERR_CODES.timeout) {
         this.page = 0; //if update occurs, number of pages may change
         this.fileNames = res?.data?.diagram_file_names;
-        this.error = false;
+        this.error = ERR_CODES.normal;
         this.consoleText = "";
       } else if (res?.data?.error) {
         // this.consoleText += `${res?.data?.error}\n`;
         this.consoleText = `${res?.data?.error}\n`;
-        this.error = true;
+        this.error = ERR_CODES.otherError;
       }      
       this.waiting = false;
     },
