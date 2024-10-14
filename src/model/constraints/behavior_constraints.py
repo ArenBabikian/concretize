@@ -2,7 +2,8 @@ from src.model.constraints.constraint import Behavior_Con
 
 import logging
 from src.model import utils
-from src.model.maneuvers import Instance_Man
+from src.model.maneuvers import Instance_Man, No_Man
+import src.simulation.utils as sim_utils
 
 class Does_Maneuver_Con(Behavior_Con):
 
@@ -13,11 +14,17 @@ class Does_Maneuver_Con(Behavior_Con):
         self.maneuver_str = maneuver
         self.allowed_maneuver_types = self.get_allowed_path_regions(maneuver)
     
-    def get_allowed_path_regions(self, maneuver):        
-        if maneuver in utils.MANEUVER_STRING_TO_CLASS:
-            return utils.MANEUVER_STRING_TO_CLASS[maneuver]
-        else:
-            return [Instance_Man(maneuver)]
+    def get_allowed_path_regions(self, maneuver):
+        maneuver_str_list = maneuver.split('|')
+        allowed_maneuver_list = []
+        for m in maneuver_str_list:
+            if m == "None":
+                allowed_maneuver_list.append(No_Man())
+            elif m in utils.MANEUVER_STRING_TO_CLASS:
+                allowed_maneuver_list.extend(utils.MANEUVER_STRING_TO_CLASS[m])
+            else:
+                allowed_maneuver_list.append(Instance_Man(m))
+        return allowed_maneuver_list
 
     def get_all_allowed_maneuver_instances(self, junction):
         all_allowed_maneuver_instances = []

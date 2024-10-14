@@ -56,6 +56,8 @@ class Scenario_Diagram:
             if not self.hide_actors:
                 # TODO display actor ID on the image?
                 logging.debug(f'{ac} positioned at {ac.position}')
+                if ac.position is None:
+                    break
                 if isinstance(ac, Car):
                     size = (2, 4)
                 elif isinstance(ac, Pedestrian):

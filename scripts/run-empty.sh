@@ -10,7 +10,7 @@ python concretize.py\
     -v 2\
     -n 1\
     -t 15\
-    -m Zalazone\
+    -m Town04\
     --output-directory output-sept\
     --save-statistics-file stats.json\
     --hide-actors\

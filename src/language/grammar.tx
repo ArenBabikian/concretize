@@ -48,7 +48,8 @@ Is_Far_From_Con: 'distFar' '(' actors += [Actor] ',' actors += [Actor] ')' ';' ;
 Behavior_Con: Does_Maneuver_Con | Danger_Con ;
 Danger_Con: Collision_Con ;
 
-Does_Maneuver_Con: 'doesManeuver' '(' actors += [Actor] ',' maneuver = ID ')' ';' ;
+Does_Maneuver_Con: 'doesManeuver' '(' actors += [Actor] ',' maneuver = MANID ')' ';' ;
+MANID: ID+['|'];
 Collision_Con: 'potentiallyCollide' '(' actors += [Actor] ',' actors += [Actor] ')' ';' ;
 
 On_Region_Con: 'onRegion' '(' actors += [Actor] ',' region = ID ')' ';' ;

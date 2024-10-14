@@ -21,7 +21,9 @@ class Junction:
     def find_junction_in_network(self, network):
         junction_w_id = list(filter(lambda x: x.id == int(self.junction_id), network.intersections))
         if len(junction_w_id) != 1:
-            raise Exception(f"Invalid junction id <{self.junction_id}>. Select among the following ids {[x.id for x in network.intersections]}")
+            # ids = [x.id for x in network.intersections]
+            ids = [f"{x.id}({len(x.maneuvers)} man.s)" for x in network.intersections]
+            raise Exception(f"Invalid junction id <{self.junction_id}>. Select among the following ids {ids}")
         junction = junction_w_id[0]
         return junction
     

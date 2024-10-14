@@ -25,7 +25,7 @@ class Complete_Result(Result):
             outcome_data = {}
             outcome_data['is_concrete_solution'] = outcome.is_concrete_solution
 
-            man_ass = {str(actor): actor.assigned_maneuver_instance.connectingLane.id for actor in outcome.actors}
+            man_ass = {str(actor): None if actor.position is None else actor.assigned_maneuver_instance.connectingLane.id for actor in outcome.actors}
             outcome_data['maneuver_assignment'] = man_ass
 
             all_outcome_data[outcome_id] = outcome_data

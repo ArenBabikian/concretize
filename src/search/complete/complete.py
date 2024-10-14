@@ -73,6 +73,11 @@ class Complete_Approach(Search_Approach):
                     # we enter these conditions if ego is already assigned a maneuver
                     ego_man = ego_actor.assigned_maneuver_instance
                     assert depth == 0 or ego_man is not None
+                    if man == None:
+                        recursiveForLoop(depth+1)
+                        # TODO may need to improve this for cases with nmore than 2 actors
+                        continue
+
                     if depth > 0 and man.connectingLane == ego_man.connectingLane:
                         # CONSTRAINT 1: Non-ego paths must be different than ego path
                         continue
@@ -160,6 +165,8 @@ class Complete_Approach(Search_Approach):
 
             # 8. If some actors are not assigned an exact path, we position them right outside the junction
             for actor in scenario.actors:
+                if actor.position is None:
+                    continue
                 if actor.assign_exact_path_for_vis is None:
                     ac_man_reg = actor.assigned_maneuver_instance.connectingLane
                     ac_start_reg = ac_man_reg._predecessor.sections[-1]
@@ -178,7 +185,7 @@ class Complete_Approach(Search_Approach):
             #         continue
 
                     # VALIDATION 1 : non-egos should initially not overlap
-                    if a1.overlaps_with(a2):
+                    if a1.position is not None and a2.position is not None and a1.overlaps_with(a2):
                         num_problems['init_overlap'] += 1
                         logging.info(f'WARNING: SCENARIO {i_sc} VOIDED, {a1} and {a2} have initially overlapping positions.')
 

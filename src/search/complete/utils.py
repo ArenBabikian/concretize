@@ -12,6 +12,9 @@ def validate_speed_profiles(actor):
 def fill_logical_actors(specification):
     for actor in specification.actors:
 
+        if actor.assigned_maneuver_instance is None:
+            continue
+
         # TODO clean this up, speciually the 'current_lane' computation
         pos_raw = actor.position
         if pos_raw is None:

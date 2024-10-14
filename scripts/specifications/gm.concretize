@@ -1,0 +1,20 @@
+# Search approach parameters
+Param approach: "complete";
+Param map: "Town04";
+Param junction: 53;
+
+# General Settings
+Param color_scheme: "alternate";
+Param quality: "low";
+Param simulation_weather: "CloudyNoon";
+Param output_directory: "output-models";
+
+# Scenario specification
+Car c1; isEgo; color: green;
+        speed: 10; controller: SimpleAgent;
+Car c2; color: blue;
+        speed: 10; controller: DummyAgent;
+
+doesManeuver(c1, road89_lane0);
+doesManeuver(c2, None|road124_lane0|road109_lane0);
+# potentiallyCollide(c1, c2);
