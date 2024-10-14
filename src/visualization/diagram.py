@@ -81,8 +81,12 @@ class Scenario_Diagram:
         for c in self.spec.constraints:
             if isinstance(c, Collision_Con):
                 if self.show_maneuvers:
-                    r1 = c.actors[0].assigned_maneuver_instance.connectingLane
-                    r2 = c.actors[1].assigned_maneuver_instance.connectingLane
+                    a0 = c.actors[0]
+                    a1 = c.actors[1]
+                    if a0.position is None or a1.position is None:
+                        break
+                    r1 = a0.assigned_maneuver_instance.connectingLane
+                    r2 = a1.assigned_maneuver_instance.connectingLane
                     utils.showPairwiseCollidingRegions(plt, [r1, r2], colors.gray, None)
                 # if self.show_exact_paths:
                     # TODO handle visualization for the case where the exact paths are overlapping

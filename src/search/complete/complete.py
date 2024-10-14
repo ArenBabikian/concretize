@@ -99,6 +99,10 @@ class Complete_Approach(Search_Approach):
                 # Check if ego road is intersecting with ALL non-ego roads
                 num_violated_danger_conditions = 0
                 for danger_con in self.danger_conditions:
+                    if danger_con.actors[1].assigned_maneuver_instance is None:
+                        # if the other actor is not assigned a maneuver, we skip this danger condition
+                        # TODO-IND this is a special case, we may need to handle it differently
+                        continue
                     _, is_violated = danger_con.evaluate_logical_condition()
                     num_violated_danger_conditions += is_violated
 

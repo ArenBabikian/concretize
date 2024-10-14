@@ -31,6 +31,8 @@ def get_collisions_in_order(collision_constraints):
         ego_actor, other_actor = detect_ego_and_other_actors(c)
         if ego_actor is None:
             continue
+        if other_actor.position is None:
+            continue
 
         # 1. get collision region
         collision_region = c.coll_region
@@ -63,6 +65,8 @@ def setup_other_actors(collision_constraints, all_collision_stats, tested_juncti
         ego_actor, other_actor = detect_ego_and_other_actors(c, False)
         validate_speed_profiles(other_actor)
         if ego_actor is None:
+            continue
+        if other_actor.position is None:
             continue
 
         # 1. get collision region

@@ -17,4 +17,4 @@ python concretize.py\
     --output-directory output\
     --save-statistics-file stats.json\
     complete\
-    scripts/specifications/gm.concretize
+    scripts/specifications/industry.concretize
