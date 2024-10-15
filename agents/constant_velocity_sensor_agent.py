@@ -45,6 +45,7 @@ class ConstantVelocitySensorAgent(BasicAgent):
 
         self.sensor_angle = sensor_angle
         self.sensor_distance = sensor_distance
+        self.speed_delta = 0.3/3.6 # [m/s]
 
         self._collision_sensor = None
         self.has_collided = False
@@ -104,16 +105,15 @@ class ConstantVelocitySensorAgent(BasicAgent):
 
         vehicle_speed = self._vehicle.get_velocity().length()
 
-        affected_by_vehicle, adversary, _ = util.vehicle_obstacle_detected(self, vehicle_list, self.sensor_angle, self.sensor_distance)
+        affected_by_vehicle, _, min_dist = util.vehicle_obstacle_detected(self, vehicle_list, self.sensor_angle, self.sensor_distance)
         if affected_by_vehicle:
-            vehicle_velocity = self._vehicle.get_velocity()
-            if vehicle_velocity.length() == 0:
-                hazard_speed = 0
-            else:
-                hazard_speed = vehicle_velocity.dot(adversary.get_velocity()) / vehicle_velocity.length()
+            hazard_speed = max(vehicle_speed-(self.speed_delta*(1-(min_dist/self.sensor_distance))), 0)
             hazard_detected = True
+        else:
+            post_hazard_speed = min(self._target_speed, vehicle_speed + self.speed_delta)
 
         # Check if the vehicle is affected by a red traffic light
+        # TODO ignored for now
         max_tlight_distance = self._base_tlight_threshold + 0.3 * vehicle_speed
         affected_by_tlight, _ = self._affected_by_traffic_light(lights_list, max_tlight_distance)
         if affected_by_tlight:
@@ -126,7 +126,7 @@ class ConstantVelocitySensorAgent(BasicAgent):
         if hazard_detected:
             self._set_constant_velocity(hazard_speed)
         else:
-            self._set_constant_velocity(self._target_speed)
+            self._set_constant_velocity(post_hazard_speed)
 
         return control
 

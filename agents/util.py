@@ -18,30 +18,6 @@ def vehicle_obstacle_detected(self, vehicle_list=None, sensor_angle= 180, sensor
             :param max_distance: max freespace to check for obstacles.
                 If None, the base threshold value is used
         """
-        def get_route_polygon():
-            route_bb = []
-            extent_y = self._vehicle.bounding_box.extent.y
-            r_ext = extent_y + self._offset
-            l_ext = -extent_y + self._offset
-            r_vec = ego_transform.get_right_vector()
-            p1 = ego_location + carla.Location(r_ext * r_vec.x, r_ext * r_vec.y)
-            p2 = ego_location + carla.Location(l_ext * r_vec.x, l_ext * r_vec.y)
-            route_bb.extend([[p1.x, p1.y, p1.z], [p2.x, p2.y, p2.z]])
-
-            for wp, _ in self._local_planner.get_plan():
-                if ego_location.distance(wp.transform.location) > max_distance:
-                    break
-
-                r_vec = wp.transform.get_right_vector()
-                p1 = wp.transform.location + carla.Location(r_ext * r_vec.x, r_ext * r_vec.y)
-                p2 = wp.transform.location + carla.Location(l_ext * r_vec.x, l_ext * r_vec.y)
-                route_bb.extend([[p1.x, p1.y, p1.z], [p2.x, p2.y, p2.z]])
-
-            # Two points don't create a polygon, nothing to check
-            if len(route_bb) < 3:
-                return None
-
-            return Polygon(route_bb)
       
         if self._ignore_vehicles:
             return ObstacleDetectionResult(False, None, -1)
@@ -99,9 +75,19 @@ def vehicle_obstacle_detected(self, vehicle_list=None, sensor_angle= 180, sensor
 
             # distance
             d_sat = min_d_to_corner < sensor_distance
-            
+
+            # DEBUG
+            color = None
+            if theta_sat and not d_sat:
+                color = carla.Color(255, 0, 0) # red - angle
+            if not theta_sat and d_sat:
+                color = carla.Color(0, 255, 0) # green - distance
             if theta_sat and d_sat:
-                self._world.debug.draw_point(ego_location+carla.Location(z=5), size=0.1, life_time=5)
+                color = carla.Color(0, 0, 255) # blue - both
+            if color:
+                self._world.debug.draw_point(target_location+carla.Location(z=5), size=0.1, color=color, life_time=10)
+
+            if theta_sat and d_sat:
                 return ObstacleDetectionResult(True, target_vehicle, min_d_to_corner)
 
         return ObstacleDetectionResult(False, None, -1)
