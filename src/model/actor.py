@@ -6,13 +6,15 @@ from shapely.geometry import Polygon
 
 
 class Actor(ABC):
-    def __init__(self, parent, name, isEgo, color, speed, controller, snap=False):
+    def __init__(self, parent, name, isEgo, color, speed, controller, sensor_angle, sensor_distance, snap=False):
         self.id = name
         self.isEgo = isEgo
         self.color = colors.get_color_object(color if color else 'random')
         self.snap_to_waypoint = snap
         self.speed_id = speed
         self.controller = controller
+        self.sensor_angle = sensor_angle
+        self.sensor_distance = sensor_distance
         self.parent = parent
 
         # # Searched parameters
@@ -62,8 +64,8 @@ class Actor(ABC):
         return str(self)
 
 class Car(Actor):
-    def __init__(self, parent, name, isEgo, color, speed, controller, snap=False): # TODO: No snap would be given in textX-generated model
-        super().__init__(parent, name, isEgo, color, speed, controller, snap)
+    def __init__(self, parent, name, isEgo, color, speed, controller, sensor_angle, sensor_distance, snap=False): # TODO: No snap would be given in textX-generated model
+        super().__init__(parent, name, isEgo, color, speed, controller, sensor_angle, sensor_distance, snap)
         self.width = 2
         self.length = 5
 

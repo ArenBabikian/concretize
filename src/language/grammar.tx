@@ -17,6 +17,8 @@ Car:
 	( 'color' ':' color = ID ';') ?
 	( 'speed' ':' speed = SPEED ';') ?
 	( 'controller' ':' controller = ID ';') ?
+	('sensor_angle' ':' sensor_angle = FLOAT ';') ?
+	('sensor_distance' ':' sensor_distance = FLOAT ';') ?
 	// TODO: Ordering of attributes
 	// ('position' ':' x = FLOAT',' y = FLOAT)?
 	// ('heading' ':' heading = STRING)?

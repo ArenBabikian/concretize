@@ -9,7 +9,7 @@ import carla
 
 import time
 # from scenario_runner.scenario_runner import ScenarioRunner
-from agents.navigation.constant_velocity_agent import ConstantVelocityAgent
+from agents.constant_velocity_sensor_agent import ConstantVelocitySensorAgent
 import src.simulation.utils as utils
 
 
@@ -108,7 +108,10 @@ class Scenario_Simulation:
                     # TODO add a warning if ego is assigned a DummyAgent
                     
                     opt_dict = id2options[ac.controller]
-                    agent = ConstantVelocityAgent(carla_actor, target_speed=ac.speed_profile.speed_on_road, opt_dict=opt_dict)
+                    agent = ConstantVelocitySensorAgent(carla_actor, target_speed=ac.speed_profile.speed_on_road, 
+                                                        sensor_angle=ac.sensor_angle,
+                                                        sensor_distance=ac.sensor_distance+ac.length/2,
+                                                        opt_dict=opt_dict)
 
                     if ac.assigned_maneuver_instance is not None:
                         target = utils.posToCarlaLocation(ac.end_of_junction_point)
