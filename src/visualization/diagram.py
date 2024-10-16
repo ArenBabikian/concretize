@@ -42,7 +42,7 @@ class Scenario_Diagram:
 
 
     def generate_diagram(self):
-        fig = plt.figure(figsize=(7, 7), dpi=200)
+        fig = plt.figure(figsize=(10, 10), dpi=200)
         plt.gca().set_aspect('equal')
         
         # display map

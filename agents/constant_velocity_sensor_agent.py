@@ -59,7 +59,7 @@ class ConstantVelocitySensorAgent(BasicAgent):
 
         self.is_constant_velocity_active = True
         self._set_collision_sensor()
-        self._set_constant_velocity(target_speed)
+        self._set_constant_velocity(0) # smooth acceleration at the start of simulation
         self.has_collided = False
 
     def set_has_collided(self):

@@ -75,7 +75,11 @@ class Scenario_Simulation:
             # Actors
             xs, ys = [], []
             carla_actors = {}
-            for i, ac in enumerate(instance.actors):
+            actors_with_positions = [ac for ac in instance.actors if ac.position is not None]
+            for i, ac in enumerate(actors_with_positions):
+
+                if ac.position is None:
+                    continue
 
                 # Spawn actors at initial positions
                 xs.append(ac.position.x)
@@ -92,7 +96,7 @@ class Scenario_Simulation:
             # assign behaviors
             run_behavior = False
             carla_agents = {}
-            for ac in instance.actors:
+            for ac in actors_with_positions:
                 carla_actor = carla_actors[ac]
                 if ac.controller:
                     run_behavior = True
@@ -154,12 +158,12 @@ class Scenario_Simulation:
             data['junction'] = jun.junction_id if jun else None
             data['weather'] = self.weather
             data['simulation_id'] = simulation_id
-            data['num_actors'] = len(instance.actors)
+            data['num_actors'] = len(actors_with_positions)
 
             data['non_ego_maneuvers_id'] = set()
             data['non_ego_maneuver_types'] = set()
 
-            for ac in instance.actors:
+            for ac in actors_with_positions:
                 assigned_man_instance = ac.assigned_maneuver_instance
                 if assigned_man_instance is None:
                     man_uid = 'None'

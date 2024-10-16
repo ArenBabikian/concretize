@@ -78,14 +78,14 @@ def vehicle_obstacle_detected(self, vehicle_list=None, sensor_angle= 180, sensor
 
             # DEBUG
             color = None
-            if theta_sat and not d_sat:
-                color = carla.Color(255, 0, 0) # red - angle
-            if not theta_sat and d_sat:
-                color = carla.Color(0, 255, 0) # green - distance
-            if theta_sat and d_sat:
-                color = carla.Color(0, 0, 255) # blue - both
-            if color:
-                self._world.debug.draw_point(target_location+carla.Location(z=5), size=0.1, color=color, life_time=10)
+            # if theta_sat and not d_sat:
+            #     color = carla.Color(255, 0, 0) # red - angle
+            # if not theta_sat and d_sat:
+            #     color = carla.Color(0, 255, 0) # green - distance
+            # if theta_sat and d_sat:
+            #     color = carla.Color(0, 0, 255) # blue - both
+            # if color:
+            #     self._world.debug.draw_point(target_location+carla.Location(z=2), size=0.1, color=color, life_time=10)
 
             if theta_sat and d_sat:
                 return ObstacleDetectionResult(True, target_vehicle, min_d_to_corner)

@@ -16,7 +16,7 @@ Param simulate: True;
 # Scenario specification
 Car c1; isEgo; color: green;
         speed: 15; controller: SimpleAgent;
-        sensor_angle: 25; sensor_distance: 5;
+        sensor_angle: 25; sensor_distance: 20;
 Car c2; color: blue;
         speed: 15; controller: DummyAgent;
 
@@ -25,7 +25,8 @@ doesManeuver(c1, road89_lane0);
 #doesManeuver(c1, road124_lane0);
 
 # doesManeuver(c2, None|road124_lane0|road109_lane0);
-#doesManeuver(c2, road109_lane0); # left
-doesManeuver(c2, road124_lane0); # front
+#doesManeuver(c2, None); # None
+#doesManeuver(c2, road124_lane0); # front
+doesManeuver(c2, road109_lane0); # left
 #############doesManeuver(c2, road108_lane0); # right
 potentiallyCollide(c1, c2);
