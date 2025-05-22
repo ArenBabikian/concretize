@@ -65,8 +65,8 @@ def generateFromSpecs(constraintsStr, args):
     args.output_directory = f"../{args.output_directory}"
         
     Path(args.output_directory).mkdir(parents=True, exist_ok=True)
-    args.upload_folder = Path(args.output_directory) / "scenarios"
-    Path(args.upload_folder).mkdir(parents=True, exist_ok=True)
+    args.save_diagram_dir = "scenarios"
+    args.upload_folder = Path(args.output_directory) / args.save_diagram_dir
     sim_folder = Path(args.output_directory) / "simulation"
     Path(sim_folder).mkdir(parents=True, exist_ok=True)
     args.save_statistics_file = f"stats_{gen_run_id}.json"
@@ -112,13 +112,13 @@ def generateFromSpecs(constraintsStr, args):
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
                 con_sol_id += 1
-                fileName = f"sol_{gen_run_id}_{res_id}_{sol_id}.png"
-                args.save_path_png = f"{args.upload_folder}/{fileName}"
+                fileName = f"sol_{gen_run_id}_{res_id}_{sol_id}"
                 args.view_diagram = False
-                sd = Scenario_Diagram(sol, f"{res_id} {sol_id}", args)
+                # sd = Scenario_Diagram(sol, f"{res_id} {sol_id}", args)
+                sd = Scenario_Diagram(sol, fileName, args)
                 sd.generate_diagram()
                 sd.save_and_show()
-                fileNames.append(fileName)
+                fileNames.append(f"{fileName}.png")
                 # Save solution as tuple
                 solutionsCache[fileName] = (sol, res_id, con_sol_id)
     return [args.upload_folder, fileNames]

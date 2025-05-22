@@ -22,6 +22,7 @@ def parse_args():
     vis_opt = parser.add_argument_group('visualisation options')
     vis_opt.add_argument('-v-diag', '--view-diagram', action='store_true', help='Pop up diagram')
     vis_opt.add_argument('-s-diag', '--save-diagram', action='store_true', help='Save the diagram')
+    vis_opt.add_argument('-s-dir', '--save-diagram-dir', default="scenarios", type=str, help='Subdirectory to save the diagram')
     vis_opt.add_argument('-z', '--zoom-diagram', action='store_true', help='Zoom to junction, or to the actors')
     vis_opt.add_argument('-sh-act', '--hide-actors', action='store_true', help='Hide the actors in the visualization')
     vis_opt.add_argument('-sh-man', '--show-maneuvers', action='store_true', help='Highlight the assigned maneuver regions in the visualization')

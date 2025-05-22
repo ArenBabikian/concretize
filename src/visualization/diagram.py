@@ -20,10 +20,10 @@ class Scenario_Diagram:
         #TODO improve below, avoid the "hasattr"
         # Below is for the linkage between the backend and frontend
         self.view = args.view_diagram
-        if hasattr(args, "save_path_png"):
-            self.save_path = args.save_path_png
-        else:
-            self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
+
+        self.save_path = Path(args.output_directory) / args.save_diagram_dir / f"{diagram_id}.png"
+        self.save_path.parent.mkdir(parents=True, exist_ok=True)
+
         self.zoom = args.zoom_diagram
 
         self.color_scheme = args.color_scheme
@@ -102,6 +102,7 @@ class Scenario_Diagram:
         self.diagram = None
 
     def save_and_show(self):
+        print(self.save_path)
         if self.save_path:
             plt.savefig(self.save_path)
             print(f"Save at {self.save_path}")

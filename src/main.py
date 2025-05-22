@@ -1,3 +1,4 @@
+from pathlib import Path
 from src import utils
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
@@ -19,6 +20,9 @@ def concretize():
     logging_map = {0: logging.CRITICAL, 1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
     logging.root.setLevel(logging_map[args.verbosity])
     logging.warning("Fix the map integration in command-line options") # TEMP
+
+    if args.output_directory is not None:
+        Path(args.output_directory).mkdir(parents=True, exist_ok=True)
 
     # 2.0 read the scenario specification (constraints)
     # TODO address the case of a file being editted on a web-based editor
