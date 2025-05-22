@@ -81,15 +81,10 @@ def concretize():
             if sol.is_concrete_solution:
                 # DIAGRAM
                 scenario_id = f"{res_id}_{con_sol_id}"
-                sd = Scenario_Diagram(sol, scenario_id, args)
-                sd.generate_diagram()
-                sd.save_and_show()
-
-                # TODO Make superclass for visualisations (DIAGRAM, XML)
-                # OPENSCENARIO XML
-                osxml = Openscenario_Xml(sol, scenario_id, args)
-                osxml.generate_xml()
-                osxml.save()
+                if args.view_diagram or args.save_diagram:
+                    sd = Scenario_Diagram(sol, scenario_id, args)
+                    sd.generate_diagram()
+                    sd.save_and_show()
 
                 con_sol_id+=1
 
@@ -105,6 +100,12 @@ def concretize():
 
                 # logging.warning("No save path provided. The scenario is not simulated")
 
+    # 7 Save a single XML file for all scenarios
+    if args.save_xml:
+        scenario_id = f"all_scenarios"
+        osxml = Openscenario_Xml(approach.all_solutions, args)
+        osxml.generate_xml()
+        osxml.save()
     #   5 simulate
     #   6 evaluate simulation run
     #   7 visualize the evaluation result

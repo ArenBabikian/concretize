@@ -10,31 +10,30 @@ MANTYPE2ID = {ManeuverType.LEFT_TURN:'left',
 
 class Openscenario_Xml:
 
-    def __init__(self, instance, scenario_id, args):
-        self.spec = instance
+    def __init__(self, all_instances, args):
+        self.all_instances = all_instances
         self.args = args
 
         self.to_save = args.save_xml
-        self.save_path = Path(args.output_directory) / args.save_xml_dir / f"{scenario_id}.xml"
-        self.save_path.parent.mkdir(parents=True, exist_ok=True)
+        self.save_path = Path(args.output_directory) / args.save_xml_file
 
         self.xml_lines = []
 
 
-    def getScenarioDesc(self, route_id):
+    def getScenarioDesc(self, instance, route_id):
         # SETUP
         town = self.args.map
         intersection_id = self.args.junction
-        num_actors = len(self.spec.actors)
-        timeout = self.spec.measured_timeout
+        num_actors = len(instance.actors)
+        timeout = instance.measured_timeout
         route_name = f'scen_{town}_{intersection_id}_{num_actors}ac_{route_id}'
         
-        ego = self.spec.specification.actors[self.spec.specification.ego_id]
+        ego = instance.specification.actors[instance.specification.ego_id]
 
         scenario_desc = []
         scenario_desc.append(f"    <route id='{route_name}' town='{town}' intersection_id='{intersection_id}' timeout='{timeout}'>")
         # ACTOR INITIALIZATION
-        actors_with_positions = [ac for ac in self.spec.actors if ac.position is not None]
+        actors_with_positions = [ac for ac in instance.actors if ac.position is not None]
         for ac in actors_with_positions:
             pos = utils.posToCarlaLocation(ac.position, 0.0)
             rot = utils.posToCarlaRotation(ac.heading)
@@ -63,8 +62,14 @@ class Openscenario_Xml:
     def generate_xml(self):
         self.xml_lines.append("<?xml version='1.0' encoding='UTF-8'?>")
         self.xml_lines.append("<routes>")
-        scenario_description = self.getScenarioDesc(0)
-        self.xml_lines.extend(scenario_description)
+        for res_id, res in enumerate(self.all_instances):
+            con_sol_id=0
+            for sol in res.ordered_outcomes:
+                if sol.is_concrete_solution:
+                    scenario_id = f"{res_id}.{con_sol_id}"
+                    scenario_description = self.getScenarioDesc(sol, scenario_id)
+                    self.xml_lines.extend(scenario_description)
+                    con_sol_id+=1
         self.xml_lines.append("</routes>")
 
 

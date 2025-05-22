@@ -4,6 +4,7 @@ output*/
 uploads/
 .vscode
 .archive/
+*.pyc
 
 # Road Map File
 *.snet

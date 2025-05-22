@@ -30,7 +30,7 @@ def parse_args():
     vis_opt.add_argument('-col', '--color-scheme', choices=['default', 'alternate'], default='default', help='Color scheme to use whie generating the diagram')
 
     vis_opt.add_argument('-s-xml', '--save-xml', action='store_true', help='Save the XML file')
-    vis_opt.add_argument('-s-xml-dir', '--save-xml-dir', default="scenarios", type=str, help='Subdirectory to save the XML file')
+    vis_opt.add_argument('-s-xml-file', '--save-xml-file', default=None, type=str, help='Subdirectory to save the XML file')
 
     # Simulation Options
     sim_opt = parser.add_argument_group('simulation options')
