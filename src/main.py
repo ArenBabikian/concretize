@@ -10,6 +10,7 @@ import logging
 from src.model.specification import Specification
 from src.simulation.simulation import Scenario_Simulation
 from src.visualization.diagram import Scenario_Diagram
+from src.simulation.xml import Openscenario_Xml
 
 def concretize():
     
@@ -78,9 +79,18 @@ def concretize():
         con_sol_id=0
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
-                sd = Scenario_Diagram(sol, f"{res_id}_{con_sol_id}", args)
+                # DIAGRAM
+                scenario_id = f"{res_id}_{con_sol_id}"
+                sd = Scenario_Diagram(sol, scenario_id, args)
                 sd.generate_diagram()
                 sd.save_and_show()
+
+                # TODO Make superclass for visualisations (DIAGRAM, XML)
+                # OPENSCENARIO XML
+                osxml = Openscenario_Xml(sol, scenario_id, args)
+                osxml.generate_xml()
+                osxml.save()
+
                 con_sol_id+=1
 
                 # TODO do we want to simulate every generated scenario?

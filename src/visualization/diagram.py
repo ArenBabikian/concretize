@@ -19,8 +19,9 @@ class Scenario_Diagram:
 
         #TODO improve below, avoid the "hasattr"
         # Below is for the linkage between the backend and frontend
-        self.view = args.view_diagram
+        self.to_view = args.view_diagram
 
+        self.to_save = args.save_diagram
         self.save_path = Path(args.output_directory) / args.save_diagram_dir / f"{diagram_id}.png"
         self.save_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -30,6 +31,7 @@ class Scenario_Diagram:
         self.hide_actors = args.hide_actors
         self.show_maneuvers = args.show_maneuvers
         self.show_exact_paths = args.show_exact_paths
+
 
     def show_road_map(self):
         if self.color_scheme == 'default':
@@ -102,12 +104,10 @@ class Scenario_Diagram:
         self.diagram = None
 
     def save_and_show(self):
-        print(self.save_path)
-        if self.save_path:
+        if self.to_save:
             plt.savefig(self.save_path)
-            print(f"Save at {self.save_path}")
             logging.info(f'Saved diagram at {self.save_path}')
-        if self.view:
+        if self.to_view:
             logging.debug('Showing diagram of the initial scene')
             plt.show()
         plt.close()

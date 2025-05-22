@@ -70,14 +70,14 @@ def fix_spectator(world, junction, xs, ys):
     rot = carla.Rotation(pitch=270, yaw=270, roll=0) # camera pointing down
     return world.get_spectator().set_transform(carla.Transform(loc, rot))
 
-def posToCarlaLocation(pos, z=None):
+def posToCarlaLocation(pos, z=2):
     if isinstance(pos, Vector):
         x, y = pos.x, pos.y
     elif isinstance(pos, list):
         x, y = pos[0], pos[1]
     else:
         raise Exception("Invalid position type")
-    return carla.Location(x, -y, 2)
+    return carla.Location(x, -y, z)  # y is inverted in Carla
 
 def posToCarlaRotation(heading):
 	yaw = math.degrees(-heading) - 90

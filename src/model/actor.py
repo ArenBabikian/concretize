@@ -31,6 +31,9 @@ class Actor(ABC):
         self.current_lane = None
         self.end_of_junction_point = None
 
+        self.pre_junc_position = None
+        self.pre_junc_heading = None
+
     @abstractmethod
     def __str__(self):
         pass
