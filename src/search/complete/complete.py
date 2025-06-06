@@ -22,13 +22,15 @@ class Complete_Approach(Search_Approach):
         self.actor_to_lane_instances = {ac:[] for ac in specification.actors}
         self.danger_conditions = []
 
+        self.maintain_original_maneuver_order = args.maintain_original_maneuver_order
+
         self.num_evaluated_logical_solutions = 0
         self.num_colliding_logical_solutions = 0
         self.num_no_init_overlap_concrete_solutions = 0
         self.num_valid_concrete_solutions = 0
         super().__init__(args, specification)
 
-        self.all_solutions.append(Complete_Result(self, specification)) # only a single solution is returned for the complete mode. It s asingle (deterministic) run of the algorithm.
+        self.all_solutions.append(Complete_Result(self, specification)) # only a single solution is returned for the complete mode. It is a single (deterministic) run of the algorithm.
 
     def validate_input_specification(self):
         actors = self.specification.actors
@@ -52,7 +54,7 @@ class Complete_Approach(Search_Approach):
         danger_constraints = []
         for con in specification.constraints:
             if isinstance(con, Does_Maneuver_Con):
-                all_allowed_maneuver_instances = con.get_all_allowed_maneuver_instances(self.junction)
+                all_allowed_maneuver_instances = con.get_all_allowed_maneuver_instances(self.junction, self.maintain_original_maneuver_order)
                 self.actor_to_lane_instances[con.actors[0]] = all_allowed_maneuver_instances
             elif isinstance(con, Danger_Con):
                 danger_constraints.append(con)

@@ -53,6 +53,7 @@ def parse_args():
     # Brute Approach
     complete_cmd = approach_subcmd.add_parser('complete', help='Use a rule-based approach to generate a set of scenarios with abstract completeness')
     complete_cmd.add_argument('-j', '--junction', type=str, help='Id of the junction where to perform search')
+    complete_cmd.add_argument('-ord', '--maintain-original-maneuver-order', action='store_true', help='Maintain the original order of maneuvers in the junction when generating scenarios')
     
     # Reverse Approach
     # for now only statc, this would be quite complicated for dynamic

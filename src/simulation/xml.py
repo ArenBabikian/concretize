@@ -39,7 +39,7 @@ class Openscenario_Xml:
             rot = utils.posToCarlaRotation(ac.heading)
             man = MANTYPE2ID[ac.assigned_maneuver_instance.type]
 
-            if ac is ego:
+            if ac.isEgo:
                 scenario_desc.append(f"        <waypoint x='{pos.x}' y='{pos.y}' z='0.0' maneuver='{man}' color='(17,37,103)'/>")
             else:
                 # TODO speed is hard coded for now...
