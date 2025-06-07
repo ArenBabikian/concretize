@@ -1,10 +1,10 @@
 # town 04, j916 is the 4-way 1-lane junction
 
 EVAL_HOME="evaluation/SOSYM25/"
-OUTPUT_FOLDER="${EVAL_HOME}/output2"
+OUTPUT_FOLDER="${EVAL_HOME}/output3"
 
 # Store junction-town pairs as "junction:town"
-junctions=("916:Town04")
+junctions=("916:Town04" "2240:Town05")
 num_actors=(1 2 3 4)
 
 if [ ! -d output ]; then
@@ -16,13 +16,15 @@ for jt in "${junctions[@]}"; do
     for num_actor in "${num_actors[@]}"; do
         suffix="_j${junction}_n${num_actor}"
         xml_save_file="scenarios${suffix}.xml"
+        json_save_file="scenarios${suffix}.json"
         python concretize.py\
             -v 2\
             -n 10\
             -t 60\
             -m ${town}\
-            --save-xml\
+            --save-xml-json\
             --save-xml-file ${xml_save_file}\
+            --save-json-file ${json_save_file}\
             -z\
             --color-scheme default\
             --show-maneuvers\
@@ -30,10 +32,15 @@ for jt in "${junctions[@]}"; do
             -all\
             --output-directory ${OUTPUT_FOLDER}\
             --save-statistics-file stats${suffix}.json\
+            --project SOSYM\
             complete\
             --junction $junction\
-            --maintain-original-maneuver-order\
             ${EVAL_HOME}/evaluation${num_actor}.concretize
+        # Check if the command was successful
+        if [ $? -ne 0 ]; then
+            echo "Error: concretize.py failed for junction $junction, town $town, actors $num_actor"
+            exit 1
+        fi
     done
 
     # Combine all output files for this junction-town pair
