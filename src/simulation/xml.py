@@ -4,17 +4,13 @@ from pathlib import Path
 from src.simulation import utils
 from scenic.domains.driving.roads import ManeuverType
 
-MANTYPE2ID = {ManeuverType.LEFT_TURN:'left',
-              ManeuverType.RIGHT_TURN:'right',
-              ManeuverType.STRAIGHT:'straight'}
-
 class Openscenario_Xml:
 
     def __init__(self, all_instances, args):
         self.all_instances = all_instances
         self.args = args
 
-        self.to_save = args.save_xml
+        self.to_save = args.save_xml_json
         self.save_path = Path(args.output_directory) / args.save_xml_file
 
         self.xml_lines = []
@@ -37,7 +33,7 @@ class Openscenario_Xml:
         for ac in actors_with_positions:
             pos = utils.posToCarlaLocation(ac.position, 0.0)
             rot = utils.posToCarlaRotation(ac.heading)
-            man = MANTYPE2ID[ac.assigned_maneuver_instance.type]
+            man = utils.MANTYPE2ID[ac.assigned_maneuver_instance.type]
 
             if ac.isEgo:
                 scenario_desc.append(f"        <waypoint x='{pos.x}' y='{pos.y}' z='0.0' maneuver='{man}' color='(17,37,103)'/>")
