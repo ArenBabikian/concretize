@@ -1,4 +1,4 @@
-param map = localPath('../../maps/' + globalParameters.carla_map + '.xodr')
+param map = localPath('../../../maps/' + globalParameters.carla_map + '.xodr')
 model scenic.domains.driving.model
 
 DISTANCE_TO_INTERSECTION1 = -5
