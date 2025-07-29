@@ -79,8 +79,8 @@ base_dir = 'evaluation/SOSYM25/scenic'
 scenario_file_path = base_dir + '/scenic-maneuvers{actors}.scenic'
 timeout = 5 # seconds
 
-configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 248), ('Town04', 916, 4, 1208), 
-           ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 26), ('Town05', 2240, 4, 62)]
+configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
+           ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]
 for map, intersection, actors, required in configs:
     eval = ScenicEval(scenario_file=scenario_file_path.format(actors=actors), map=map, intersection=intersection, required_unique_scenes=required, timeout=timeout)
     scenes, unique_scenes = eval.generate()
