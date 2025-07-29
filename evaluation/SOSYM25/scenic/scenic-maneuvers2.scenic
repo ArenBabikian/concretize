@@ -17,6 +17,6 @@ csm = Uniform(*ego_maneuver.conflictingManeuvers)
 crossing_startLane = csm.startLane
 crossing_car_trajectory = [csm.startLane, csm.connectingLane, csm.endLane]
 
-crossing_starting_lane = csm.startLane.union(csm.connectingLane)
-crossing_car = Car on crossing_starting_lane,
+crossing_starting_lane = Uniform(csm.startLane, csm.connectingLane)
+crossing_car = Car on crossing_starting_lane.centerline,
 				with behavior FollowTrajectoryBehavior(trajectory = crossing_car_trajectory)

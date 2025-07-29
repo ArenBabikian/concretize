@@ -20,6 +20,6 @@ actor1_endLane = filter(lambda i: i.uid == globalParameters.actor1_endLane, netw
 
 crossing_car_trajectory = [actor1_startLane, actor1_connectingLane, actor1_endLane]
 
-crossing_starting_lane = actor1_startLane.union(actor1_connectingLane)
-crossing_car = Car on crossing_starting_lane,
+crossing_starting_lane = Uniform(actor1_startLane, actor1_connectingLane)
+crossing_car = Car on crossing_starting_lane.centerline,
 				with behavior FollowTrajectoryBehavior(trajectory = crossing_car_trajectory)
