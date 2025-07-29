@@ -29,8 +29,9 @@ def parse_args():
     vis_opt.add_argument('-sh-expa', '--show-exact-paths', action='store_true', help='Show the assigned exact paths in the visualization')
     vis_opt.add_argument('-col', '--color-scheme', choices=['default', 'alternate'], default='default', help='Color scheme to use whie generating the diagram')
 
-    vis_opt.add_argument('-s-xml', '--save-xml', action='store_true', help='Save the XML file')
+    vis_opt.add_argument('-s-xml-json', '--save-xml-json', action='store_true', help='Save the XML file and JSON file for the scenario simulation')
     vis_opt.add_argument('-s-xml-file', '--save-xml-file', default=None, type=str, help='Subdirectory to save the XML file')
+    vis_opt.add_argument('-s-json-file', '--save-json-file', default=None, type=str, help='Subdirectory to save the JSON file')
 
     # Simulation Options
     sim_opt = parser.add_argument_group('simulation options')
@@ -41,6 +42,10 @@ def parse_args():
     sim_opt.add_argument('-sim-ip', '--simulation-ip', type=str, default='localhost', help='Ip address of running simulator')
     sim_opt.add_argument('-sim-port', '--simulation-port', type=int, default=2000, help='Port of running simulator')
     sim_opt.add_argument('-sim-weather', '--simulation-weather', type=str, default="CloudyNoon", help='Weather preset for simulation')
+
+    # Evaluation Options
+    eval_opt = parser.add_argument_group('evaluation options')
+    eval_opt.add_argument('-proj', '--project', choices=['none', 'SOSYM'], default='default', help='Project to use for evaluation')
 
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')
@@ -53,7 +58,6 @@ def parse_args():
     # Brute Approach
     complete_cmd = approach_subcmd.add_parser('complete', help='Use a rule-based approach to generate a set of scenarios with abstract completeness')
     complete_cmd.add_argument('-j', '--junction', type=str, help='Id of the junction where to perform search')
-    complete_cmd.add_argument('-ord', '--maintain-original-maneuver-order', action='store_true', help='Maintain the original order of maneuvers in the junction when generating scenarios')
     
     # Reverse Approach
     # for now only statc, this would be quite complicated for dynamic

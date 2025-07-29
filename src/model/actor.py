@@ -20,6 +20,7 @@ class Actor(ABC):
         # # Searched parameters
         # Logical parameters
         self.assigned_maneuver_instance = None
+        self.assigned_maneuver_id = None
 
         # Concrete parameters
         self.position = None

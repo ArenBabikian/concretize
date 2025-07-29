@@ -7,6 +7,9 @@ from scenic.core.vectors import Vector
 import matplotlib.pyplot as plt
 import pandas as pd
 
+MANTYPE2ID = {ManeuverType.LEFT_TURN:'left',
+              ManeuverType.RIGHT_TURN:'right',
+              ManeuverType.STRAIGHT:'straight'}
 
 def fix_map(client, world_name, ip, port):
     cur_world = client.get_world().get_map().name

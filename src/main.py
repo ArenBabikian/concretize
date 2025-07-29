@@ -8,6 +8,7 @@ from src.language import parser
 import logging
 
 from src.model.specification import Specification
+from src.simulation.json import Openscenario_Json
 from src.simulation.simulation import Scenario_Simulation
 from src.visualization.diagram import Scenario_Diagram
 from src.simulation.xml import Openscenario_Xml
@@ -101,11 +102,15 @@ def concretize():
                 # logging.warning("No save path provided. The scenario is not simulated")
 
     # 7 Save a single XML file for all scenarios
-    if args.save_xml:
+    if args.save_xml_json:
         scenario_id = f"all_scenarios"
         osxml = Openscenario_Xml(approach.all_solutions, args)
         osxml.generate_xml()
         osxml.save()
+
+        osjson = Openscenario_Json(spec, approach.all_solutions, approach.collisions_in_order, args)
+        osjson.generate_json()
+        osjson.save()
     #   5 simulate
     #   6 evaluate simulation run
     #   7 visualize the evaluation result

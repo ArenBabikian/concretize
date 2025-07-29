@@ -22,7 +22,8 @@ class Complete_Approach(Search_Approach):
         self.actor_to_lane_instances = {ac:[] for ac in specification.actors}
         self.danger_conditions = []
 
-        self.maintain_original_maneuver_order = args.maintain_original_maneuver_order
+        # SOSYM requires the original order of maneuvers to be maintained, while the default approach does not.
+        self.sosym_setup = args.project == 'SOSYM'
 
         self.num_evaluated_logical_solutions = 0
         self.num_colliding_logical_solutions = 0
@@ -54,7 +55,7 @@ class Complete_Approach(Search_Approach):
         danger_constraints = []
         for con in specification.constraints:
             if isinstance(con, Does_Maneuver_Con):
-                all_allowed_maneuver_instances = con.get_all_allowed_maneuver_instances(self.junction, self.maintain_original_maneuver_order)
+                all_allowed_maneuver_instances = con.get_all_allowed_maneuver_instances(self.junction, self.sosym_setup)
                 self.actor_to_lane_instances[con.actors[0]] = all_allowed_maneuver_instances
             elif isinstance(con, Danger_Con):
                 danger_constraints.append(con)
@@ -89,14 +90,16 @@ class Complete_Approach(Search_Approach):
                     if depth > 1 and actors_with_ego_first[depth-1].assigned_maneuver_instance == man:
                         # CONSTRAINT 3: All non-ego paths must be distinct
                         continue 
-                    # TODO below IMPORTANT
-                    # if depth > 1 and tuple[-1][1] > maneuver_id:
-                    #     # CONSTRAINT 4: No permutations among all non-ego paths
-                    #     continue 
+                    if self.sosym_setup:
+                        if depth > 1 and actors_with_ego_first[depth-1].assigned_maneuver_id > maneuver_id:
+                            # CONSTRAINT 4: No permutations among all non-ego paths
+                            continue 
 
                     actor.assigned_maneuver_instance = man
+                    actor.assigned_maneuver_id = maneuver_id
                     recursiveForLoop(depth+1)
                     actor.assigned_maneuver_instance = None
+                    actor.assigned_maneuver_id = None
             else:
                 # Check if ego road is intersecting with ALL non-ego roads
                 num_violated_danger_conditions = 0
@@ -140,7 +143,7 @@ class Complete_Approach(Search_Approach):
             # 4. Get collisions in order
             collision_constraints = self.handle_constraints(scenario)
             collisions_in_order = utils_con.get_collisions_in_order(collision_constraints)
-            # ranked_non_ego_by_dist_for_ego = []
+            self.collisions_in_order = collisions_in_order
 
             # 5. Determine how much time to add to ensure collision must happen
             # ...and that non-egos wont collide with each other, at least not  on the path of ego
@@ -237,6 +240,3 @@ class Complete_Approach(Search_Approach):
         # GET ALL DANGEROUS CONCRETE SCENARIOS
         self.get_dangerous_concrete_scenarios()
 
-        # SAVE EXECUTABLE XML FILES
-
-        # TODO go back to `initializeAbstractScenarioDetails` from scenic, l63, for the analysis at the end
