@@ -46,17 +46,6 @@ class ScenicEval():
             if new_size > prev_size:
                 self.generated_scenes.append((scene, generation_time, num_iterations))
         return self.generated_scenes, self.unique_scenes
-        
-    # TODO: calculate distance of vehicles to the intersection point along the centerline
-    def find_distsnces_to_collision_points(self):
-        for scene, _, _ in self.generated_scenes:
-            scene.collision_points = {}
-            ego_position = scene.egoObject.position
-            ego_centerline = scene.egoObject.behavior._kwargs['trajectory'][1].centerline
-            for obj in scene.objects:
-                if obj.isVehicle and obj != scene.egoObject:
-                    scene.collision_points[obj] = ego_centerline.intersect(obj.behavior._kwargs['trajectory'][1].centerline)
-            print(len(scene.collision_points.values()))
 
     def save_generation_time_to_file(self, path):
         os.makedirs(os.path.dirname(path), exist_ok=True)

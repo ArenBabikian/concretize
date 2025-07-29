@@ -16,6 +16,16 @@ def should_run():
 
 def collision_occurs(scene):
     return True
+        
+# TODO: calculate distance of vehicles to the intersection point along the centerline
+def find_distances_to_collision_point(scene):
+    collision_points = {}
+    ego_position = scene.egoObject.position
+    ego_centerline = scene.egoObject.behavior._kwargs['trajectory'][1].centerline
+    for obj in scene.objects:
+        if obj.isVehicle and obj != scene.egoObject:
+            collision_points[obj] = ego_centerline.intersect(obj.behavior._kwargs['trajectory'][1].centerline)
+    print(len(collision_points.values()))
 
 for map, intersection, actors in configs:
     scenario_file = scenario_file_path.format(actors = actors)
