@@ -44,9 +44,9 @@ class ScenicEval():
         return (ego_traj, other_trajs_sorted)
     
     def generate(self):
-        self.start_time = time.time()
         self.scenario = scenic.scenarioFromFile(self.scenario_file, 
                                            {'carla_map':self.map, 'intersection_uid':'intersection' + str(self.intersection)})
+        self.start_time = time.time()
         while self.should_run():
             scene, num_iterations = self.scenario.generate()
             generation_time = time.time() - self.start_time

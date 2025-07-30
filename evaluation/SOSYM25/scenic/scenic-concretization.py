@@ -100,9 +100,9 @@ for map, intersection, actors in configs:
         reader = csv.DictReader(f)
         for params in reader:
             params['carla_map'] = map
-            start_time = time.time()
             generated_scenes = []
             scenario = scenic.scenarioFromFile(scenario_file, params)
+            start_time = time.time()
             while should_run():
                 scene, n = scenario.generate()
                 if collision_occurs(scene):
