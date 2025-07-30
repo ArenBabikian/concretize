@@ -14,7 +14,6 @@ ego = Car following roadDirection from ego_spwPt for DISTANCE_TO_INTERSECTION1,
 		with behavior FollowTrajectoryBehavior(trajectory = ego_trajectory)
 
 csm = Uniform(*ego_maneuver.conflictingManeuvers)
-crossing_startLane = csm.startLane
 crossing_car_trajectory = [csm.startLane, csm.connectingLane, csm.endLane]
 
 crossing_starting_lane = Uniform(csm.startLane, csm.connectingLane)
@@ -22,21 +21,19 @@ crossing_car = Car on crossing_starting_lane.centerline,
 				with behavior FollowTrajectoryBehavior(trajectory = crossing_car_trajectory)
 
 csm2 = Uniform(*ego_maneuver.conflictingManeuvers)
-crossing_startLane2 = csm2.startLane
 crossing_car_trajectory2 = [csm2.startLane, csm2.connectingLane, csm2.endLane]
 
-require (crossing_startLane != crossing_startLane2)
+require (csm != csm2)
 
 crossing_starting_lane2 = Uniform(csm2.startLane, csm2.connectingLane)
 crossing_car2 = Car on crossing_starting_lane2.centerline,
 				with behavior FollowTrajectoryBehavior(trajectory = crossing_car_trajectory2)
 
 csm3 = Uniform(*ego_maneuver.conflictingManeuvers)
-crossing_startLane3 = csm3.startLane
 crossing_car_trajectory3 = [csm3.startLane, csm3.connectingLane, csm3.endLane]
 
-require (crossing_startLane != crossing_startLane3)
-require (crossing_startLane2 != crossing_startLane3)
+require (csm != csm3)
+require (csm2 != csm3)
 
 crossing_starting_lane3 = Uniform(csm3.startLane, csm3.connectingLane)
 crossing_car3 = Car on crossing_starting_lane3.centerline,
