@@ -127,7 +127,7 @@ base_dir = 'evaluation/SOSYM25/scenic'
 scenario_file_path = base_dir + '/scenic-maneuvers{actors}.scenic'
 timeout = 20 # seconds
 
-all_times_path = f'{base_dir}/output/f2l-times.json'
+all_times_path = f'{base_dir}/output/times-f2l.json'
 
 configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
            ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]
