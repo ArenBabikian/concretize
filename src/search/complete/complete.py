@@ -7,6 +7,7 @@ from src.model.constraints.constraint import Static_Con
 from src.results.complete_result import Complete_Result
 from src.results.result import Result
 from src.search.search_approach import Search_Approach
+import time
 import src.search.complete.constants as cst
 import src.search.complete.utils as utils
 import src.search.complete.utils_concrete as utils_con
@@ -29,6 +30,11 @@ class Complete_Approach(Search_Approach):
         self.num_colliding_logical_solutions = 0
         self.num_no_init_overlap_concrete_solutions = 0
         self.num_valid_concrete_solutions = 0
+
+        # Timing
+        self.time_fun_to_log = -1
+        self.times_log_to_con = []
+
         super().__init__(args, specification)
 
         self.all_solutions.append(Complete_Result(self, specification)) # only a single solution is returned for the complete mode. It is a single (deterministic) run of the algorithm.
@@ -118,14 +124,21 @@ class Complete_Approach(Search_Approach):
                     # pass
                 self.num_evaluated_logical_solutions += 1
 
+        time_start = time.time()
         recursiveForLoop(0)
-        logging.info(f'We evaluate {self.num_evaluated_logical_solutions} {global_depth}-lane combinations. {self.num_colliding_logical_solutions} of them are colliding at the logical level.')
+        time_total = time.time() - time_start
+        self.time_fun_to_log = time_total
+
+        logging.info(f'({time_total:.3f}s) We evaluate {self.num_evaluated_logical_solutions} {global_depth}-lane combinations. {self.num_colliding_logical_solutions} of them are colliding at the logical level.')
 
     def get_dangerous_concrete_scenarios(self):
-        # Scenarios are included in aelf.all_solutions[0].all_solutions
+        # Scenarios are included in self.all_solutions[0].all_solutions
         scenario_instances = self.all_solutions[0].all_solutions
 
         for i_sc, scenario in enumerate(scenario_instances):
+            # 0. timing
+            time_start = time.time()
+
             # 1. get logical params of ego
             ego_actor = scenario.actors[scenario.specification.ego_id]
             utils.validate_speed_profiles(ego_actor)
@@ -222,7 +235,11 @@ class Complete_Approach(Search_Approach):
             timeout = utils_con.calculate_timeout(ego_actor, ego_man_reg, ego_time_to_add)
             scenario.measured_timeout = timeout
 
-        logging.info(f'From these {self.num_colliding_logical_solutions} colliding tuples, {self.num_valid_concrete_solutions} of them are valid at the concrete level (i.e. they do not have initial-position overlaps).')
+            # 0. timing
+            scenario_time = time.time() - time_start
+            self.times_log_to_con.append(scenario_time)
+
+        logging.info(f'({sum(self.times_log_to_con):.3f}s) From these {self.num_colliding_logical_solutions} colliding tuples, {self.num_valid_concrete_solutions} of them are valid at the concrete level (i.e. they do not have initial-position overlaps).')
 
     def concretize(self):
 

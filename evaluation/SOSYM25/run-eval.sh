@@ -1,7 +1,7 @@
 # town 04, j916 is the 4-way 1-lane junction
 
 EVAL_HOME="evaluation/SOSYM25/"
-OUTPUT_FOLDER="${EVAL_HOME}/output3"
+OUTPUT_FOLDER="${EVAL_HOME}/output"
 
 # Store junction-town pairs as "junction:town"
 junctions=("916:Town04" "2240:Town05")
@@ -17,6 +17,9 @@ for jt in "${junctions[@]}"; do
         suffix="_j${junction}_n${num_actor}"
         xml_save_file="scenarios${suffix}.xml"
         json_save_file="scenarios${suffix}.json"
+        stats_save_file="stats${suffix}.json"
+
+        # Run scenario generation
         python concretize.py\
             -v 2\
             -n 10\
@@ -31,7 +34,7 @@ for jt in "${junctions[@]}"; do
             --show-exact-paths\
             -all\
             --output-directory ${OUTPUT_FOLDER}\
-            --save-statistics-file stats${suffix}.json\
+            --save-statistics-file ${stats_save_file}\
             --project SOSYM\
             complete\
             --junction $junction\
@@ -41,6 +44,14 @@ for jt in "${junctions[@]}"; do
             echo "Error: concretize.py failed for junction $junction, town $town, actors $num_actor"
             exit 1
         fi
+
+        # Collect the timing information and save it to a file
+        python ${EVAL_HOME}/save_times.py\
+            ${OUTPUT_FOLDER}/${stats_save_file}\
+            ${OUTPUT_FOLDER}/times.json\
+            ${junction}\
+            ${num_actor}
+        echo ""
     done
 
     # Combine all output files for this junction-town pair

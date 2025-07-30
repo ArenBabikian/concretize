@@ -18,6 +18,10 @@ class Complete_Result(Result):
         self.stats_map['con_no_init_overlap'] = self.raw_res.num_no_init_overlap_concrete_solutions
         self.stats_map['con_valid'] = self.raw_res.num_valid_concrete_solutions
 
+        self.runtime = self.raw_res.time_fun_to_log + sum(self.raw_res.times_log_to_con)
+        self.stats_map['timing'] = {'functional-to-logical': self.raw_res.time_fun_to_log, 
+                                    'logical-to-concrete': self.raw_res.times_log_to_con}
+
         all_outcome_data = {}
         for i, outcome in enumerate(self.all_solutions):
             # outcome is a Specification_Instance
