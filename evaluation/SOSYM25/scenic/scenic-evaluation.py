@@ -3,10 +3,12 @@ import os
 import scenic
 import time
 import csv
+import pandas as pd
 
 class ScenicEval():
     
-    def __init__(self, scenario_file, map, intersection, actors, required_unique_scenes, timeout):
+    def __init__(self, run_id, scenario_file, map, intersection, actors, required_unique_scenes, timeout):
+        self.run_id = run_id
         self.scenario_file = scenario_file
         self.map = map
         self.intersection = intersection
@@ -47,14 +49,20 @@ class ScenicEval():
         self.scenario = scenic.scenarioFromFile(self.scenario_file, 
                                            {'carla_map':self.map, 'intersection_uid':'intersection' + str(self.intersection)})
         self.start_time = time.time()
+        iterations = 0
+        attempts = 0
         while self.should_run():
             scene, num_iterations = self.scenario.generate()
+            iterations += num_iterations
+            attempts += 1
             generation_time = time.time() - self.start_time
             prev_size = len(self.unique_scenes)
             self.unique_scenes.add(ScenicEval.normalize_scene(scene))
             new_size = len(self.unique_scenes)
             if new_size > prev_size:
-                self.generated_scenes.append((scene, generation_time, num_iterations))
+                self.generated_scenes.append((scene, generation_time, attempts, iterations))
+                iterations = 0
+                attempts = 0
 
         if self.timeout_reached():
             self.total_runtime = self.timeout
@@ -64,13 +72,15 @@ class ScenicEval():
         return self.generated_scenes, self.unique_scenes
 
     def save_generation_time_to_file(self, path):
+        file_exists = os.path.isfile(path)
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, 'w', newline='') as f:
+        with open(path, 'a', newline='') as f:
             writer = csv.writer(f, delimiter=',')
-            header = ['number', 'time(s)', 'iterations']
-            writer.writerow(header)
-            for i, (_, time, iterations) in enumerate(self.generated_scenes):
-                writer.writerow([i, time, iterations])
+            if not file_exists:
+                header = ['map', 'junction', 'run_id', 'actors', 'scene_number', 'time', 'attempts', 'iterations']
+                writer.writerow(header)
+            for i, (_, time, attempts, iterations) in enumerate(self.generated_scenes):
+                writer.writerow([self.map, self.intersection, self.run_id, self.actors, i + 1, time, attempts, iterations])
     
     def save_logical_scenarios_to_file(self, path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -123,18 +133,37 @@ class ScenicEval():
         with open(output_file_path, 'w') as outfile:
             json.dump(output_data, outfile, indent=2)
 
+
+def calcualte_statistics(input_file, output_file):
+    df = pd.read_csv(input_file)
+    df['max_scene'] = df.groupby(['map', 'junction', 'run_id', 'actors'])['scene_number'].transform('max')
+    df_total_times = df[df['scene_number'] == df['max_scene']]
+    result = df_total_times.groupby(['map', 'junction', 'actors'])['time'].median().reset_index().rename(columns={'time': 'median_time'})
+    result.to_csv(output_file)
+    result.to_latex(output_file + ".txt")
+
+
 base_dir = 'evaluation/SOSYM25/scenic'
 scenario_file_path = base_dir + '/scenic-maneuvers{actors}.scenic'
-timeout = 20 # seconds
+stats_file_path = f'{base_dir}/output/generation_times.csv'
+aggregate_stats_file_path = f'{base_dir}/output/median_generation_times.csv'
+if os.path.isfile(stats_file_path):
+    os.remove(stats_file_path)
+timeout = 60 # seconds
+iterations = 10
 
 all_times_path = f'{base_dir}/output/times-f2l.json'
 
 configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
            ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]
 for map, intersection, actors, required in configs:
-    eval = ScenicEval(scenario_file=scenario_file_path.format(actors=actors), map=map, intersection=intersection, actors=actors, required_unique_scenes=required, timeout=timeout)
-    scenes, unique_scenes = eval.generate()
-    eval.save_logical_scenarios_to_file(f"{base_dir}/logical-scenarios/{map}_{intersection}_{actors}ac.csv")
-    eval.save_generation_time_to_file(f"{base_dir}/output/generation_time_{map}_{intersection}_{actors}ac.csv")
-    eval.save_times(all_times_path)
-    print("With ", actors, "actors, out of ", required, " possible unique scenes we found ", len(unique_scenes), " with a total of ", len(scenes), " scenes generated")
+    for i in range(iterations):
+        eval = ScenicEval(run_id = i + 1, scenario_file=scenario_file_path.format(actors=actors), map=map, intersection=intersection, actors=actors, required_unique_scenes=required, timeout=timeout)
+        scenes, unique_scenes = eval.generate()
+        if i == 0:
+            eval.save_logical_scenarios_to_file(f"{base_dir}/logical-scenarios/{map}_{intersection}_{actors}ac.csv")
+        eval.save_generation_time_to_file(stats_file_path)
+        eval.save_times(all_times_path)
+        print("With ", actors, "actors, out of ", required, " possible unique scenes we found ", len(unique_scenes), " with a total of ", len(scenes), " scenes generated")
+
+calcualte_statistics(stats_file_path, aggregate_stats_file_path)
