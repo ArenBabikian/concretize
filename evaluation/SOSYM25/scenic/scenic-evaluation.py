@@ -134,19 +134,10 @@ class ScenicEval():
             json.dump(output_data, outfile, indent=2)
 
 
-def calcualte_statistics(input_file, output_file):
-    df = pd.read_csv(input_file)
-    df['max_scene'] = df.groupby(['map', 'junction', 'run_id', 'actors'])['scene_number'].transform('max')
-    df_total_times = df[df['scene_number'] == df['max_scene']]
-    result = df_total_times.groupby(['map', 'junction', 'actors'])['time'].median().reset_index().rename(columns={'time': 'median_time'})
-    result.to_csv(output_file)
-    result.to_latex(output_file + ".txt")
-
 
 base_dir = 'evaluation/SOSYM25/scenic'
 scenario_file_path = base_dir + '/scenic-maneuvers{actors}.scenic'
 stats_file_path = f'{base_dir}/output/generation_times.csv'
-aggregate_stats_file_path = f'{base_dir}/output/median_generation_times.csv'
 if os.path.isfile(stats_file_path):
     os.remove(stats_file_path)
 timeout = 60 # seconds
@@ -165,5 +156,3 @@ for map, intersection, actors, required in configs:
         eval.save_generation_time_to_file(stats_file_path)
         eval.save_times(all_times_path)
         print("With ", actors, "actors, out of ", required, " possible unique scenes we found ", len(unique_scenes), " with a total of ", len(scenes), " scenes generated")
-
-calcualte_statistics(stats_file_path, aggregate_stats_file_path)
