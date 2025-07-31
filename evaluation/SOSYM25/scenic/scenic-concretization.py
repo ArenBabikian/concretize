@@ -5,14 +5,19 @@ import scenic
 import csv
 import time
 
+from utils import does_actor_pair_collide
+
 base_dir = 'evaluation/SOSYM25/scenic'
 scenario_file_path = base_dir + '/scenic-concrete{actors}.scenic'
+all_times_path = f'{base_dir}/output/times-l2c-new.json'
 
 configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3), ('Town04', 916, 4), 
            ('Town05', 2240, 1), ('Town05', 2240, 2), ('Town05', 2240, 3), ('Town05', 2240, 4)]
+# # configs = [('Town04', 916, 4)]
+# configs = [('Town05', 2240, 1), ('Town05', 2240, 2), ('Town05', 2240, 3), ('Town05', 2240, 4)]
 
-required_total_scenes = 2
-timeout = 5 # seconds
+required_total_scenes = 1
+timeout = 10 # seconds
 
 def timeout_reached():
     return (time.time() - start_time) >= timeout
@@ -20,18 +25,17 @@ def timeout_reached():
 def should_run():
     return len(generated_scenes) < required_total_scenes and (time.time() - start_time) < timeout
 
-def collision_occurs(scene):
+def all_collisions_occur(scene):
+    ego_actor = scene.egoObject
+    for other_actor in scene.objects:
+        if not other_actor.isVehicle or other_actor == ego_actor:
+            continue
+
+        pair_collision_occurs = does_actor_pair_collide(ego_actor, other_actor)
+
+        if not pair_collision_occurs:
+            return False
     return True
-        
-# TODO: calculate distance of vehicles to the intersection point along the centerline
-def find_distances_to_collision_point(scene):
-    collision_points = {}
-    ego_position = scene.egoObject.position
-    ego_centerline = scene.egoObject.behavior._kwargs['trajectory'][1].centerline
-    for obj in scene.objects:
-        if obj.isVehicle and obj != scene.egoObject:
-            collision_points[obj] = ego_centerline.intersect(obj.behavior._kwargs['trajectory'][1].centerline)
-    print(len(collision_points.values()))
 
 def initialize_times_json(output_file_path, j_id, n_ac):
 
@@ -91,8 +95,6 @@ def save_times(scenario_runtime, success, output_file_path, j_id, n_ac):
         json.dump(output_data, outfile, indent=2)
 
 
-all_times_path = f'{base_dir}/output/times-l2c.json'
-
 for map, intersection, actors in configs:
     initialize_times_json(all_times_path, intersection, actors)
     scenario_file = scenario_file_path.format(actors = actors)
@@ -101,13 +103,13 @@ for map, intersection, actors in configs:
         for params in reader:
             params['carla_map'] = map
             generated_scenes = []
+            print(map, intersection, actors, params)
             scenario = scenic.scenarioFromFile(scenario_file, params)
             start_time = time.time()
             while should_run():
                 scene, n = scenario.generate()
-                if collision_occurs(scene):
+                if all_collisions_occur(scene):
                     generated_scenes.append(scene)
-                print(map, intersection, actors, params)
 
             if timeout_reached():
                 scenario_runtime = timeout

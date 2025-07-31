@@ -137,4 +137,4 @@ for map, intersection, actors, required in configs:
     eval.save_logical_scenarios_to_file(f"{base_dir}/logical-scenarios/{map}_{intersection}_{actors}ac.csv")
     eval.save_generation_time_to_file(f"{base_dir}/output/generation_time_{map}_{intersection}_{actors}ac.csv")
     eval.save_times(all_times_path)
-    print("With ", actors, "actors, out of ", required, " possible unique scenes we found ", len(unique_scenes), " with a total of ", len(scenes), " scenes generated")
+    print(f"({eval.total_runtime:.3f}s) With {actors} actors, out of {required} possible unique scenes we found {len(unique_scenes)} with a total of {len(scenes)} scenes generated")
