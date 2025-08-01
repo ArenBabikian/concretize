@@ -27,7 +27,7 @@ saves results in `evaluation\SOSYM25\statistics\output\complete`
 ```
 python evaluation\SOSYM25\scenic\scenic-evaluation.py
 ```
-generates all the times at `evaluation\SOSYM25\all_output\scenic\f2l\generation_times.csv`
+generates all the times (including intermediate times) at `evaluation\SOSYM25\all_output\scenic\f2l\generation_times.csv`
 <br>
 also generates all logcal scenarios at `evaluation\SOSYM25\all_output\scenic\logical-scenarios`
 
@@ -41,11 +41,13 @@ saves results in `evaluation\SOSYM25\statistics\output\scenic`
 ```
 python evaluation\SOSYM25\scenic\scenic-concretization.py
 ```
-(TENTATIVE) saves all the times
-(TODO) add support for multiple iterations
+generates all the times at `evaluation\SOSYM25\all_output\scenic\l2c\concretization_times.csv`
 
-4. get stats for L2C (TODO)
-currently done via json file, improve this, to also allow for 
+4. get stats for L2C
+```
+python evaluation\SOSYM25\statistics\statistics_scenic.py
+```
+saves results in `evaluation\SOSYM25\statistics\output\scenic`
 
 
 ### For STAT SIG
