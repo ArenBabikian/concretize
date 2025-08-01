@@ -1,6 +1,4 @@
-import json
 import os
-import statistics
 import scenic
 import csv
 import time
@@ -9,7 +7,7 @@ from utils import does_actor_pair_collide
 base_dir = 'evaluation/SOSYM25'
 scenario_file_path = base_dir + '/scenic/scenic-concrete{actors}.scenic'
 logical_scenario_dir_path = f'{base_dir}/all_output/scenic/logical-scenarios/'
-all_times_path = f'{base_dir}/all_output/scenic/l2c/times-l2c-new.json'
+all_times_path = f'{base_dir}/all_output/scenic/l2c/concretizations_times.csv'
 os.makedirs(os.path.dirname(all_times_path), exist_ok=True)
 
 configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3), ('Town04', 916, 4), 
@@ -19,7 +17,8 @@ configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3), ('Town04'
 # configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3)]
 
 required_total_scenes = 1
-timeout = 10 # seconds # TODO
+iterations = 2 # TODO
+timeout = 2 # seconds # TODO
 
 def timeout_reached():
     return (time.time() - start_time) >= timeout
@@ -39,86 +38,44 @@ def all_collisions_occur(scene):
             return False
     return True
 
-def initialize_times_json(output_file_path, j_id, n_ac):
-
-    # Load or initialize output JSON
-    if os.path.exists(output_file_path):
-        with open(output_file_path, 'r') as outfile:
-            try:
-                output_data = json.load(outfile)
-            except json.JSONDecodeError:
-                output_data = {}
-    else:
-        output_data = {}
-
-    j_id = str(j_id)
-    n_ac = str(n_ac)
-
-    # Ensure nested structure
-    if j_id not in output_data:
-        output_data[j_id] = {}
-    if n_ac not in output_data[j_id]:
-        output_data[j_id][n_ac] = {}
-    output_data[j_id][n_ac]['l2c-successes'] = []
-    output_data[j_id][n_ac]['l2c-times-of-successes'] = []
-    output_data[j_id][n_ac]['agg-l2c-success-rate'] = -1.0
-    output_data[j_id][n_ac]['agg-l2c-time-median-of-successes'] = -1.0
-
-    with open(output_file_path, 'w') as outfile:
-        json.dump(output_data, outfile, indent=2)
-
-def save_times(scenario_runtime, success, output_file_path, j_id, n_ac):
-    # Load or initialize output JSON
-    with open(output_file_path, 'r') as outfile:
-        try:
-            output_data = json.load(outfile)
-        except json.JSONDecodeError:
-            output_data = {}
-
-    j_id = str(j_id)
-    n_ac = str(n_ac)
-
-    # Update the output data with success rate values
-    output_data[j_id][n_ac]['l2c-successes'].append(success)
-
-    num_successes = sum(output_data[j_id][n_ac]['l2c-successes'])
-    num_attempts = len(output_data[j_id][n_ac]['l2c-successes'])
-    output_data[j_id][n_ac]['agg-l2c-success-rate'] = num_successes / num_attempts if num_attempts > 0 else -1.0
-
-    # Update the output data with the timing values
-    if success:
-        output_data[j_id][n_ac]['l2c-times-of-successes'].append(scenario_runtime)
-
-    all_successes = output_data[j_id][n_ac]['l2c-times-of-successes']
-    output_data[j_id][n_ac]['agg-l2c-time-median-of-successes'] = statistics.median(all_successes) if all_successes else -1.0
-
-    # Write back to output file
-    with open(output_file_path, 'w') as outfile:
-        json.dump(output_data, outfile, indent=2)
+def intitialize_csv(output_file_path):
+    if os.path.isfile(output_file_path):
+        os.remove(output_file_path)
+    with open(output_file_path, 'a', newline='') as f:
+        writer = csv.writer(f, delimiter=',')
+        header = ['map', 'junction', 'run_id', 'actors', 'logical_scene_number', 'scenario_runtime', 'success']
+        writer.writerow(header)
 
 
+def save_times(map, intersection, run_id, actors, logical_scenario_id, scenario_runtime, success, output_file_path):
+    with open(output_file_path, 'a', newline='') as f:
+        writer = csv.writer(f, delimiter=',')
+        writer.writerow([map, intersection, run_id, actors, logical_scenario_id, scenario_runtime, success])
+
+
+intitialize_csv(all_times_path)
 for map, intersection, actors in configs:
-    initialize_times_json(all_times_path, intersection, actors)
     scenario_file = scenario_file_path.format(actors = actors)
     with open(f'{logical_scenario_dir_path}/{map}_{intersection}_{actors}ac.csv') as f:
         reader = csv.DictReader(f)
-        for params in reader:
+        for logical_scenario_id, params in enumerate(reader):
             params['carla_map'] = map
-            generated_scenes = []
             print(map, intersection, actors, params)
             scenario = scenic.scenarioFromFile(scenario_file, params)
-            start_time = time.time()
-            while should_run():
-                scene, n = scenario.generate()
-                if all_collisions_occur(scene):
-                    generated_scenes.append(scene)
-
-            if timeout_reached():
-                scenario_runtime = timeout
-                succeed = 0.0
-            else:
+            for run_id in range(iterations):
+                generated_scenes = []
+                start_time = time.time()
+                while should_run():
+                    scene, n = scenario.generate()
+                    if all_collisions_occur(scene):
+                        generated_scenes.append(scene)
                 scenario_runtime = time.time() - start_time
-                succeed = 1.0
 
-            save_times(scenario_runtime, succeed, all_times_path, intersection, actors)
+                if scenario_runtime > timeout:
+                    scenario_runtime = -1.0
+                    succeed = False
+                else:
+                    succeed = True
+
+                save_times(map, intersection, run_id, actors, logical_scenario_id, scenario_runtime, succeed, all_times_path)
             
