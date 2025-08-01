@@ -135,15 +135,18 @@ class ScenicEval():
 
 
 
-base_dir = 'evaluation/SOSYM25/scenic'
-scenario_file_path = base_dir + '/scenic-maneuvers{actors}.scenic'
-stats_file_path = f'{base_dir}/output/generation_times.csv'
+base_dir = 'evaluation/SOSYM25'
+scenario_file_path = base_dir + '/scenic/scenic-maneuvers{actors}.scenic'
+
+stats_file_path = f'{base_dir}/all_output/scenic/f2l/generation_times.csv'
+logical_scenarios_path = f'{base_dir}/all_output/scenic/logical-scenarios'
+
 if os.path.isfile(stats_file_path):
     os.remove(stats_file_path)
-timeout = 60 # seconds
-iterations = 10
+timeout = 5 # seconds # TODO
+iterations = 2 # TODO
 
-all_times_path = f'{base_dir}/output/times-f2l.json'
+all_times_path = f'{base_dir}/all_output/scenic/f2l/times-f2l.json'
 
 configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
            ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]
@@ -152,8 +155,8 @@ for map, intersection, actors, required in configs:
         eval = ScenicEval(run_id = i + 1, scenario_file=scenario_file_path.format(actors=actors), map=map, intersection=intersection, actors=actors, required_unique_scenes=required, timeout=timeout)
         scenes, unique_scenes = eval.generate()
         if i == 0:
-            eval.save_logical_scenarios_to_file(f"{base_dir}/logical-scenarios/{map}_{intersection}_{actors}ac.csv")
+            eval.save_logical_scenarios_to_file(f"{logical_scenarios_path}/{map}_{intersection}_{actors}ac.csv")
         eval.save_generation_time_to_file(stats_file_path)
-        eval.save_times(all_times_path)
+        # eval.save_times(all_times_path)
         print(f"({eval.total_runtime:.3f}s) With {actors} actors, out of {required} possible unique scenes we found {len(unique_scenes)} with a total of {len(scenes)} scenes generated")
 

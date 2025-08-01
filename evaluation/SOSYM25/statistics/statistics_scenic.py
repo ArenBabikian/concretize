@@ -1,13 +1,15 @@
+import os
 import pandas as pd
 
 # Input
 base_dir = 'evaluation/SOSYM25'
-stats_file_path = f'{base_dir}/scenic/output/generation_times.csv'
+stats_file_path = f'{base_dir}/all_output/scenic/f2l/generation_times.csv'
 
 # output paths
 output_folder_path = f'{base_dir}/statistics/output/scenic'
-aggregate_stats_file_path = f'{output_folder_path}/median_generation_times.csv'
-total_stats_file_path = f'{output_folder_path}/total_generation_times.csv'
+os.makedirs(output_folder_path, exist_ok=True)
+aggregate_stats_file_path = f'{output_folder_path}/f2l_median_generation_times.csv'
+total_stats_file_path = f'{output_folder_path}/f2l_total_generation_times.csv'
 
 df = pd.read_csv(stats_file_path)
 

@@ -6,7 +6,7 @@ import csv
 
 # Read CSVs
 df_complete = pd.read_csv('evaluation/SOSYM25/statistics/output/complete/f2l_times.csv')    
-df_scenic = pd.read_csv('evaluation/SOSYM25/statistics/output/scenic/total_generation_times.csv')
+df_scenic = pd.read_csv('evaluation/SOSYM25/statistics/output/scenic/f2l_total_generation_times.csv')
 
 # Group by 'junction' and 'actors'
 grouped_complete = df_complete.groupby(['junction', 'actors'])['time'].apply(list)
