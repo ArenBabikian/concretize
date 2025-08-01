@@ -7,7 +7,7 @@ from utils import does_actor_pair_collide
 base_dir = 'evaluation/SOSYM25'
 scenario_file_path = base_dir + '/scenic/scenic-concrete{actors}.scenic'
 logical_scenario_dir_path = f'{base_dir}/all_output/scenic/logical-scenarios/'
-all_times_path = f'{base_dir}/all_output/scenic/l2c/concretizations_times.csv'
+all_times_path = f'{base_dir}/all_output/scenic/l2c/concretization_times.csv'
 os.makedirs(os.path.dirname(all_times_path), exist_ok=True)
 
 configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3), ('Town04', 916, 4), 
@@ -43,14 +43,14 @@ def intitialize_csv(output_file_path):
         os.remove(output_file_path)
     with open(output_file_path, 'a', newline='') as f:
         writer = csv.writer(f, delimiter=',')
-        header = ['map', 'junction', 'run_id', 'actors', 'logical_scene_number', 'scenario_runtime', 'success']
+        header = ['map', 'junction', 'run_id', 'actors', 'logical_scene_number', 'runtime', 'success']
         writer.writerow(header)
 
 
-def save_times(map, intersection, run_id, actors, logical_scenario_id, scenario_runtime, success, output_file_path):
+def save_times(map, intersection, run_id, actors, logical_scenario_id, runtime, success, output_file_path):
     with open(output_file_path, 'a', newline='') as f:
         writer = csv.writer(f, delimiter=',')
-        writer.writerow([map, intersection, run_id, actors, logical_scenario_id, scenario_runtime, success])
+        writer.writerow([map, intersection, run_id, actors, logical_scenario_id, runtime, success])
 
 
 intitialize_csv(all_times_path)
@@ -69,13 +69,13 @@ for map, intersection, actors in configs:
                     scene, n = scenario.generate()
                     if all_collisions_occur(scene):
                         generated_scenes.append(scene)
-                scenario_runtime = time.time() - start_time
+                runtime = time.time() - start_time
 
-                if scenario_runtime > timeout:
-                    scenario_runtime = -1.0
+                if runtime > timeout:
+                    runtime = -1.0
                     succeed = False
                 else:
                     succeed = True
 
-                save_times(map, intersection, run_id, actors, logical_scenario_id, scenario_runtime, succeed, all_times_path)
+                save_times(map, intersection, run_id, actors, logical_scenario_id, runtime, succeed, all_times_path)
             
