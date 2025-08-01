@@ -4,20 +4,22 @@ import statistics
 import scenic
 import csv
 import time
-
 from utils import does_actor_pair_collide
 
-base_dir = 'evaluation/SOSYM25/scenic'
-scenario_file_path = base_dir + '/scenic-concrete{actors}.scenic'
-all_times_path = f'{base_dir}/output/times-l2c-new.json'
+base_dir = 'evaluation/SOSYM25'
+scenario_file_path = base_dir + '/scenic/scenic-concrete{actors}.scenic'
+logical_scenario_dir_path = f'{base_dir}/all_output/scenic/logical-scenarios/'
+all_times_path = f'{base_dir}/all_output/scenic/l2c/times-l2c-new.json'
+os.makedirs(os.path.dirname(all_times_path), exist_ok=True)
 
 configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3), ('Town04', 916, 4), 
            ('Town05', 2240, 1), ('Town05', 2240, 2), ('Town05', 2240, 3), ('Town05', 2240, 4)]
-# # configs = [('Town04', 916, 4)]
-# configs = [('Town05', 2240, 1), ('Town05', 2240, 2), ('Town05', 2240, 3), ('Town05', 2240, 4)]
+# configs = [('Town04', 916, 4)]
+# configs = [('Town05', 2240, 4)]
+# configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3)]
 
 required_total_scenes = 1
-timeout = 10 # seconds
+timeout = 10 # seconds # TODO
 
 def timeout_reached():
     return (time.time() - start_time) >= timeout
@@ -98,7 +100,7 @@ def save_times(scenario_runtime, success, output_file_path, j_id, n_ac):
 for map, intersection, actors in configs:
     initialize_times_json(all_times_path, intersection, actors)
     scenario_file = scenario_file_path.format(actors = actors)
-    with open(f'{base_dir}/logical-scenarios/{map}_{intersection}_{actors}ac.csv') as f:
+    with open(f'{logical_scenario_dir_path}/{map}_{intersection}_{actors}ac.csv') as f:
         reader = csv.DictReader(f)
         for params in reader:
             params['carla_map'] = map

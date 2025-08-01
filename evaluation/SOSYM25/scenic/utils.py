@@ -15,10 +15,6 @@ ACTOR_WIDTH = 2
 ACTOR_LENGTH = 5
 ACTOR_CORNER_DIST = math.hypot(ACTOR_WIDTH / 2, ACTOR_LENGTH / 2)
 
-def add_point_to_fig(scene, point, color='red'):
-    marker = Object(position=point, width=0.3, height=0.3, shape='circle', color=color)
-    scene.objects = scene.objects + (marker,)
-
 def find_time_to_relevant(d_in, d_out):
     # print(f"{d_in/IN_SPEED} + {d_out/OUT_SPEED} = {d_in/IN_SPEED + d_out/OUT_SPEED}")
     return d_in / IN_SPEED + d_out / OUT_SPEED
@@ -94,9 +90,7 @@ def does_actor_pair_collide(ego_actor, other_actor):
 
         oth_dist_in = d_point_of_interest - d_start_to_cur  # distance from start of connectingLane to the current position of the other actor
     else:
-        print("Ignoring scenario")
-        return False
-        # raise ValueError("Other actor's position is not in any relevant region")
+        raise ValueError("Other actor's position is not in any relevant region")
     
     t_other = find_time_to_relevant(oth_dist_in, oth_dist_pre)
     
