@@ -42,4 +42,4 @@ crossing_car_trajectory3 = [actor3_startLane, actor3_connectingLane, actor3_endL
 
 crossing_starting_lane3 = Uniform(actor3_startLane, actor3_connectingLane)
 crossing_car3 = Car on crossing_starting_lane3.centerline,
-				with behavior FollowTrajectoryBehavior(trajectory = crossing_car_trajectory2)
+				with behavior FollowTrajectoryBehavior(trajectory = crossing_car_trajectory3)
