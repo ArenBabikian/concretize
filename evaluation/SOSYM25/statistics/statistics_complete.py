@@ -71,7 +71,7 @@ def collect_f2l_times(input_folder_path, output_folder_path, j_id_list, n_ac_lis
 if __name__ == "__main__":
     # Example usage:
     # python statistics_complete.py /path/to/folder
-    in_folder = 'evaluation/SOSYM25/output-new'
+    in_folder = 'evaluation/SOSYM25/all_output/complete'
     out_folder = 'evaluation/SOSYM25/statistics/output/complete'
     os.makedirs(out_folder, exist_ok=True)
     j_id = ['916', '2240']

@@ -1,12 +1,12 @@
 # town 04, j916 is the 4-way 1-lane junction
 
 EVAL_HOME="evaluation/SOSYM25/"
-OUTPUT_FOLDER="${EVAL_HOME}/output-new"
+OUTPUT_FOLDER="${EVAL_HOME}/all_output/complete"
 
 # Store junction-town pairs as "junction:town"
 junctions=("916:Town04" "2240:Town05")
 num_actors=(1 2 3 4)
-iterations=10
+iterations=10 # TODO
 
 if [ ! -d output ]; then
     mkdir output
