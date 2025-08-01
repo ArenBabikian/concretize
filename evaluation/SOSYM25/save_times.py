@@ -35,6 +35,7 @@ def save_times(input_file_path, output_file_path, junction_id, num_actors):
     # Update the output data with the timing values
     output_data[junction_id][str(num_actors)]['f2l-time'] = timing_value
     output_data[junction_id][str(num_actors)]['f2l-success-rate'] = 1.0
+    output_data[junction_id][str(num_actors)]['l2c-time-list'] = l2c_list
     output_data[junction_id][str(num_actors)]['l2c-time-median'] = l2c_median
     output_data[junction_id][str(num_actors)]['l2c-success-rate'] = 1.0
 
