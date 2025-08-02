@@ -54,10 +54,10 @@ def get_f2l_stat_sig():
     results_df.to_csv(output_file, index=True)
 
 
-def get_l2c_stat_sig():
+def get_l2c_stat_sig(threshold=-1):
     # Read CSVs
     df_complete = pd.read_csv('evaluation/SOSYM25/statistics/output/complete/l2c_times.csv')    
-    df_scenic = pd.read_csv('evaluation/SOSYM25/all_output/scenic/l2c/concretization_times.csv')
+    df_scenic = pd.read_csv(f'evaluation/SOSYM25/all_output/scenic/l2c/concretization_times_{threshold}.csv')
 
     #######
     # TIMES
@@ -150,3 +150,4 @@ def get_l2c_stat_sig():
 if __name__ == "__main__":
     get_f2l_stat_sig()
     get_l2c_stat_sig()
+    get_l2c_stat_sig(threshold=2.5)

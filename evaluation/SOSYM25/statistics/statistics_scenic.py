@@ -33,12 +33,12 @@ def generate_f2l_statistics():
     print(f"saved f2l stats to       {f2l_aggregate_stats_file_path}")
 
 
-def generate_l2c_statistics():
+def generate_l2c_statistics(threshold=-1):
     # Input
-    l2c_stats_file_path = f'{base_dir}/all_output/scenic/l2c/concretization_times.csv'
+    l2c_stats_file_path = f'{base_dir}/all_output/scenic/l2c/concretization_times_{threshold}.csv'
 
     # Output
-    l2c_aggregate_stats_file_path = f'{output_folder_path}/l2c_median_concretization_times.csv'
+    l2c_aggregate_stats_file_path = f'{output_folder_path}/l2c_median_concretization_times_{threshold}.csv'
 
     df_l2c = pd.read_csv(l2c_stats_file_path)
 
@@ -54,3 +54,4 @@ def generate_l2c_statistics():
 if __name__ == "__main__":
     generate_f2l_statistics()
     generate_l2c_statistics()
+    generate_l2c_statistics(threshold=2.5)
