@@ -5,12 +5,11 @@ import time
 
 from tqdm import tqdm
 from utils import does_actor_pair_collide
+import argparse
 
 base_dir = 'evaluation/SOSYM25'
 scenario_file_path = base_dir + '/scenic/scenic-concrete{actors}.scenic'
 logical_scenario_dir_path = f'{base_dir}/all_output/scenic/logical-scenarios/'
-all_times_path = f'{base_dir}/all_output/scenic/l2c/concretization_times.csv'
-os.makedirs(os.path.dirname(all_times_path), exist_ok=True)
 
 configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
            ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]
@@ -28,13 +27,13 @@ def timeout_reached():
 def should_run():
     return len(generated_scenes) < required_total_scenes and (time.time() - start_time) < timeout
 
-def all_collisions_occur(scene):
+def all_collisions_occur(scene, threshold):
     ego_actor = scene.egoObject
     for other_actor in scene.objects:
         if not other_actor.isVehicle or other_actor == ego_actor:
             continue
 
-        pair_collision_occurs = does_actor_pair_collide(ego_actor, other_actor)
+        pair_collision_occurs = does_actor_pair_collide(ego_actor, other_actor, threshold)
 
         if not pair_collision_occurs:
             return False
@@ -55,6 +54,13 @@ def save_times(map, intersection, run_id, actors, logical_scenario_id, runtime, 
         writer.writerow([map, intersection, run_id, actors, logical_scenario_id, runtime, success])
 
 
+# MAIN EXECUTION
+parser = argparse.ArgumentParser(description='Run Scenic concretization with collision threshold.')
+parser.add_argument('--threshold', type=float, default=-1, help='Collision threshold value (float, default: -1)')
+args = parser.parse_args()
+
+all_times_path = f'{base_dir}/all_output/scenic/l2c/concretization_times_{args.threshold}.csv'
+os.makedirs(os.path.dirname(all_times_path), exist_ok=True)
 intitialize_csv(all_times_path)
 for map, intersection, actors, n_total_scenarios in configs:
     print(f'Running for {map} {intersection} with {actors} actors. {n_total_scenarios} total scenarios required')
@@ -70,7 +76,7 @@ for map, intersection, actors, n_total_scenarios in configs:
                 start_time = time.time()
                 while should_run():
                     scene, n = scenario.generate()
-                    if all_collisions_occur(scene):
+                    if all_collisions_occur(scene, threshold=args.threshold):
                         generated_scenes.append(scene)
                 runtime = time.time() - start_time
 

@@ -29,7 +29,7 @@ def get_dist_from_start_to_cur(point, region):
     ls = cl.lineString  # lineString of connectingLane
     return ls.project(point)
 
-def does_actor_pair_collide(ego_actor, other_actor):
+def does_actor_pair_collide(ego_actor, other_actor, threshold=-1):
     #######
     # SETUP
     #######
@@ -98,7 +98,7 @@ def does_actor_pair_collide(ego_actor, other_actor):
     # In the ideal case, t_ego and t_other should be equal (this would make the scenrio equivalent to what Complete would output)
     # Nevertheless, we allow for a margin of error d, s.t. a scenario is considered to be colliding if at the moment where ego reaches its intended point, at least one part of the other actor is on its inteded point
 
-    d_threshold = ACTOR_CORNER_DIST
+    d_threshold = threshold if threshold >= 0 else ACTOR_CORNER_DIST
     d_other_overshoot = abs(t_other - t_ego) * IN_SPEED  # how much the other actor overshoots the ego actor's time
     collision_occurs = d_other_overshoot < d_threshold
 
