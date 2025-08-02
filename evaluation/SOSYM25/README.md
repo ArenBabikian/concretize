@@ -1,6 +1,6 @@
 ## Scenario Generation for RQ1, RQ2, RQ3
 ```
-bash evaluation/SOSYM25/run-eval.sh
+bash evaluation/SOSYM25/complete/run-eval.sh
 ```
 
 ## RQ0
@@ -9,7 +9,7 @@ bash evaluation/SOSYM25/run-eval.sh
 
 1. generate the scenarios
 ```
-bash evaluation/SOSYM25/run-gen-for-baseline.sh
+bash evaluation/SOSYM25/complete/run-gen-for-baseline.sh
 ```
 saves everything at `evaluation/SOSYM25/all_output/complete`
 

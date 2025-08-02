@@ -6,7 +6,7 @@ OUTPUT_FOLDER="${EVAL_HOME}/all_output/complete"
 # Store junction-town pairs as "junction:town"
 junctions=("916:Town04" "2240:Town05")
 num_actors=(1 2 3 4)
-iterations=10 # TODO
+iterations=10
 
 if [ ! -d output ]; then
     mkdir output
@@ -39,7 +39,7 @@ for jt in "${junctions[@]}"; do
                 --project SOSYM\
                 complete\
                 --junction $junction\
-                ${EVAL_HOME}/evaluation${num_actor}.concretize
+                ${EVAL_HOME}/complete/evaluation${num_actor}.concretize
             # Check if the command was successful
             if [ $? -ne 0 ]; then
                 echo "Error: concretize.py failed for junction $junction, town $town, actors $num_actor"
@@ -47,7 +47,7 @@ for jt in "${junctions[@]}"; do
             fi
 
             # Collect the timing information and save it to a file
-            python ${EVAL_HOME}/save_times.py\
+            python ${EVAL_HOME}/complete/save_times.py\
                 ${output_folder}/${stats_save_file}\
                 ${output_folder}/times.json\
                 ${junction}\

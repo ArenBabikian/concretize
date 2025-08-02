@@ -2,6 +2,8 @@ import os
 import scenic
 import csv
 import time
+
+from tqdm import tqdm
 from utils import does_actor_pair_collide
 
 base_dir = 'evaluation/SOSYM25'
@@ -10,15 +12,15 @@ logical_scenario_dir_path = f'{base_dir}/all_output/scenic/logical-scenarios/'
 all_times_path = f'{base_dir}/all_output/scenic/l2c/concretization_times.csv'
 os.makedirs(os.path.dirname(all_times_path), exist_ok=True)
 
-configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3), ('Town04', 916, 4), 
-           ('Town05', 2240, 1), ('Town05', 2240, 2), ('Town05', 2240, 3), ('Town05', 2240, 4)]
+configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
+           ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]
 # configs = [('Town04', 916, 4)]
 # configs = [('Town05', 2240, 4)]
 # configs = [('Town04', 916, 1), ('Town04', 916, 2), ('Town04', 916, 3)]
 
 required_total_scenes = 1
-iterations = 2 # TODO
-timeout = 2 # seconds # TODO
+iterations = 10
+timeout = 10 # seconds # TODO
 
 def timeout_reached():
     return (time.time() - start_time) >= timeout
@@ -54,13 +56,14 @@ def save_times(map, intersection, run_id, actors, logical_scenario_id, runtime, 
 
 
 intitialize_csv(all_times_path)
-for map, intersection, actors in configs:
+for map, intersection, actors, n_total_scenarios in configs:
+    print(f'Running for {map} {intersection} with {actors} actors. {n_total_scenarios} total scenarios required')
     scenario_file = scenario_file_path.format(actors = actors)
     with open(f'{logical_scenario_dir_path}/{map}_{intersection}_{actors}ac.csv') as f:
         reader = csv.DictReader(f)
-        for logical_scenario_id, params in enumerate(reader):
+        for logical_scenario_id, params in tqdm(enumerate(reader), total=n_total_scenarios):
             params['carla_map'] = map
-            print(map, intersection, actors, params)
+            # print(map, intersection, actors, params)
             scenario = scenic.scenarioFromFile(scenario_file, params)
             for run_id in range(iterations):
                 generated_scenes = []
