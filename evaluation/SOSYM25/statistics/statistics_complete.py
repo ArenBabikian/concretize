@@ -47,11 +47,11 @@ def collect_f2l_times(input_folder_path, output_folder_path, j_id_list, n_ac_lis
 
     # Save F2L times to CSV
     df_f2l = pd.DataFrame(records_f2l)
-    output_csv = os.path.join(output_folder_path, 'f2l_times.csv')
+    output_csv = os.path.join(output_folder_path, 'a2l_times.csv')
     df_f2l.to_csv(output_csv, index=False)
 
     median_df_f2l = df_f2l.groupby(['town', 'junction', 'actors'])['time'].median().reset_index()
-    median_csv = os.path.join(output_folder_path, 'f2l_median_time')
+    median_csv = os.path.join(output_folder_path, 'a2l_median_time')
     median_df_f2l.to_csv(median_csv + ".csv", index=False)
     median_df_f2l.to_latex(median_csv + ".txt")
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # Example usage:
     # python statistics_complete.py /path/to/folder
     in_folder = 'evaluation/SOSYM25/all_output/complete'
-    out_folder = 'evaluation/SOSYM25/statistics/output/complete'
+    out_folder = 'evaluation/SOSYM25/all_output/statistics/complete'
     os.makedirs(out_folder, exist_ok=True)
     j_id = ['916', '2240']
     n_ac = ['1', '2', '3', '4']

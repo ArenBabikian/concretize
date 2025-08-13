@@ -138,7 +138,7 @@ class ScenicEval():
 base_dir = 'evaluation/SOSYM25'
 scenario_file_path = base_dir + '/scenic/scenic-maneuvers{actors}.scenic'
 
-stats_file_path = f'{base_dir}/all_output/scenic/f2l/generation_times.csv'
+stats_file_path = f'{base_dir}/all_output/scenic/a2l/generation_times.csv'
 logical_scenarios_path = f'{base_dir}/all_output/scenic/logical-scenarios'
 
 if os.path.isfile(stats_file_path):
@@ -146,7 +146,7 @@ if os.path.isfile(stats_file_path):
 timeout = 300 # seconds
 iterations = 10
 
-all_times_path = f'{base_dir}/all_output/scenic/f2l/times-f2l.json'
+all_times_path = f'{base_dir}/all_output/scenic/a2l/times-a2l.json'
 
 configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 124), ('Town04', 916, 4, 160), 
            ('Town05', 2240, 1, 8), ('Town05', 2240, 2, 14), ('Town05', 2240, 3, 13), ('Town05', 2240, 4, 6)]

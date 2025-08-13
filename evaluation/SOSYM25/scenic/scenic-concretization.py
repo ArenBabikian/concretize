@@ -19,7 +19,7 @@ configs = [('Town04', 916, 1, 12), ('Town04', 916, 2, 56), ('Town04', 916, 3, 12
 
 required_total_scenes = 1
 iterations = 10
-timeout = 10 # seconds # TODO
+timeout = 10 # seconds
 
 def timeout_reached():
     return (time.time() - start_time) >= timeout

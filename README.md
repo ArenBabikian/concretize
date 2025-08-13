@@ -2,6 +2,10 @@
 
 Concretize turns scenarios for testing autonomous vehicles specified using a domain-specific modelling language into concrete scenes. It offers diagram generation using [Scenic](https://github.com/BerkeleyLearnVerify/Scenic) and integration with [CARLA](https://carla.org/) for simulation.
 
+## SOSYM 2025
+To access the experiments of our SOSYM 2025 submisison entitled _"Automated and Complete Generation of Traffic Scenarios at Road Junctions Using a Multi-level Danger Definition"_, please refer to the dedicated [README.md](evaluation/SOSYM25/README.md) file.
+
+
 ## How to install
 
 1. Install [Docker](https://docs.docker.com/get-docker/)

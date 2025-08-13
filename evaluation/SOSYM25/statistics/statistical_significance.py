@@ -14,10 +14,10 @@ def get_mwu(x, y, alternative='greater'):
     return p, eff
 
 
-def get_f2l_stat_sig():
+def get_a2l_stat_sig():
     # Read CSVs
-    df_complete = pd.read_csv('evaluation/SOSYM25/statistics/output/complete/f2l_times.csv')    
-    df_scenic = pd.read_csv('evaluation/SOSYM25/statistics/output/scenic/f2l_total_generation_times.csv')
+    df_complete = pd.read_csv('evaluation/SOSYM25/all_output/statistics/complete/a2l_times.csv')    
+    df_scenic = pd.read_csv('evaluation/SOSYM25/all_output/statistics/scenic/a2l_total_generation_times.csv')
 
     # Group by 'junction' and 'actors'
     grouped_complete = df_complete.groupby(['junction', 'actors'])['time'].apply(list)
@@ -49,14 +49,14 @@ def get_f2l_stat_sig():
     results_df = pd.DataFrame(list(results.values())).sort_values(['junction', 'actors']).reset_index(drop=True)
 
     # Write results to CSV
-    output_file = 'evaluation/SOSYM25/statistics/output/stat_sig/f2l_stat_sig.csv'
+    output_file = 'evaluation/SOSYM25/all_output/statistics/stat_sig/a2l_stat_sig.csv'
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     results_df.to_csv(output_file, index=True)
 
 
 def get_l2c_stat_sig(threshold=-1):
     # Read CSVs
-    df_complete = pd.read_csv('evaluation/SOSYM25/statistics/output/complete/l2c_times.csv')    
+    df_complete = pd.read_csv('evaluation/SOSYM25/all_output/statistics/complete/l2c_times.csv')    
     df_scenic = pd.read_csv(f'evaluation/SOSYM25/all_output/scenic/l2c/concretization_times_{threshold}.csv')
 
     #######
@@ -92,7 +92,7 @@ def get_l2c_stat_sig(threshold=-1):
     results_df = pd.DataFrame(list(times_results.values())).sort_values(['junction', 'actors']).reset_index(drop=True)
 
     # Write results to CSV
-    output_file = 'evaluation/SOSYM25/statistics/output/stat_sig/l2c_time_stat_sig.csv'
+    output_file = f'evaluation/SOSYM25/all_output/statistics/stat_sig/l2c_time_stat_sig_{threshold}.csv'
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     results_df.to_csv(output_file, index=True)
 
@@ -142,12 +142,11 @@ def get_l2c_stat_sig(threshold=-1):
     successes_df = pd.DataFrame(list(successes_results.values())).sort_values(['junction', 'actors']).reset_index(drop=True)
 
     # Write results to CSV
-    output_file = 'evaluation/SOSYM25/statistics/output/stat_sig/l2c_success_stat_sig.csv'
+    output_file = f'evaluation/SOSYM25/all_output/statistics/stat_sig/l2c_success_stat_sig_{threshold}.csv'
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     successes_df.to_csv(output_file, index=True)
 
 
 if __name__ == "__main__":
-    get_f2l_stat_sig()
+    get_a2l_stat_sig()
     get_l2c_stat_sig()
-    get_l2c_stat_sig(threshold=2.5)

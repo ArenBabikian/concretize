@@ -1,61 +1,28 @@
-## Scenario Generation for RQ1, RQ2, RQ3
+
+## Experiments
+
+### RQ1
+To run the experiments comparing our approach (named `Complete`) to `Scenic`, run the following command:
+```
+bash evalution/SOSYM25/run_all_measurements.sh
+```
+For further details, please refer to the `run_all_measurements.sh` file, which contains many helpful comments.
+
+Note that data processing for RQ1 is also performed in this stage. 
+
+### RQ2-4
+
+To generate the scenarios that are runnable in simulation, run the following command:
 ```
 bash evaluation/SOSYM25/complete/run-eval.sh
 ```
+This generates simulation-ready scenarios in the `evaluation/SOSYM25/output-scenarios/` folder.
 
-## RQ0
+To run the generated cenarios in simulation, please refer to the documentation of our [Transfuser fork](https://github.com/ArenBabikian/transfuser/tree/complete-gen) repository.
 
-### For COMPLETE
+## Data analysis
 
-1. generate the scenarios
-```
-bash evaluation/SOSYM25/complete/run-gen-for-baseline.sh
-```
-saves everything at `evaluation/SOSYM25/all_output/complete`
+Once the Scenarios are simulated, to process the data and generate figures, you should:
 
-2. generate the stats (mdeians)
-```
-python evaluation/SOSYM25/statistics/statistics_complete.py
-```
-saves results in `evaluation\SOSYM25\statistics\output\complete`
-
-
-
-### For SCENIC
-
-1. Run f2l
-```
-python evaluation\SOSYM25\scenic\scenic-evaluation.py
-```
-generates all the times (including intermediate times) at `evaluation\SOSYM25\all_output\scenic\f2l\generation_times.csv`
-<br>
-also generates all logcal scenarios at `evaluation\SOSYM25\all_output\scenic\logical-scenarios`
-
-2. get statistics for f2l
-```
-python evaluation\SOSYM25\statistics\statistics_scenic.py
-```
-saves results in `evaluation\SOSYM25\statistics\output\scenic`
-
-3. Run L2C
-```
-python evaluation\SOSYM25\scenic\scenic-concretization.py
-```
-generates all the times at `evaluation\SOSYM25\all_output\scenic\l2c\concretization_times.csv`
-
-4. get stats for L2C
-```
-python evaluation\SOSYM25\statistics\statistics_scenic.py
-```
-saves results in `evaluation\SOSYM25\statistics\output\scenic`
-
-
-### For STAT SIG
-
-1. for F2L
-```
-python evaluation\SOSYM25\statistics\statistical_significance.py
-```
-Saves resluts at `evaluation\SOSYM25\statistics\output\stat_sig`
-
-2. for L2C (TODO)
+1. Move the scenario generation data to `TODO`.
+2. Run the following command: `TODO`
