@@ -24,5 +24,20 @@ To run the generated cenarios in simulation, please refer to the documentation o
 
 Once the Scenarios are simulated, to process the data and generate figures, you should:
 
-1. Move the scenario generation data to `TODO`.
-2. Run the following command: `TODO`
+1. Move the scenario generation data to the `evaluation/SOSYM25/data-sim/` folder:
+    - `evaluation/SOSYM25/data-sim/0-generated-scenarios`
+    - `evaluation/SOSYM25/data-sim/1-simulation-results`
+<!-- 2. To process the raw data and output them in a more digestable format, run the following command: 
+    ```
+    python evaluation/SOSYM25/figures/runmetrics.py
+    ``` -->
+3. To extract the useful information from the processed data and save it in separate files, run the following command:
+    ```
+    python evaluation/SOSYM25/figures/gen_figures_from_cooked.py
+    ```
+    
+4. Generate the final figures using the processed data by running the following command:
+    ```
+    python evaluation/SOSYM25/figures/create_figures_SOSYM.py
+    ```
+    The figures will be saved in the `evaluation/SOSYM25/figures/figures` folder.
