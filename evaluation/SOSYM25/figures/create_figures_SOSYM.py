@@ -506,7 +506,7 @@ def main():
     output_path_meta = 'evaluation/SOSYM25/figures/figures'
     # os.makedirs(output_path, exist_ok=True)
 
-    map_junction_names = ['Town04_916', 'Town05_2240', 'both']
+    map_junction_names = ['rural', 'urban', 'both']
     for map_junction_name in map_junction_names:
         
         actor_df_list = []
@@ -529,8 +529,8 @@ def main():
             # coordinatess_list.append(dc_coord)
 
         if map_junction_name == 'both':
-            add_data('Town04_916')
-            add_data('Town05_2240')
+            add_data('rural')
+            add_data('urban')
         else:
             add_data(map_junction_name)
 

@@ -267,10 +267,10 @@ def to_dataframe(cooked_measurements_path, abs_scenario_dir, included_sizes):
 
 
 def main():
-    map_junction = 'Town04_916'
-    # map_junction = 'Town05_2240'
+    map_junction = 'rural'
+    # map_junction = 'urban'
     data_path = f"evaluation/SOSYM25/data-sim/{map_junction}"
-    cooked_measurements_path = f'{data_path}/cooked_measurements.json'
+    cooked_measurements_path = f'{data_path}/measurements.json'
     abs_scenario_dir = f'{data_path}/abs_scenarios'
     included_sizes = [2, 3, 4]
     out_path = f"evaluation/SOSYM25/data-sim/{map_junction}"
