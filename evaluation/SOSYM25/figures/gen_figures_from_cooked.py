@@ -54,7 +54,7 @@ def gen_figures(cooked_measurements_path, abs_scenario_dir, included_sizes):
             continue
 
         # ABSTRACT
-        with open(f'{abs_scenario_dir}/_{num_actors}actors-abs-scenarios.json') as j:
+        with open(f'{abs_scenario_dir}/{num_actors}-actor-scenarios.json') as j:
             abs_scenarios_json = json.load(j)
 
         all_scenarios_at_size = all_scenarios[num_actors]
@@ -162,7 +162,7 @@ def to_dataframe(cooked_measurements_path, abs_scenario_dir, included_sizes):
             continue
 
         # ABSTRACT
-        with open(f'{abs_scenario_dir}/_{num_actors}actors-abs-scenarios.json') as j:
+        with open(f'{abs_scenario_dir}/{num_actors}-actor-scenarios.json') as j:
             abs_scenarios_json = json.load(j)
 
         all_scenarios_at_size = all_scenarios[num_actors]
@@ -267,36 +267,42 @@ def to_dataframe(cooked_measurements_path, abs_scenario_dir, included_sizes):
 
 
 def main():
-    map_junction = 'rural'
-    # map_junction = 'urban'
-    data_path = f"evaluation/SOSYM25/data-sim/{map_junction}"
-    cooked_measurements_path = f'{data_path}/measurements.json'
-    abs_scenario_dir = f'{data_path}/abs_scenarios'
-    included_sizes = [2, 3, 4]
-    out_path = f"evaluation/SOSYM25/data-sim/{map_junction}"
-    
-    # Get the list of file contents
-    data = gen_figures(cooked_measurements_path, abs_scenario_dir, included_sizes)
-    data_actor, data_relationship = to_dataframe(cooked_measurements_path, abs_scenario_dir, included_sizes)
+    base_dir = "evaluation/SOSYM25/data-sim"
+    map_junctions = ['rural', 'urban']
+    for map_junction in map_junctions:
+        data_path = f"{base_dir}/1-simulation-results/{map_junction}"
+        cooked_measurements_path = f'{data_path}/measurements.json'
+        abs_scenario_dir = f'{base_dir}/0-generated-scenarios/{map_junction}/abstract-specifications'
+        included_sizes = [2, 3, 4]
+        out_path = f"{base_dir}/1-simulation-results/{map_junction}"
+        
+        # Get the list of file contents
+        data = gen_figures(cooked_measurements_path, abs_scenario_dir, included_sizes)
+        data_actor, data_relationship = to_dataframe(cooked_measurements_path, abs_scenario_dir, included_sizes)
 
-    os.makedirs(out_path, exist_ok=True)
-    json.dump(data_actor, open(f'{out_path}/data_actor.json', 'w'), indent=4)
-    json.dump(data_relationship, open(f'{out_path}/data_relationship.json', 'w'), indent=4)
+        os.makedirs(out_path, exist_ok=True)
+        json.dump(data_actor, open(f'{out_path}/data_actor.json', 'w'), indent=4)
+        print(f'({map_junction}, {included_sizes}) Saved actor data at {out_path}/data_actor.json')
+        json.dump(data_relationship, open(f'{out_path}/data_relationship.json', 'w'), indent=4)
+        print(f'({map_junction}, {included_sizes}) Saved relationship data at {out_path}/data_relationship.json')
 
-    # PRINT DATA
-    print('_______________________________________')
-    print(F'AGGREGATE RESULTS FOR {included_sizes}')
+        # PRINT DATA
+        output_txt_path = f"{out_path}/aggregate_results.txt"
+        with open(output_txt_path, "w") as f:
+            f.write('_______________________________________\n')
+            f.write(f'AGGREGATE RESULTS FOR {map_junction}, {included_sizes}\n\n')
+            for map_id in data:
+                f.write('---------------------\n')
+                f.write(f'<<<{map_id}>>>\n')
+                for x in data[map_id]:
+                    f.write(f'{x} : {data[map_id][x]}\n')
+        print(f'({map_junction}, {included_sizes}) Saved aggregate results at {output_txt_path}')
+        print()
 
-    for map_id in data:
-        print('---------------------')
-        print(f'<<<{map_id}>>>')
-        for x in data[map_id]:
-            print(f'{x} : {data[map_id][x]}')
-
-    # Save the list as a JSON file
-    # with open(out_path, "w") as json_file:
-    #     json.dump(file_contents_list, json_file, indent=4)
-    # print(f'Saved cooked measurments at     {out_path}')
+        # Save the list as a JSON file
+        # with open(out_path, "w") as json_file:
+        #     json.dump(file_contents_list, json_file, indent=4)
+        # print(f'Saved cooked measurments at     {out_path}')
 
 if __name__ == "__main__":
     main()

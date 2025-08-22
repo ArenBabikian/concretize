@@ -158,15 +158,14 @@ def create_bar_chart(df, groupby, title, xlabel, add_prev, width, height, output
     with open(f'{output_path}/latex/{title}.tex', 'w') as f:
         f.write(df_agg.to_latex())
 
-    # EXPORT LEGEND
-    if not add_prev:
-        return
-    
+    # EXPORT LEGEND    
     plt.close()
     
     colors = ['#A50205', '#0876B5', '#CC6400', '#5C7B3D', '#C1DDEC', '#F2D8BF']
     attributes = ['collision', 'near miss', 'attempts', 'preventative measure']
-    labels = ['Collision', 'Near-miss', 'No incident', 'Preventive maneuver']
+    labels = ['Collision', 'Near-miss', 'No incident']
+    if add_prev:
+        labels.append('Preventive maneuver')
     # for i in range(len(attributes)):
     #     plt.bar(x_positions[i], data[:, i], width=bar_width, label=labels[i], edgecolor='black', color=colors[i % len(colors)])
 
@@ -188,7 +187,7 @@ def create_bar_chart(df, groupby, title, xlabel, add_prev, width, height, output
     fig  = legend.figure
     fig.canvas.draw()
     bbox  = legend.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-    fig.savefig(f'{output_path}/legend.{FILE_FORMAT}', dpi=300, bbox_inches=bbox)
+    fig.savefig(f'{output_path}/legend{"3" if not add_prev else "4"}.{FILE_FORMAT}', dpi=300, bbox_inches=bbox)
 
     plt.close()
 
@@ -502,8 +501,8 @@ def create_collision_near_miss_preventative_matrix_table(df, output_path):
 
 
 def main():
-    input_path = 'evaluation/SOSYM25/data-sim'
-    output_path_meta = 'evaluation/SOSYM25/figures/figures'
+    input_path = 'evaluation/SOSYM25/data-sim/1-simulation-results'
+    output_path_meta = 'evaluation/SOSYM25/figures/output'
     # os.makedirs(output_path, exist_ok=True)
 
     map_junction_names = ['rural', 'urban', 'both']
@@ -542,7 +541,7 @@ def main():
 
         plot_types = [
             (df_actor[df_actor['ego']], 'num_actors',    'size-res'      , 'Number of Actors', True),
-            (df_actor[df_actor['ego']], 'maneuver.id',   'log-res'      , 'Logical Maneuver', True),
+            (df_actor[df_actor['ego']], 'maneuver.id',   'log-res'      , 'Logical Maneuver', False),
             (df_actor[df_actor['ego']], 'maneuver.type', 'fun-res' , 'Functional maneuver', True)
         ]
 
