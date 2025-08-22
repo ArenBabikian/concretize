@@ -27,17 +27,10 @@ Once the Scenarios are simulated, to process the data and generate figures, you 
 1. Move the scenario generation data to the `evaluation/SOSYM25/data-sim/` folder:
     - `evaluation/SOSYM25/data-sim/0-generated-scenarios`
     - `evaluation/SOSYM25/data-sim/1-simulation-results`
-<!-- 2. To process the raw data and output them in a more digestable format, run the following command: 
+2. To process the data and to generate figures from them, run the following command
     ```
-    python evaluation/SOSYM25/figures/runmetrics.py
-    ``` -->
-2. To extract the useful information from the processed data and save it in separate files, run the following command:
-    ```
-    python evaluation/SOSYM25/figures/gen_figures_from_cooked.py
-    ```
-    
-3. Generate the final figures using the processed data by running the following command:
-    ```
-    python evaluation/SOSYM25/figures/create_figures_SOSYM.py
+    bash evaluation/SOSYM25/raw_data_to_figures.sh
     ```
     The figures will be saved in the `evaluation/SOSYM25/figures/output` folder.
+    
+    For further details, please refer to the `raw_data_to_figures.sh` file.
