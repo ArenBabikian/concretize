@@ -26,10 +26,20 @@ class Does_Maneuver_Con(Behavior_Con):
                 allowed_maneuver_list.append(Instance_Man(m))
         return allowed_maneuver_list
 
-    def get_all_allowed_maneuver_instances(self, junction):
+    def get_all_allowed_maneuver_instances(self, junction, keep_order=False):
         all_allowed_maneuver_instances = []
-        for man_type in self.allowed_maneuver_types:
-            all_allowed_maneuver_instances.extend(man_type.get_scenic_maneuver_instances(junction))
+        if not keep_order:
+            # Order by maneuver type
+            for man_type in self.allowed_maneuver_types:
+                all_allowed_maneuver_instances.extend(man_type.get_scenic_maneuver_instances(junction))
+        else:
+            # Maintian the order of the maneuver types as specified in the road map
+            allowed_scenic_types = [x.get_scenic_maneuver_type() for x in self.allowed_maneuver_types]
+            for m in junction.all_maneuvers:
+                m_type_scenic = junction.instance_to_maneuver_type[m]
+                if m_type_scenic in allowed_scenic_types:
+                    all_allowed_maneuver_instances.append(m)
+
         if all_allowed_maneuver_instances == []:
             allowed_maneuver_types = [x for x in junction.maneuver_type_to_instance.keys() if junction.maneuver_type_to_instance[x] != []]
             raise Exception(f"No maneuvers of type <{self.maneuver_str}> are allowed at {junction}. Select among the following types {allowed_maneuver_types} or ids {[x.connectingLane.id for x in junction.all_maneuvers]}")

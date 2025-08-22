@@ -11,6 +11,7 @@ class Junction:
 
         self.all_maneuvers = self.junction_in_network.maneuvers
         self.maneuver_type_to_instance = self.get_maneuver_to_instance_map()
+        self.instance_to_maneuver_type = self.get_instance_to_maneuver_map()
         self.maneuver_type_to_union_region = self.get_maneuver_to_region_map()
 
         # Stats
@@ -35,6 +36,12 @@ class Junction:
         for maneuver in self.junction_in_network.maneuvers:
             type_to_maneuver_instance[maneuver.type].append(maneuver)
         return type_to_maneuver_instance
+    
+    def get_instance_to_maneuver_map(self):
+        maneuver_instance_to_type = {}
+        for maneuver in self.junction_in_network.maneuvers:
+            maneuver_instance_to_type[maneuver] = maneuver.type
+        return maneuver_instance_to_type
 
     def get_maneuver_to_region_map(self):
         maneuverToRegion = {}

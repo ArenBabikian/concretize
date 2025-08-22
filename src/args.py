@@ -22,11 +22,16 @@ def parse_args():
     vis_opt = parser.add_argument_group('visualisation options')
     vis_opt.add_argument('-v-diag', '--view-diagram', action='store_true', help='Pop up diagram')
     vis_opt.add_argument('-s-diag', '--save-diagram', action='store_true', help='Save the diagram')
+    vis_opt.add_argument('-s-diag-dir', '--save-diagram-dir', default="scenarios", type=str, help='Subdirectory to save the diagram')
     vis_opt.add_argument('-z', '--zoom-diagram', action='store_true', help='Zoom to junction, or to the actors')
     vis_opt.add_argument('-sh-act', '--hide-actors', action='store_true', help='Hide the actors in the visualization')
     vis_opt.add_argument('-sh-man', '--show-maneuvers', action='store_true', help='Highlight the assigned maneuver regions in the visualization')
     vis_opt.add_argument('-sh-expa', '--show-exact-paths', action='store_true', help='Show the assigned exact paths in the visualization')
     vis_opt.add_argument('-col', '--color-scheme', choices=['default', 'alternate'], default='default', help='Color scheme to use whie generating the diagram')
+
+    vis_opt.add_argument('-s-xml-json', '--save-xml-json', action='store_true', help='Save the XML file and JSON file for the scenario simulation')
+    vis_opt.add_argument('-s-xml-file', '--save-xml-file', default=None, type=str, help='Subdirectory to save the XML file')
+    vis_opt.add_argument('-s-json-file', '--save-json-file', default=None, type=str, help='Subdirectory to save the JSON file')
 
     # Simulation Options
     sim_opt = parser.add_argument_group('simulation options')
@@ -37,6 +42,10 @@ def parse_args():
     sim_opt.add_argument('-sim-ip', '--simulation-ip', type=str, default='localhost', help='Ip address of running simulator')
     sim_opt.add_argument('-sim-port', '--simulation-port', type=int, default=2000, help='Port of running simulator')
     sim_opt.add_argument('-sim-weather', '--simulation-weather', type=str, default="CloudyNoon", help='Weather preset for simulation')
+
+    # Evaluation Options
+    eval_opt = parser.add_argument_group('evaluation options')
+    eval_opt.add_argument('-proj', '--project', choices=['none', 'SOSYM'], default='default', help='Project to use for evaluation')
 
     # MHS Approch
     mhs_cmd = approach_subcmd.add_parser('mhs', help='Use the MHS approach')

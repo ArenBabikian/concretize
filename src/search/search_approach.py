@@ -9,6 +9,7 @@ class Search_Approach(ABC):
         self.validate_input_specification()
 
         self.all_solutions = []
+        self.collisions_in_order = []
     
     @abstractmethod
     def validate_input_specification(self):

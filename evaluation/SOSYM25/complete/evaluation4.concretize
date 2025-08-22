@@ -1,0 +1,22 @@
+
+Car c1; isEgo;
+        color: black;
+        speed: transfuser;
+        controller: SimpleAgent;
+Car c2; color: black;
+        speed: transfuser;
+        controller: DummyAgent;
+Car c3; color: black;
+        speed: transfuser;
+        controller: DummyAgent;
+Car c4; color: black;
+        speed: transfuser;
+        controller: DummyAgent;
+
+doesManeuver(c1, any);
+doesManeuver(c2, any);
+doesManeuver(c3, any);
+doesManeuver(c4, any);
+potentiallyCollide(c1, c2);
+potentiallyCollide(c1, c3);
+potentiallyCollide(c1, c4);

@@ -1,3 +1,4 @@
+from pathlib import Path
 from src import utils
 import src.args as get_args
 from src.results.statistics import Statistics_Manager
@@ -7,8 +8,10 @@ from src.language import parser
 import logging
 
 from src.model.specification import Specification
+from src.simulation.json import Openscenario_Json
 from src.simulation.simulation import Scenario_Simulation
 from src.visualization.diagram import Scenario_Diagram
+from src.simulation.xml import Openscenario_Xml
 
 def concretize():
     
@@ -19,6 +22,9 @@ def concretize():
     logging_map = {0: logging.CRITICAL, 1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
     logging.root.setLevel(logging_map[args.verbosity])
     logging.warning("Fix the map integration in command-line options") # TEMP
+
+    if args.output_directory is not None:
+        Path(args.output_directory).mkdir(parents=True, exist_ok=True)
 
     # 2.0 read the scenario specification (constraints)
     # TODO address the case of a file being editted on a web-based editor
@@ -74,9 +80,13 @@ def concretize():
         con_sol_id=0
         for sol_id, sol in enumerate(res.ordered_outcomes):
             if sol.is_concrete_solution:
-                sd = Scenario_Diagram(sol, f"{res_id}_{con_sol_id}", args)
-                sd.generate_diagram()
-                sd.save_and_show()
+                # DIAGRAM
+                scenario_id = f"{res_id}_{con_sol_id}"
+                if args.view_diagram or args.save_diagram:
+                    sd = Scenario_Diagram(sol, scenario_id, args)
+                    sd.generate_diagram()
+                    sd.save_and_show()
+
                 con_sol_id+=1
 
                 # TODO do we want to simulate every generated scenario?
@@ -91,6 +101,16 @@ def concretize():
 
                 # logging.warning("No save path provided. The scenario is not simulated")
 
+    # 7 Save a single XML file for all scenarios
+    if args.save_xml_json:
+        scenario_id = f"all_scenarios"
+        osxml = Openscenario_Xml(approach.all_solutions, args)
+        osxml.generate_xml()
+        osxml.save()
+
+        osjson = Openscenario_Json(spec, approach.all_solutions, approach.collisions_in_order, args)
+        osjson.generate_json()
+        osjson.save()
     #   5 simulate
     #   6 evaluate simulation run
     #   7 visualize the evaluation result
