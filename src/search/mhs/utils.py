@@ -42,7 +42,7 @@ def getMapBoundaries(specifcation, num_obj):
         bounds = [-155, -101, 103, 80]
     elif map_name == "Tram05-mod.xodr":
         bounds = [-140, -160, 215, 70]
-    elif map_name == "zalaFullcrop.xodr":
+    elif map_name == "Zalazone.xodr":
         bounds = [-59, 1337, 211, 1811] # full smart-city section
         # bounds = [-59, 211, 1337, 1811] # smaller version
     else:

@@ -1,0 +1,6 @@
+Car c1; isEgo;
+        color: black;
+        speed: transfuser;
+        controller: SimpleAgent;
+
+doesManeuver(c1, any);

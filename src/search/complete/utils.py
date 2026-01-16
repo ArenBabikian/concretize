@@ -12,6 +12,9 @@ def validate_speed_profiles(actor):
 def fill_logical_actors(specification):
     for actor in specification.actors:
 
+        if actor.assigned_maneuver_instance is None:
+            continue
+
         # TODO clean this up, speciually the 'current_lane' computation
         pos_raw = actor.position
         if pos_raw is None:
@@ -62,6 +65,7 @@ def fill_concrete_actors(actor, pos, current_region, pre_junc_pos=None, pre_junc
     # TODO
     # TODO
     # THIS IS SUS
+    # DEADLINE IS REDUCING SUSNESS
     if pre_junc_pos != None:
         actor.pre_junc_position = Vector(pre_junc_pos[0], pre_junc_pos[1])
         actor.pre_junc_heading = pre_junc_lane.orientation[pre_junc_pos]

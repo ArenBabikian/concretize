@@ -1,0 +1,6 @@
+
+Car c1;
+Car c2;
+
+onRegion(c1, Drivable);
+onRegion(c2, Drivable);

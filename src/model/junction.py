@@ -11,6 +11,7 @@ class Junction:
 
         self.all_maneuvers = self.junction_in_network.maneuvers
         self.maneuver_type_to_instance = self.get_maneuver_to_instance_map()
+        self.instance_to_maneuver_type = self.get_instance_to_maneuver_map()
         self.maneuver_type_to_union_region = self.get_maneuver_to_region_map()
 
         # Stats
@@ -21,7 +22,9 @@ class Junction:
     def find_junction_in_network(self, network):
         junction_w_id = list(filter(lambda x: x.id == int(self.junction_id), network.intersections))
         if len(junction_w_id) != 1:
-            raise Exception(f"Invalid junction id <{self.junction_id}>. Select among the following ids {[x.id for x in network.intersections]}")
+            # ids = [x.id for x in network.intersections]
+            ids = [f"{x.id}({len(x.maneuvers)} man.s)" for x in network.intersections]
+            raise Exception(f"Invalid junction id <{self.junction_id}>. Select among the following ids {ids}")
         junction = junction_w_id[0]
         return junction
     
@@ -33,6 +36,12 @@ class Junction:
         for maneuver in self.junction_in_network.maneuvers:
             type_to_maneuver_instance[maneuver.type].append(maneuver)
         return type_to_maneuver_instance
+    
+    def get_instance_to_maneuver_map(self):
+        maneuver_instance_to_type = {}
+        for maneuver in self.junction_in_network.maneuvers:
+            maneuver_instance_to_type[maneuver] = maneuver.type
+        return maneuver_instance_to_type
 
     def get_maneuver_to_region_map(self):
         maneuverToRegion = {}

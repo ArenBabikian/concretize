@@ -19,17 +19,19 @@ class Scenario_Diagram:
 
         #TODO improve below, avoid the "hasattr"
         # Below is for the linkage between the backend and frontend
-        self.view = args.view_diagram
-        if hasattr(args, "save_path_png"):
-            self.save_path = args.save_path_png
-        else:
-            self.save_path = Path(args.output_directory) / "scenarios" / f"{diagram_id}.png"
+        self.to_view = args.view_diagram
+
+        self.to_save = args.save_diagram
+        self.save_path = Path(args.output_directory) / args.save_diagram_dir / f"{diagram_id}.png"
+        self.save_path.parent.mkdir(parents=True, exist_ok=True)
+
         self.zoom = args.zoom_diagram
 
         self.color_scheme = args.color_scheme
         self.hide_actors = args.hide_actors
         self.show_maneuvers = args.show_maneuvers
         self.show_exact_paths = args.show_exact_paths
+
 
     def show_road_map(self):
         if self.color_scheme == 'default':
@@ -56,6 +58,8 @@ class Scenario_Diagram:
             if not self.hide_actors:
                 # TODO display actor ID on the image?
                 logging.debug(f'{ac} positioned at {ac.position}')
+                if ac.position is None:
+                    break
                 if isinstance(ac, Car):
                     size = (2, 4)
                 elif isinstance(ac, Pedestrian):
@@ -79,8 +83,12 @@ class Scenario_Diagram:
         for c in self.spec.constraints:
             if isinstance(c, Collision_Con):
                 if self.show_maneuvers:
-                    r1 = c.actors[0].assigned_maneuver_instance.connectingLane
-                    r2 = c.actors[1].assigned_maneuver_instance.connectingLane
+                    a0 = c.actors[0]
+                    a1 = c.actors[1]
+                    if a0.position is None or a1.position is None:
+                        break
+                    r1 = a0.assigned_maneuver_instance.connectingLane
+                    r2 = a1.assigned_maneuver_instance.connectingLane
                     utils.showPairwiseCollidingRegions(plt, [r1, r2], colors.gray, None)
                 # if self.show_exact_paths:
                     # TODO handle visualization for the case where the exact paths are overlapping
@@ -96,11 +104,10 @@ class Scenario_Diagram:
         self.diagram = None
 
     def save_and_show(self):
-        if self.save_path:
+        if self.to_save:
             plt.savefig(self.save_path)
-            print(f"Save at {self.save_path}")
             logging.info(f'Saved diagram at {self.save_path}')
-        if self.view:
+        if self.to_view:
             logging.debug('Showing diagram of the initial scene')
             plt.show()
         plt.close()

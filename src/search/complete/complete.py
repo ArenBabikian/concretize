@@ -7,6 +7,7 @@ from src.model.constraints.constraint import Static_Con
 from src.results.complete_result import Complete_Result
 from src.results.result import Result
 from src.search.search_approach import Search_Approach
+import time
 import src.search.complete.constants as cst
 import src.search.complete.utils as utils
 import src.search.complete.utils_concrete as utils_con
@@ -22,13 +23,21 @@ class Complete_Approach(Search_Approach):
         self.actor_to_lane_instances = {ac:[] for ac in specification.actors}
         self.danger_conditions = []
 
+        # SOSYM requires the original order of maneuvers to be maintained, while the default approach does not.
+        self.sosym_setup = args.project == 'SOSYM'
+
         self.num_evaluated_logical_solutions = 0
         self.num_colliding_logical_solutions = 0
         self.num_no_init_overlap_concrete_solutions = 0
         self.num_valid_concrete_solutions = 0
+
+        # Timing
+        self.time_fun_to_log = -1
+        self.times_log_to_con = []
+
         super().__init__(args, specification)
 
-        self.all_solutions.append(Complete_Result(self, specification)) # only a single solution is returned for the complete mode. It s asingle (deterministic) run of the algorithm.
+        self.all_solutions.append(Complete_Result(self, specification)) # only a single solution is returned for the complete mode. It is a single (deterministic) run of the algorithm.
 
     def validate_input_specification(self):
         actors = self.specification.actors
@@ -52,7 +61,7 @@ class Complete_Approach(Search_Approach):
         danger_constraints = []
         for con in specification.constraints:
             if isinstance(con, Does_Maneuver_Con):
-                all_allowed_maneuver_instances = con.get_all_allowed_maneuver_instances(self.junction)
+                all_allowed_maneuver_instances = con.get_all_allowed_maneuver_instances(self.junction, self.sosym_setup)
                 self.actor_to_lane_instances[con.actors[0]] = all_allowed_maneuver_instances
             elif isinstance(con, Danger_Con):
                 danger_constraints.append(con)
@@ -73,6 +82,11 @@ class Complete_Approach(Search_Approach):
                     # we enter these conditions if ego is already assigned a maneuver
                     ego_man = ego_actor.assigned_maneuver_instance
                     assert depth == 0 or ego_man is not None
+                    if man == None:
+                        recursiveForLoop(depth+1)
+                        # TODO may need to improve this for cases with nmore than 2 actors
+                        continue
+
                     if depth > 0 and man.connectingLane == ego_man.connectingLane:
                         # CONSTRAINT 1: Non-ego paths must be different than ego path
                         continue
@@ -82,18 +96,24 @@ class Complete_Approach(Search_Approach):
                     if depth > 1 and actors_with_ego_first[depth-1].assigned_maneuver_instance == man:
                         # CONSTRAINT 3: All non-ego paths must be distinct
                         continue 
-                    # TODO below IMPORTANT
-                    # if depth > 1 and tuple[-1][1] > maneuver_id:
-                    #     # CONSTRAINT 4: No permutations among all non-ego paths
-                    #     continue 
+                    if self.sosym_setup:
+                        if depth > 1 and actors_with_ego_first[depth-1].assigned_maneuver_id > maneuver_id:
+                            # CONSTRAINT 4: No permutations among all non-ego paths
+                            continue 
 
                     actor.assigned_maneuver_instance = man
+                    actor.assigned_maneuver_id = maneuver_id
                     recursiveForLoop(depth+1)
                     actor.assigned_maneuver_instance = None
+                    actor.assigned_maneuver_id = None
             else:
                 # Check if ego road is intersecting with ALL non-ego roads
                 num_violated_danger_conditions = 0
                 for danger_con in self.danger_conditions:
+                    if danger_con.actors[1].assigned_maneuver_instance is None:
+                        # if the other actor is not assigned a maneuver, we skip this danger condition
+                        # TODO-IND this is a special case, we may need to handle it differently
+                        continue
                     _, is_violated = danger_con.evaluate_logical_condition()
                     num_violated_danger_conditions += is_violated
 
@@ -104,14 +124,21 @@ class Complete_Approach(Search_Approach):
                     # pass
                 self.num_evaluated_logical_solutions += 1
 
+        time_start = time.time()
         recursiveForLoop(0)
-        logging.info(f'We evaluate {self.num_evaluated_logical_solutions} {global_depth}-lane combinations. {self.num_colliding_logical_solutions} of them are colliding at the logical level.')
+        time_total = time.time() - time_start
+        self.time_fun_to_log = time_total
+
+        logging.info(f'({time_total:.3f}s) We evaluate {self.num_evaluated_logical_solutions} {global_depth}-lane combinations. {self.num_colliding_logical_solutions} of them are colliding at the logical level.')
 
     def get_dangerous_concrete_scenarios(self):
-        # Scenarios are included in aelf.all_solutions[0].all_solutions
+        # Scenarios are included in self.all_solutions[0].all_solutions
         scenario_instances = self.all_solutions[0].all_solutions
 
         for i_sc, scenario in enumerate(scenario_instances):
+            # 0. timing
+            time_start = time.time()
+
             # 1. get logical params of ego
             ego_actor = scenario.actors[scenario.specification.ego_id]
             utils.validate_speed_profiles(ego_actor)
@@ -129,7 +156,7 @@ class Complete_Approach(Search_Approach):
             # 4. Get collisions in order
             collision_constraints = self.handle_constraints(scenario)
             collisions_in_order = utils_con.get_collisions_in_order(collision_constraints)
-            # ranked_non_ego_by_dist_for_ego = []
+            self.collisions_in_order = collisions_in_order
 
             # 5. Determine how much time to add to ensure collision must happen
             # ...and that non-egos wont collide with each other, at least not  on the path of ego
@@ -160,6 +187,8 @@ class Complete_Approach(Search_Approach):
 
             # 8. If some actors are not assigned an exact path, we position them right outside the junction
             for actor in scenario.actors:
+                if actor.position is None:
+                    continue
                 if actor.assign_exact_path_for_vis is None:
                     ac_man_reg = actor.assigned_maneuver_instance.connectingLane
                     ac_start_reg = ac_man_reg._predecessor.sections[-1]
@@ -178,7 +207,7 @@ class Complete_Approach(Search_Approach):
             #         continue
 
                     # VALIDATION 1 : non-egos should initially not overlap
-                    if a1.overlaps_with(a2):
+                    if a1.position is not None and a2.position is not None and a1.overlaps_with(a2):
                         num_problems['init_overlap'] += 1
                         logging.info(f'WARNING: SCENARIO {i_sc} VOIDED, {a1} and {a2} have initially overlapping positions.')
 
@@ -206,7 +235,11 @@ class Complete_Approach(Search_Approach):
             timeout = utils_con.calculate_timeout(ego_actor, ego_man_reg, ego_time_to_add)
             scenario.measured_timeout = timeout
 
-        logging.info(f'From these {self.num_colliding_logical_solutions} colliding tuples, {self.num_valid_concrete_solutions} of them are valid at the concrete level (i.e. they do not have initial-position overlaps).')
+            # 0. timing
+            scenario_time = time.time() - time_start
+            self.times_log_to_con.append(scenario_time)
+
+        logging.info(f'({sum(self.times_log_to_con):.3f}s) From these {self.num_colliding_logical_solutions} colliding tuples, {self.num_valid_concrete_solutions} of them are valid at the concrete level (i.e. they do not have initial-position overlaps).')
 
     def concretize(self):
 
@@ -224,6 +257,3 @@ class Complete_Approach(Search_Approach):
         # GET ALL DANGEROUS CONCRETE SCENARIOS
         self.get_dangerous_concrete_scenarios()
 
-        # SAVE EXECUTABLE XML FILES
-
-        # TODO go back to `initializeAbstractScenarioDetails` from scenic, l63, for the analysis at the end
