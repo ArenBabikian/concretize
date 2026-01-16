@@ -1,5 +1,6 @@
 services:
   backend:
+    platform: linux/amd64
     build:
       dockerfile: ./Dockerfile-backend
     environment:

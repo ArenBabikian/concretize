@@ -14,5 +14,8 @@ To access the experiments of our SOSYM 2025 submisison entitled _"Automated and 
 4. Navigate to [https://localhost:5173](https://localhost:5173) in your browser to see the web interface. An up-to-date Chromium-based browser is recommended to ensure correct display.
 
 ## For more information
+
+Video demonstration: https://youtu.be/inaD8jd7YxI
+
 See the [Wiki](https://github.com/ArenBabikian/concretize/wiki) for more documentation, including
 - [Scenario specification language](https://github.com/ArenBabikian/concretize/wiki/Scenario-Specification-Language)
